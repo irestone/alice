@@ -10,6 +10,6 @@ export const global = globalCss({
   },
   body: {
     background: '$gray100',
-    color: '$gray900',
+    color: '$gray700',
   },
 })

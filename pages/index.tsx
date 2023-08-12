@@ -33,6 +33,9 @@ const Layout = styled(Div, {
   gridTemplateColumns: 'var(--navbar-width) var(--collection-width) 1fr',
   height: '100%',
   fontFamily: 'var(--font-regular)',
+  fontSize: '.9rem',
+  fontWeight: 300,
+  letterSpacing: '.03em',
 })
 
 const Navbar: SFC = () => {
@@ -104,36 +107,72 @@ const Navbar: SFC = () => {
 
 const Collection: SFC = () => {
   return (
-    <Div css={{ borderRight: '1px solid $gray300', overflow: 'auto' }}>
-      <Header css={{ position: 'sticky', top: 0, boxShadow: 'rgb(255 255 255 / 4%) 0px 0px 50px' }}>
+    <Div
+      css={{
+        borderRight: '1px solid $gray300',
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+          width: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+          background: '#121212',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: '$gray300',
+          '&:hover': {
+            background: '$gray400',
+          },
+        },
+      }}
+    >
+      <Header css={{ position: 'sticky', top: 0, boxShadow: 'rgb(255 255 255 / 3%) 0px 0px 50px' }}>
         <Heading4
           css={{
             padding: '1rem',
-            paddingLeft: '2rem',
-            background: '$accent',
+            // paddingLeft: '2rem',
+            // background: ' #292A2D',
+            background: '#293239',
+            // background: '$accent',
             textTransform: 'uppercase',
-            fontSize: '.9rem',
-            fontWeight: '500',
-            letterSpacing: '.08em',
+            fontSize: '.82rem',
+            // fontWeight: '600',
+            fontWeight: '150',
+            // letterSpacing: '.13em',
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'flex-start',
             boxShadow: 'rgb(25 29 33 / 30%) 0px 0px 50px',
             position: 'relative',
             zIndex: 1,
-            borderBottom: '1px solid #438cc3',
+            // borderBottom: '1px solid $gray300',
+            borderBottom: '1px solid #44525d',
+            // borderBottom: '1px solid #438cc3',
             color: '$gray900',
+            minHeight: '4.5rem',
           }}
         >
           Должники
           <Div css={{ display: 'flex', gap: '1rem' }}>
-            <Button>+</Button>
+            <Button
+              css={{
+                fontSize: '.65rem',
+                fontWeight: '100',
+                color: '$gray700',
+                border: '1px solid $gray700',
+                padding: '.4em .6em',
+                borderRadius: 4,
+              }}
+            >
+              + добавить
+            </Button>
           </Div>
         </Heading4>
         <Div
           css={{
-            padding: '1rem',
+            padding: '.6rem 1rem',
             // background: ' #292A2D',
-            background: 'linear-gradient(to bottom, #324655, #292A2D)',
+            // background: 'linear-gradient(to bottom, #324655, #292A2D)',
+            background: 'linear-gradient(to bottom, #324655, #2b2f35)',
             borderBottom: '1px solid $gray300',
             fontSize: '.9rem',
             display: 'flex',
