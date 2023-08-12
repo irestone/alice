@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^13.4.13",
     "@stitches/react": "^1.2.8",
     "lodash": "^4.17.21",
     "next": "13.4.13",
