@@ -35,6 +35,7 @@ export const Paragraph = styled('p')
 // Iteraction/Form
 export const Button = styled('button')
 export const Input = styled('input')
+export const Textarea = styled('textarea')
 export const Link = styled('a')
 export const RouteLink = styled(NextLink)
 

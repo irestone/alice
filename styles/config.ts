@@ -10,9 +10,10 @@ import { createStitches, PropertyValue, CSS as StichesCSS } from '@stitches/reac
 
 const colors = {
   gray100: '#181818',
-  gray200: '#202123',
-  gray300: '#313131', // #2A2A2A
-  gray400: '#3f3f3f', // #2A2A2A
+  gray200: '#232323',
+  gray300: '#313131',
+  gray400: '#3f3f3f',
+  gray600: '#999',
   gray700: '#ccc',
   gray900: '#f7f7f7',
   accent: '#0078D4',
@@ -117,6 +118,22 @@ const utils = {
   br: (value: PropertyValue<'borderRadius'>) => ({ borderRadius: value }),
 
   areas: (areas: string[]) => ({ gridTemplateAreas: areas.join(' ') }),
+
+  scrollbarSize: (value: PropertyValue<'width'>) => ({
+    '&::-webkit-scrollbar': { width: value, height: value },
+  }),
+  scrollbarColor: (value: PropertyValue<'color'>) => ({
+    scrollbarColor: value,
+  }),
+  scrollbarTrackColor: (value: PropertyValue<'color'>) => ({
+    '&::-webkit-scrollbar-track': { background: value },
+  }),
+  scrollbarThumbColor: (value: PropertyValue<'color'>) => ({
+    '&::-webkit-scrollbar-thumb': { background: value },
+  }),
+  scrollbarThumbColorHovered: (value: PropertyValue<'color'>) => ({
+    '&::-webkit-scrollbar-thumb:hover': { background: value },
+  }),
 }
 
 // section #########################################################################################
