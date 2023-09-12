@@ -20,22 +20,3 @@ export const useSelection = create<ISelection>()(
     { name: 'selection', store: 'controlPanel' }
   )
 )
-
-type TTabName = 'files' | 'tasks'
-
-interface ITab {
-  tab: TTabName
-  set: (tab: TTabName) => void
-}
-
-export const useTabs = create<ITab>()(
-  devtools(
-    (set) => ({
-      tab: 'files',
-      set: (tab: TTabName) => {
-        set((state) => ({ ...state, tab }))
-      },
-    }),
-    { name: 'tabs', store: 'controlPanel' }
-  )
-)

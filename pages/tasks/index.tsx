@@ -11,10 +11,10 @@ const Index: NextPage = () => {
   const router = useRouter()
   const id = router.query.id as string
   return (
-    <Page title={`FILES_DASHBOARD`}>
+    <Page title={`TASKS_DASHBOARD`}>
       <ControlPanel />
       <Viewport>
-        <p>files dashboard</p>
+        <p>tasks dashboard</p>
       </Viewport>
     </Page>
   )

@@ -1,4 +1,4 @@
-import { Button, Div, Item, SFC, Span, Textarea, styled } from '../../styles/components'
+import { Button, Div, Item, SFC, Span, Textarea, styled } from '../styles/components'
 
 type TUser = {
   id: string
@@ -47,6 +47,7 @@ const NewCommentForm: SFC<{ user: TUser }> = ({ user }) => {
         display: 'flex',
         alignItems: 'top',
         gap: '.5rem',
+        paddingRight: '2.4rem',
       }}
     >
       <Avatar css={{ background: user.avatar }} />
@@ -152,20 +153,15 @@ const List = styled('ul', {
   gap: '1.4rem',
 })
 
-const Title = styled('h4', {
-  fontSize: '1rem',
-  fontWeight: '100',
-  letterSpacing: '.05em',
-  color: '#eaeaea',
-  textTransform: 'uppercase',
-  lineHeight: 1,
-})
-
 const Root = styled('div', {
-  marginTop: '3rem',
+  margin: '3rem auto 0',
+  maxWidth: '48rem',
 })
 
-const Activity: SFC<{ fileId: string }> = ({ fileId }) => {
+const Activity: SFC<{
+  history: any[]
+  onComment: (text: string) => void
+}> = ({ history, onComment }) => {
   return (
     <Root>
       <Div
@@ -173,7 +169,8 @@ const Activity: SFC<{ fileId: string }> = ({ fileId }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '0 2.3rem',
+          paddingLeft: '2.4rem',
+          paddingRight: '2.4rem',
         }}
       >
         <Div css={{ height: 1, background: '#2c2c2c', flex: 1, marginRight: '1rem' }}></Div>

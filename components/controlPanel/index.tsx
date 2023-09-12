@@ -1,9 +1,9 @@
-import { Aside, SFC, styled } from '../../styles/components'
+import { SFC, styled } from '../../styles/components'
 import Menu from './menu'
 import Head from './head'
 import Body from './body'
 
-const Root = styled(Aside, {
+const Root = styled('nav', {
   width: '27rem',
   height: '100%',
   overflow: 'auto',
@@ -24,5 +24,3 @@ const ControlPanel: SFC = () => {
 }
 
 export default ControlPanel
-
-// todo: open multiple files and show them as tabs in viewport (like in editors)

@@ -1,39 +1,15 @@
-import { Div, SFC, styled } from '../../styles/components'
-import { useRouter } from 'next/router'
+import { useCallback } from 'react'
+import { Div, RouteLink, SFC, styled } from '../../styles/components'
 import { BellIcon } from '@radix-ui/react-icons'
 
-import BellIconSVG from '../../public/assets/bell-icon.svg'
 import FolderIconSVG from '../../public/assets/folder-icon.svg'
 import TasksIconSVG from '../../public/assets/tasks-icon.svg'
 import ProfileIconSVG from '../../public/assets/profile-icon.svg'
-import { useCallback } from 'react'
-import { useTabs } from './state'
+import { useRouter } from 'next/router'
 
 const FolderIcon = styled(FolderIconSVG, { stroke: 'var(--icon-color)' })
 const TasksIcon = styled(TasksIconSVG, { fill: 'var(--icon-color)' })
 const ProfileIcon = styled(ProfileIconSVG, { fill: 'var(--icon-color)' })
-// const BellIcon = styled(BellIconSVG, {
-//   stroke: 'var(--icon-color)',
-//   strokeWidth: 1.4,
-//   fill: 'none',
-// })
-
-const Pill = styled('div', {
-  display: 'grid',
-  placeContent: 'center',
-  height: '1.3em',
-  minWidth: '1.3em',
-  position: 'absolute',
-  left: '64%',
-  top: '33%',
-  transform: 'translate(-50%, -50%)',
-  borderRadius: 99999,
-  background: '$accent',
-  color: '#e6e6e6',
-  fontSize: '.75rem',
-  lineHeight: 0,
-  padding: '0 .24em',
-})
 
 const Dot = styled('div', {
   width: '.6rem',
@@ -59,7 +35,7 @@ const Button = styled('button', {
   '&:hover svg': { filter: 'drop-shadow(0 0 .66rem #fff2)' },
 })
 
-const Tab = styled('button', {
+const Tab = styled(RouteLink, {
   '--icon-color': '#999',
   '--btn-w': '4rem',
   '--btn-h': '2rem',
@@ -68,14 +44,15 @@ const Tab = styled('button', {
   width: 'var(--btn-w)',
   height: 'var(--btn-h)',
   background: '#263039',
-  '&:hover': { '--icon-color': '#bababa', background: '#28333d' },
   '&:hover svg': { filter: 'drop-shadow(0 0 .66rem #fff2)' },
   variants: {
     active: {
       true: {
         '--icon-color': '#eee',
         background: '#333d47',
-        pointerEvents: 'none',
+      },
+      false: {
+        '&:hover': { '--icon-color': '#bababa', background: '#28333d' },
       },
     },
   },
@@ -93,15 +70,15 @@ const Root = styled(Div, {
 })
 
 const Menu: SFC = () => {
-  const tab = useTabs((s) => s.tab)
-  const setTab = useTabs((s) => s.set)
+  const { pathname } = useRouter()
+  const isActiveTab = useCallback((href: string) => pathname.startsWith(href), [pathname])
   return (
     <Root>
       <Group>
-        <Tab active={tab === 'files'} onClick={() => setTab('files')}>
+        <Tab href='/files' active={isActiveTab('/files')}>
           <FolderIcon css={{ height: 'calc(var(--btn-h) - 10px)' }} />
         </Tab>
-        <Tab active={tab === 'tasks'} onClick={() => setTab('tasks')}>
+        <Tab href='/tasks' active={isActiveTab('/tasks')}>
           <TasksIcon css={{ height: 'calc(var(--btn-h) - 16px)' }} />
         </Tab>
       </Group>
@@ -114,7 +91,6 @@ const Menu: SFC = () => {
               fill: 'var(--icon-color)',
             }}
           />
-          {/* <Pill>12</Pill> */}
           <Dot />
         </Button>
         <Button>

@@ -1,8 +1,8 @@
-import { Div, SFC, styled } from '../../styles/components'
-import { TFile } from '../../types'
+import { Div, SFC, styled } from '../styles/components'
+import { TFile } from '../types'
 import Activity from './activity'
 
-const Body = styled('div', {
+const Content = styled('div', {
   display: 'block',
   height: '40rem',
   background: '#333',
@@ -14,14 +14,13 @@ const Root = styled('div', {
   margin: '1rem auto 3rem',
 })
 
-const File: SFC<TFile> = ({ id }) => {
+const File: SFC<TFile & { onChange: (values: any) => void }> = ({ id, onChange }) => {
   return (
     <Root>
-      <Body>
+      <Content>
         <Div>FILE_ID {id}</Div>
         <Div>FILE_BODY</Div>
-      </Body>
-      <Activity fileId={id} />
+      </Content>
     </Root>
   )
 }
