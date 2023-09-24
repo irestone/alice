@@ -1,0 +1,8 @@
+[
+  { "id": "a", "contentType": "files", "name": "перерасчет" },
+  { "id": "b", "contentType": "files", "name": "не заполнена общая инфа" },
+  { "id": "c", "contentType": "files", "name": "до пятницы" },
+  { "id": "d", "contentType": "files", "name": "заур" },
+  { "id": "e", "contentType": "tasks", "name": "группа задач 1" },
+  { "id": "f", "contentType": "tasks", "name": "группа задач 2" }
+]

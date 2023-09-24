@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const Index = () => {
+const HomePage = () => {
   const router = useRouter()
   useEffect(() => {
     router.push('/files')
-  })
+  }, [router])
 }
 
-export default Index
+export default HomePage

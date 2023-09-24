@@ -1,11 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useRouter } from 'next/router'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 
-import { Button, Div, RouteLink, SFC, Span, styled } from '../../../styles/components'
-import { TCard } from '../types'
-import { useSelection } from '../state'
+import { Button, Div, RouteLink, SFC, styled } from '../../styles/components'
+import { useControlPanelStore } from './store'
+import { TFile, TTask } from '../../types'
 
 const Checkbox = styled(Button, {
   width: 16,
@@ -132,26 +132,26 @@ const ChevronIcon = styled(ChevronRightIcon, {
   fill: '#bababa',
 })
 
-const Card: SFC<TCard> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }) => {
+const FileCard: SFC<TFile> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }) => {
   const router = useRouter()
   const isActive = useCallback((id: string) => router.query.id === id, [router.query.id])
 
-  const selection = useSelection((s) => s.selection)
-  const toggleSelection = useSelection((s) => s.toggle)
+  const selection = useControlPanelStore((api) => api.selection)
+  const toggleSelect = useControlPanelStore((api) => api.toggleSelect)
 
-  const toggleCardSelection = useCallback(
+  const handleCardSelect = useCallback(
     (e: any) => {
       e.preventDefault()
-      toggleSelection(id)
+      toggleSelect(id)
     },
-    [toggleSelection, id]
+    [toggleSelect, id]
   )
 
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger>
         <Root href={`/files/${id}`} active={isActive(id)} onDoubleClick={console.log}>
-          <Checkbox checked={selection.includes(id)} onClick={toggleCardSelection} />
+          <Checkbox checked={selection.includes(id)} onClick={handleCardSelect} />
           <Div>
             <Div>FILE_ID {id}</Div>
             {groups.map((id) => (
@@ -218,4 +218,88 @@ const Card: SFC<TCard> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }) =>
   )
 }
 
-export default Card
+const TaskCard: SFC<TTask> = ({ id, pinned, groups, name, description }) => {
+  const router = useRouter()
+  const isActive = useCallback((id: string) => router.query.id === id, [router.query.id])
+
+  const selection = useControlPanelStore((api) => api.selection)
+  const toggleSelect = useControlPanelStore((api) => api.toggleSelect)
+
+  const handleCardSelect = useCallback(
+    (e: any) => {
+      e.preventDefault()
+      toggleSelect(id)
+    },
+    [toggleSelect, id]
+  )
+
+  return (
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>
+        <Root href={`/tasks/${id}`} active={isActive(id)} onDoubleClick={console.log}>
+          <Checkbox checked={selection.includes(id)} onClick={handleCardSelect} />
+          <Div>
+            <Div>TASK_ID {id}</Div>
+            {groups.map((id) => (
+              <Div key={id}>GROUP_ID {id}</Div>
+            ))}
+            {pinned && <Div>PINNED</Div>}
+          </Div>
+          <Div>
+            <Div>NAME {name}</Div>
+            <Div>DESCRIPTION {description}</Div>
+          </Div>
+        </Root>
+      </ContextMenu.Trigger>
+      <ContextMenu.Portal>
+        <ContextMenuContent>
+          <ContextMenuItem>Закрепить</ContextMenuItem>
+          <ContextMenu.Sub>
+            <ContextMenuSubTrigger>
+              Добавить в группу
+              <ChevronIcon />
+            </ContextMenuSubTrigger>
+            <ContextMenu.Portal>
+              <ContextMenuSubContent>
+                <ContextMenuItem>группа 1</ContextMenuItem>
+                <ContextMenuItem>группа 4</ContextMenuItem>
+                <ContextMenuItem>группа 5</ContextMenuItem>
+                <ContextMenuSeparator />
+                <ContextMenuItem>+ Новая группа...</ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenu.Portal>
+          </ContextMenu.Sub>
+          <ContextMenu.Sub>
+            <ContextMenuSubTrigger>
+              Убрать из группы
+              <ChevronIcon />
+            </ContextMenuSubTrigger>
+            <ContextMenu.Portal>
+              <ContextMenuSubContent>
+                <ContextMenuItem>группа 2</ContextMenuItem>
+                <ContextMenuItem>группа 3</ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenu.Portal>
+          </ContextMenu.Sub>
+          <ContextMenuItem>Экспортировать...</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenu.Sub>
+            <ContextMenuSubTrigger>
+              Управление
+              <ChevronIcon />
+            </ContextMenuSubTrigger>
+            <ContextMenu.Portal>
+              <ContextMenuSubContent>
+                <ContextMenuItem>Отложить</ContextMenuItem>
+                <ContextMenuItem>Убрать в архив</ContextMenuItem>
+                <ContextMenuItem>Удалить</ContextMenuItem>
+              </ContextMenuSubContent>
+            </ContextMenu.Portal>
+          </ContextMenu.Sub>
+        </ContextMenuContent>
+      </ContextMenu.Portal>
+    </ContextMenu.Root>
+  )
+}
+
+export { FileCard, TaskCard }

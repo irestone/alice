@@ -3,8 +3,8 @@ import * as Accordion from '@radix-ui/react-accordion'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import { PlusIcon, MinusIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 
-import { Div, SFC, Span, styled } from '../../../styles/components'
-import { TGroup } from '../types'
+import { Div, SFC, Span, styled } from '../../styles/components'
+import { TGroup } from '../../types'
 
 const AccordionTrigger = styled(Accordion.Trigger)
 

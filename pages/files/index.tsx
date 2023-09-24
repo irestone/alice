@@ -1,18 +1,16 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
 
+import Page from '../../components/page'
 import ControlPanel from '../../components/controlPanel'
 import Viewport from '../../components/viewport'
 
-const Page = dynamic(() => import('../../components/page'), { ssr: false })
-
-const Index: NextPage = () => {
+const FilesPage: NextPage = () => {
   const router = useRouter()
   const id = router.query.id as string
   return (
     <Page title={`FILES_DASHBOARD`}>
-      <ControlPanel />
+      <ControlPanel contentType='files' />
       <Viewport>
         <p>files dashboard</p>
       </Viewport>
@@ -20,4 +18,4 @@ const Index: NextPage = () => {
   )
 }
 
-export default Index
+export default FilesPage

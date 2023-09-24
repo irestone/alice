@@ -6,8 +6,7 @@ import { Button, Div, Heading2, Input, SFC, Span, styled } from '../../styles/co
 import FilterIconSVG from '../../public/assets/filter-icon.svg'
 import SearchIconSVG from '../../public/assets/search-icon.svg'
 import CloseIconSVG from '../../public/assets/close-icon.svg'
-import * as Select from '@radix-ui/react-select'
-import { useSelection } from './state'
+import { useControlPanelStore } from './store'
 import {
   DrawingPinIcon,
   ArchiveIcon,
@@ -144,128 +143,69 @@ const Search: SFC<{ onChange: (value: string) => void }> = ({ onChange }) => {
   )
 }
 
-// todo: documents/folder icon on background
-// faded, rotated (like steam HOME button)
-
-const Title = styled(Heading2, {
-  fontSize: '1rem',
-  fontWeight: '100',
-  letterSpacing: '.05em',
-  color: '$gray900',
-  textTransform: 'uppercase',
-})
-
-const ActionButton = styled(Button, {
-  fontSize: '.55rem',
-  fontWeight: 500,
-  color: '#b0b0b0',
-  border: '1px solid #8b8b8b',
-  padding: '.4em .6em',
-  borderRadius: 4,
-  lineHeight: 1.2,
-  textTransform: 'uppercase',
-  '&:hover': {
-    background: '$accent',
-    color: '#eaeaea',
-    borderColor: '#418cc5',
-  },
-})
-
-const ActionBar = styled(Div, {
+const Root = styled(Div, {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   gap: '.3rem',
-  padding: '0 6px',
-  height: 28,
-  // fontSize
   fontWeight: '200',
   color: '#ccc',
   lineHeight: 1,
+  padding: '0 calc(.3rem + 6px) .3rem calc(.3rem + 3px)',
 })
 
-const Root = styled(Div, {
-  '--bd-clr': '#42515d',
-  '--bd': '1px solid var(--bd-clr)',
-  // width: 'calc(100% - 15px)',
-  background: 'linear-gradient(to bottom, #333d47, #374957)',
-  padding: '.8rem calc(.3rem + 6px) .3rem calc(.3rem + 3px)',
-  borderBottom: 'var(--bd)',
-})
+const Controls: SFC = () => {
+  const selection = useControlPanelStore((api) => api.selection)
+  const hasSelection = !isEmpty(selection)
+  const clearSelection = useControlPanelStore((api) => api.clearSelection)
 
-const Head: SFC = () => {
-  const selection = useSelection((s) => s.selection)
-  const clearSelection = useSelection((s) => s.clear)
-  const selectionActionsEnabled = !isEmpty(selection)
+  if (!hasSelection) {
+    return (
+      <Root css={{ marginTop: '.7rem' }}>
+        <Search onChange={noop} />
+        <Filter onChange={noop} />
+      </Root>
+    )
+  }
+
   return (
-    <Root>
-      <Div
-        css={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Title>Картотека</Title>
-        <Div css={{ display: 'flex', gap: 12 }}>
-          <select>
-            <option value='in_work'>в работе</option>
-            <option value='on_hold'>отложенные</option>
-            <option value='archived'>архив</option>
-          </select>
-          <ActionButton>+ новый файл</ActionButton>
-        </Div>
+    <Root css={{ marginTop: '.7rem' }}>
+      <Div css={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
+        <IconButton css={{ width: '1.4rem', padding: '.15rem' }} onClick={clearSelection}>
+          <CloseIcon style={{ fill: '#ccc' }} />
+        </IconButton>
+        <Div>{selection.length}</Div>
       </Div>
-      {selectionActionsEnabled && (
-        <ActionBar css={{ marginTop: '.7rem' }}>
-          <Div css={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
-            <IconButton css={{ width: '1.4rem', padding: '.15rem' }} onClick={clearSelection}>
-              <CloseIcon style={{ fill: '#ccc' }} />
-            </IconButton>
-            <Div>{selection.length}</Div>
-          </Div>
-          <Div css={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
-            <IconButton css={{ width: '1.4rem', padding: '.18rem' }} title='Закрепить'>
-              <DrawingPinIcon style={{ fill: '#ccc' }} />
-            </IconButton>
-            <IconButton
-              css={{
-                width: 'auto',
-                height: '1.4rem',
-                aspectRatio: 'auto',
-                padding: '.24rem',
-                display: 'flex',
-              }}
-            >
-              <SectionIcon style={{ width: '1.4rem', height: '1.4rem', fill: '#ccc' }} />
-              группы
-              <CaretDownIcon style={{ width: '1.4rem', height: '1.4rem', fill: '#ccc' }} />
-            </IconButton>
-            <Span css={{ color: '#536675' }}>|</Span>
-            <IconButton css={{ width: '1.4rem', padding: '.24rem' }} title='Отложить'>
-              <CounterClockwiseClockIcon style={{ fill: '#ccc' }} />
-            </IconButton>
-            <IconButton css={{ width: '1.4rem', padding: '.24rem' }} title='Убрать в архив'>
-              <ArchiveIcon style={{ fill: '#ccc' }} />
-            </IconButton>
-            <IconButton css={{ width: '1.4rem', padding: '.18rem' }} title='Удалить'>
-              <TrashIcon style={{ fill: '#ccc' }} />
-            </IconButton>
-          </Div>
-        </ActionBar>
-      )}
-      {!selectionActionsEnabled && (
-        <ActionBar css={{ marginTop: '.7rem' }}>
-          <Search onChange={noop} />
-          <Filter onChange={noop} />
-        </ActionBar>
-      )}
+      <Div css={{ display: 'flex', alignItems: 'center', gap: '.4rem' }}>
+        <IconButton css={{ width: '1.4rem', padding: '.18rem' }} title='Закрепить'>
+          <DrawingPinIcon style={{ fill: '#ccc' }} />
+        </IconButton>
+        <IconButton
+          css={{
+            width: 'auto',
+            height: '1.4rem',
+            aspectRatio: 'auto',
+            padding: '.24rem',
+            display: 'flex',
+          }}
+        >
+          <SectionIcon style={{ width: '1.4rem', height: '1.4rem', fill: '#ccc' }} />
+          группы
+          <CaretDownIcon style={{ width: '1.4rem', height: '1.4rem', fill: '#ccc' }} />
+        </IconButton>
+        <Span css={{ color: '#536675' }}>|</Span>
+        <IconButton css={{ width: '1.4rem', padding: '.24rem' }} title='Отложить'>
+          <CounterClockwiseClockIcon style={{ fill: '#ccc' }} />
+        </IconButton>
+        <IconButton css={{ width: '1.4rem', padding: '.24rem' }} title='Убрать в архив'>
+          <ArchiveIcon style={{ fill: '#ccc' }} />
+        </IconButton>
+        <IconButton css={{ width: '1.4rem', padding: '.18rem' }} title='Удалить'>
+          <TrashIcon style={{ fill: '#ccc' }} />
+        </IconButton>
+      </Div>
     </Root>
   )
 }
 
-export default Head
-
-// todo(feature):
-// - generate filters set one by one like in notion
-// - save the set to easily reapply it later if needed
+export default Controls

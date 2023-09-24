@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { Div, RouteLink, SFC, styled } from '../../styles/components'
 import { BellIcon } from '@radix-ui/react-icons'
 
+import { Div, RouteLink, SFC, styled } from '../../styles/components'
 import FolderIconSVG from '../../public/assets/folder-icon.svg'
 import TasksIconSVG from '../../public/assets/tasks-icon.svg'
 import ProfileIconSVG from '../../public/assets/profile-icon.svg'
-import { useRouter } from 'next/router'
+import { useControlPanelStore } from './store'
 
 const FolderIcon = styled(FolderIconSVG, { stroke: 'var(--icon-color)' })
 const TasksIcon = styled(TasksIconSVG, { fill: 'var(--icon-color)' })
@@ -70,15 +70,14 @@ const Root = styled(Div, {
 })
 
 const Menu: SFC = () => {
-  const { pathname } = useRouter()
-  const isActiveTab = useCallback((href: string) => pathname.startsWith(href), [pathname])
+  const contentType = useControlPanelStore((api) => api.contentType)
   return (
     <Root>
       <Group>
-        <Tab href='/files' active={isActiveTab('/files')}>
+        <Tab href='/files' active={contentType === 'files'}>
           <FolderIcon css={{ height: 'calc(var(--btn-h) - 10px)' }} />
         </Tab>
-        <Tab href='/tasks' active={isActiveTab('/tasks')}>
+        <Tab href='/tasks' active={contentType === 'tasks'}>
           <TasksIcon css={{ height: 'calc(var(--btn-h) - 16px)' }} />
         </Tab>
       </Group>

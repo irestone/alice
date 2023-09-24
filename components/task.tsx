@@ -1,5 +1,5 @@
 import { Div, SFC, styled } from '../styles/components'
-import { TFile } from '../types'
+import { TTask } from '../types'
 
 const Content = styled('div', {
   display: 'block',
@@ -13,15 +13,15 @@ const Root = styled('div', {
   margin: '1rem auto 3rem',
 })
 
-const File: SFC<TFile & { onChange: (values: any) => void }> = ({ id, onChange }) => {
+const Task: SFC<TTask & { onChange: (values: any) => void }> = ({ id, name, description }) => {
   return (
     <Root>
       <Content>
-        <Div>FILE_ID {id}</Div>
-        <Div>FILE_BODY</Div>
+        <Div>{name}</Div>
+        <Div>{description}</Div>
       </Content>
     </Root>
   )
 }
 
-export default File
+export default Task

@@ -1,6 +1,6 @@
-import { Aside, SFC, styled } from '../styles/components'
+import { styled } from '../styles/components'
 
-const Root = styled(Aside, {
+const Sidebar = styled('aside', {
   display: 'flex',
   flexDirection: 'column',
   width: '32rem',
@@ -12,9 +12,5 @@ const Root = styled(Aside, {
   scrollbarThumbColor: '#666',
   scrollbarThumbColorHovered: '#777',
 })
-
-const Sidebar: SFC = ({ children }) => {
-  return <Root>{children}</Root>
-}
 
 export default Sidebar
