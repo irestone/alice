@@ -1,6 +1,6 @@
 import { concat, filter, map, merge, reject, uniqueId } from 'lodash'
 
-import { TFile, TGroup, TTask } from '../_types'
+import { FILE_STATUS, TASK_STATUS, TFile, TGroup, TTask } from '../_types'
 import stubFiles from './files.json'
 import stubTasks from './tasks.json'
 import stubGroups from './groups.json'
@@ -34,7 +34,7 @@ const files = {
   create: ({ prop3 = false, ...restProps }: NewFileProps) => {
     const file: TFile = {
       id: uniqueId(),
-      status: 'in_work',
+      status: FILE_STATUS.IN_WORK,
       groups: [],
       pinned: false,
       data: {
@@ -69,7 +69,7 @@ const tasks = {
   create: ({ name, description = '', files = [] }: NewTaskProps) => {
     const task: TTask = {
       id: uniqueId(),
-      status: 'in_work',
+      status: TASK_STATUS.IN_WORK,
       files,
       groups: [],
       pinned: false,
