@@ -1,15 +1,13 @@
-import { useCallback } from 'react'
+import { useRouter } from 'next/router'
 import { BellIcon } from '@radix-ui/react-icons'
 
-import { Div, RouteLink, SFC, styled } from '../../styles/components'
-import FolderIconSVG from '../../public/assets/folder-icon.svg'
-import TasksIconSVG from '../../public/assets/tasks-icon.svg'
-import ProfileIconSVG from '../../public/assets/profile-icon.svg'
-import { useControlPanelStore } from './store'
+import { SFC, styled } from '../../_styles'
+import { Div, RouteLink } from '../_primitives'
+import { FolderIcon, ProfileIcon, TasksIcon } from '../_icons'
 
-const FolderIcon = styled(FolderIconSVG, { stroke: 'var(--icon-color)' })
-const TasksIcon = styled(TasksIconSVG, { fill: 'var(--icon-color)' })
-const ProfileIcon = styled(ProfileIconSVG, { fill: 'var(--icon-color)' })
+const FilesTabIcon = styled(FolderIcon, { stroke: 'var(--icon-color)' })
+const TasksTabIcon = styled(TasksIcon, { fill: 'var(--icon-color)' })
+const ProfileButtonIcon = styled(ProfileIcon, { fill: 'var(--icon-color)' })
 
 const Dot = styled('div', {
   width: '.6rem',
@@ -17,19 +15,19 @@ const Dot = styled('div', {
   borderRadius: 99999,
   background: '$accent',
   position: 'absolute',
-  right: 0,
+  right: '10%',
   top: '35%',
   transform: 'translate(-50%, -50%)',
 })
 
 const Button = styled('button', {
   '--icon-color': '#999',
-  '--btn-w': '2rem',
-  '--btn-h': '2rem',
+  '--w': '2.4rem',
+  '--h': '2.4rem',
   display: 'grid',
   placeContent: 'center',
-  width: 'var(--btn-w)',
-  height: 'var(--btn-h)',
+  width: 'var(--w)',
+  height: 'var(--h)',
   position: 'relative',
   '&:hover': { '--icon-color': '#bababa' },
   '&:hover svg': { filter: 'drop-shadow(0 0 .66rem #fff2)' },
@@ -37,13 +35,16 @@ const Button = styled('button', {
 
 const Tab = styled(RouteLink, {
   '--icon-color': '#999',
-  '--btn-w': '4rem',
-  '--btn-h': '2rem',
-  display: 'grid',
-  placeContent: 'center',
-  width: 'var(--btn-w)',
-  height: 'var(--btn-h)',
+  '--h': '2.4rem',
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: '.6rem',
+  height: 'var(--h)',
   background: '#263039',
+  textTransform: 'uppercase',
+  fontSize: '.77rem',
+  fontWeight: 450,
+  // letterSpacing: '.05em',
   '&:hover svg': { filter: 'drop-shadow(0 0 .66rem #fff2)' },
   variants: {
     active: {
@@ -69,23 +70,25 @@ const Root = styled(Div, {
   background: '#232931',
 })
 
-const Menu: SFC = () => {
-  const contentType = useControlPanelStore((api) => api.contentType)
+export const Menu: SFC = () => {
+  const router = useRouter()
   return (
     <Root>
       <Group>
-        <Tab href='/files' active={contentType === 'files'}>
-          <FolderIcon css={{ height: 'calc(var(--btn-h) - 10px)' }} />
+        <Tab href='/files' active={router.pathname.startsWith('/files')}>
+          <FilesTabIcon css={{ height: 'calc(var(--h) - 14px)', width: 'calc(var(--h))' }} />
+          Картотека
         </Tab>
-        <Tab href='/tasks' active={contentType === 'tasks'}>
-          <TasksIcon css={{ height: 'calc(var(--btn-h) - 16px)' }} />
+        <Tab href='/tasks' active={router.pathname.startsWith('/tasks')}>
+          <TasksTabIcon css={{ height: 'calc(var(--h) - 20px)', width: 'calc(var(--h))' }} />
+          Задания
         </Tab>
       </Group>
       <Group css={{ gap: '.3rem', margin: '0 .3rem' }}>
         <Button>
           <BellIcon
             style={{
-              height: 'calc(var(--btn-h) - 14px)',
+              height: 'calc(var(--h) - 20px)',
               width: '100%',
               fill: 'var(--icon-color)',
             }}
@@ -93,11 +96,9 @@ const Menu: SFC = () => {
           <Dot />
         </Button>
         <Button>
-          <ProfileIcon css={{ height: 'calc(var(--btn-h) - 12px)' }} />
+          <ProfileButtonIcon css={{ height: 'calc(var(--h) - 17px)' }} />
         </Button>
       </Group>
     </Root>
   )
 }
-
-export default Menu

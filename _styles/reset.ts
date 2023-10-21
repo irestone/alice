@@ -1,6 +1,6 @@
-import { globalCss } from './config'
+import { stitches } from './stitches'
 
-export const reset = globalCss({
+export const reset = stitches.globalCss({
   '*, ::before, ::after': {
     boxSizing: 'border-box',
   },

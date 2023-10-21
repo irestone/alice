@@ -1,8 +1,8 @@
 [
-  { "id": "a", "contentType": "files", "name": "перерасчет" },
-  { "id": "b", "contentType": "files", "name": "не заполнена общая инфа" },
-  { "id": "c", "contentType": "files", "name": "до пятницы" },
-  { "id": "d", "contentType": "files", "name": "заур" },
-  { "id": "e", "contentType": "tasks", "name": "группа задач 1" },
-  { "id": "f", "contentType": "tasks", "name": "группа задач 2" }
+  { "id": "a", "name": "перерасчет" },
+  { "id": "b", "name": "не заполнена общая инфа" },
+  { "id": "c", "name": "до пятницы" },
+  { "id": "d", "name": "заур" },
+  { "id": "e", "name": "группа задач 1" },
+  { "id": "f", "name": "группа задач 2" }
 ]

@@ -1,112 +1,125 @@
-import { concat, filter, map, merge, uniqueId } from 'lodash'
+import { concat, filter, map, merge, reject, uniqueId } from 'lodash'
 
-import { TContentType, TFile, TGroup, TTask } from '../types'
+import { TFile, TGroup, TTask } from '../_types'
 import stubFiles from './files.json'
 import stubTasks from './tasks.json'
 import stubGroups from './groups.json'
 
 // section #########################################################################################
-//  FILES
+//  UTILS
 // #################################################################################################
 
-let FILES: TFile[] = stubFiles
-
-const getFiles = () => Promise.resolve<TFile[]>(FILES)
-
-const createFile = (prop1: string) => {
-  const file: TFile = {
-    id: uniqueId(),
-    pinned: false,
-    groups: [],
-    prop1,
-    prop3: false,
-    prop4: new Date().toISOString(),
-  }
-  FILES = concat(FILES, file)
-  return Promise.resolve(file)
-}
-
-const updateFiles = (changes: Partial<TFile>, files: string[]) => {
-  FILES = map(FILES, (item) => (files.includes(item.id) ? merge(changes, item) : item))
-  return Promise.resolve()
-}
-
-const deleteFiles = (files: string[]) => {
-  FILES = filter(FILES, ({ id }) => !files.includes(id))
-  return Promise.resolve()
+const collection = {
+  add: (collection: any[], items: any) => {
+    return concat(collection, items)
+  },
+  update: (collection: any[], ids: string[], changes: any) => {
+    return map(collection, (item) => (ids.includes(item.id) ? merge(item, changes) : item))
+  },
+  delete: (collection: any[], ids: string[]) => {
+    return reject(collection, (item) => ids.includes(item.id))
+  },
 }
 
 // section #########################################################################################
-//  TASKS
+//  DB:FILES
 // #################################################################################################
 
-let TASKS: TTask[] = stubTasks
+export type NewFileProps = { prop1: string; prop2?: number; prop3?: boolean }
 
-const getTasks = () => Promise.resolve<TTask[]>(TASKS)
+let FILES = stubFiles as TFile[]
 
-export type NewTaskProps = {
-  name: string
-  description?: string
-  files?: string[]
-}
-
-const createTask = ({ name, description = '', files = [] }: NewTaskProps) => {
-  const task: TTask = { id: uniqueId(), files, name, description, groups: [], pinned: false }
-  TASKS = concat(TASKS, task)
-  return Promise.resolve(task)
-}
-
-const updateTasks = (changes: Partial<TTask>, tasks: string[]) => {
-  TASKS = map(TASKS, (item) => (tasks.includes(item.id) ? merge(changes, item) : item))
-  return Promise.resolve()
-}
-
-const deleteTasks = (tasks: string[]) => {
-  TASKS = filter(TASKS, ({ id }) => !tasks.includes(id))
-  return Promise.resolve()
+const files = {
+  get: () => Promise.resolve<TFile[]>(FILES),
+  create: ({ prop3 = false, ...restProps }: NewFileProps) => {
+    const file: TFile = {
+      id: uniqueId(),
+      status: 'in_work',
+      groups: [],
+      pinned: false,
+      data: {
+        prop3,
+        prop4: new Date().toISOString(),
+        ...restProps,
+      },
+    }
+    FILES = collection.add(FILES, file)
+    return Promise.resolve(file)
+  },
+  update: (ids: string[], changes: Partial<TFile>) => {
+    FILES = collection.update(FILES, ids, changes)
+    return Promise.resolve()
+  },
+  delete: (ids: string[]) => {
+    FILES = collection.delete(FILES, ids)
+    return Promise.resolve()
+  },
 }
 
 // section #########################################################################################
-//  GROUPS
+//  DB:TASKS
 // #################################################################################################
 
-let GROUPS: TGroup[] = stubGroups as any
+export type NewTaskProps = { name: string; description?: string; files?: string[] }
 
-const getGroups = () => Promise.resolve<TGroup[]>(GROUPS)
+let TASKS = stubTasks as TTask[]
 
-const createGroup = (name: string, contentType: TContentType) => {
-  const group: TGroup = { id: uniqueId(), contentType, name }
-  GROUPS = concat(GROUPS, group)
-  return Promise.resolve(group)
+const tasks = {
+  get: () => Promise.resolve<TTask[]>(TASKS),
+  create: ({ name, description = '', files = [] }: NewTaskProps) => {
+    const task: TTask = {
+      id: uniqueId(),
+      status: 'in_work',
+      files,
+      groups: [],
+      pinned: false,
+      data: {
+        name,
+        description,
+      },
+    }
+    TASKS = collection.add(TASKS, task)
+    return Promise.resolve(task)
+  },
+  update: (ids: string[], changes: Partial<TTask>) => {
+    TASKS = collection.update(TASKS, ids, changes)
+    return Promise.resolve()
+  },
+  delete: (ids: string[]) => {
+    TASKS = collection.delete(TASKS, ids)
+    return Promise.resolve()
+  },
 }
 
-const updateGroup = (changes: Partial<TGroup>, group: string) => {
-  GROUPS = GROUPS.map((item) => (item.id === group ? merge(changes, item) : item))
-  return Promise.resolve()
-}
+// section #########################################################################################
+//  DB:GROUPS
+// #################################################################################################
 
-const deleteGroup = (group: string) => {
-  GROUPS = filter(GROUPS, ({ id }) => id !== group)
-  return Promise.resolve()
+export type NewGroupProps = { name: string }
+
+let GROUPS = stubGroups as any as TGroup[]
+
+const groups = {
+  get: () => Promise.resolve<TGroup[]>(GROUPS),
+  create: ({ name }: NewGroupProps) => {
+    const group: TGroup = { id: uniqueId(), name }
+    GROUPS = collection.add(GROUPS, group)
+    return Promise.resolve(group)
+  },
+  update: (ids: string[], changes: Partial<TGroup>) => {
+    GROUPS = collection.update(GROUPS, ids, changes)
+    return Promise.resolve()
+  },
+  delete: (ids: string[]) => {
+    GROUPS = collection.delete(GROUPS, ids)
+    return Promise.resolve()
+  },
 }
 
 // section #########################################################################################
 //  EXPORT
 // #################################################################################################
 
-const db = {
-  getFiles,
-  createFile,
-  updateFiles,
-  deleteFiles,
-  getTasks,
-  createTask,
-  updateTasks,
-  deleteTasks,
-  getGroups,
-  createGroup,
-  updateGroup,
-  deleteGroup,
-}
+const db = { files, tasks, groups }
 
 export default db

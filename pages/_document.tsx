@@ -1,6 +1,7 @@
 import React from 'react'
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
-import { getCssText } from '../styles/config'
+
+import { getCssText } from '../_styles'
 
 export default class Document extends NextDocument {
   render() {

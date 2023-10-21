@@ -1,5 +1,6 @@
 import { random, range } from 'lodash'
-import { Heading4, SFC, styled } from '../../styles/components'
+
+import { SFC, styled } from '../../_styles'
 
 const docs = range(random(2, 5))
 

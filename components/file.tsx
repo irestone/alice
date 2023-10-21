@@ -1,5 +1,6 @@
-import { Div, SFC, styled } from '../styles/components'
-import { TFile } from '../types'
+import { TFile } from '../_types'
+import { SFC, styled } from '../_styles'
+import { Div } from './_primitives'
 
 const Content = styled('div', {
   display: 'block',
@@ -13,12 +14,17 @@ const Root = styled('div', {
   margin: '1rem auto 3rem',
 })
 
-const File: SFC<TFile & { onChange: (values: any) => void }> = ({ id, onChange }) => {
+interface IFile {
+  file: TFile
+  update: (changes: Partial<TFile>) => void
+}
+
+const File: SFC<IFile> = ({ file, update }) => {
   return (
     <Root>
       <Content>
-        <Div>FILE_ID {id}</Div>
-        <Div>FILE_BODY</Div>
+        <Div>FILE_ID {file.id}</Div>
+        <Div>FILE_BODY: {file.data.toString()}</Div>
       </Content>
     </Root>
   )

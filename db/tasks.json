@@ -1,50 +1,68 @@
 [
   {
     "id": "a",
+    "status": "IN_WORK",
     "files": ["a", "c"],
     "groups": [],
     "pinned": false,
-    "name": "task a",
-    "description": "task a description"
+    "data": {
+      "name": "task a",
+      "description": "task a description"
+    }
   },
   {
     "id": "b",
+    "status": "IN_WORK",
     "files": ["d"],
     "groups": ["e"],
     "pinned": true,
-    "name": "task b",
-    "description": "task b description"
+    "data": {
+      "name": "task b",
+      "description": "task b description"
+    }
   },
   {
     "id": "c",
+    "status": "IN_WORK",
     "files": [],
     "groups": ["f"],
     "pinned": false,
-    "name": "task c",
-    "description": "c desc"
+    "data": {
+      "name": "task c",
+      "description": "c desc"
+    }
   },
   {
     "id": "d",
+    "status": "IN_WORK",
     "files": ["b"],
     "groups": ["e", "f"],
     "pinned": false,
-    "name": "task d",
-    "description": ""
+    "data": {
+      "name": "task d",
+      "description": ""
+    }
   },
   {
     "id": "e",
+    "status": "IN_WORK",
     "files": [],
     "groups": [],
     "pinned": false,
-    "name": "task e",
-    "description": ""
+    "data": {
+      "name": "task e",
+      "description": ""
+    }
   },
   {
     "id": "f",
+    "status": "IN_WORK",
     "files": ["a"],
     "groups": [],
     "pinned": true,
-    "name": "task f",
-    "description": "f desc"
+    "data": {
+      "name": "task f",
+      "description": "f desc"
+    }
   }
 ]

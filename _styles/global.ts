@@ -1,13 +1,7 @@
-import { Inter } from '@next/font/google'
+import { stitches } from './stitches'
+import { regularFont } from './fonts'
 
-import { globalCss } from './config'
-
-const regularFont = Inter({
-  subsets: ['cyrillic'],
-  variable: '--font-regular',
-})
-
-export const global = globalCss({
+export const global = stitches.globalCss({
   '*::-webkit-scrollbar-button': { height: 0, width: 0 },
   'html, body, #__next': { height: '100%' },
   body: {

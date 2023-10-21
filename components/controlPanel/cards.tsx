@@ -3,9 +3,14 @@ import { useRouter } from 'next/router'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 
-import { Button, Div, RouteLink, SFC, styled } from '../../styles/components'
-import { useControlPanelStore } from './store'
-import { TFile, TTask } from '../../types'
+import { TFile, TTask } from '../../_types'
+import { SFC, styled } from '../../_styles'
+import { Button, Div, RouteLink } from '../_primitives'
+import { useControlPanelStore } from './_store'
+
+// section #########################################################################################
+//  CHILD COPONENTS
+// #################################################################################################
 
 const Checkbox = styled(Button, {
   width: 16,
@@ -132,7 +137,11 @@ const ChevronIcon = styled(ChevronRightIcon, {
   fill: '#bababa',
 })
 
-const FileCard: SFC<TFile> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }) => {
+// section #########################################################################################
+//  FILE CARD
+// #################################################################################################
+
+export const FileCard: SFC<TFile> = ({ id, pinned, groups, data }) => {
   const router = useRouter()
   const isActive = useCallback((id: string) => router.query.id === id, [router.query.id])
 
@@ -160,10 +169,10 @@ const FileCard: SFC<TFile> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }
             {pinned && <Div>PINNED</Div>}
           </Div>
           <Div>
-            <Div>PROP_1 {prop1}</Div>
-            <Div>PROP_2 {prop2}</Div>
-            <Div>PROP_3 {prop3.toString()}</Div>
-            <Div>PROP_4 {prop4}</Div>
+            <Div>PROP_1 {data.prop1}</Div>
+            <Div>PROP_2 {data.prop2}</Div>
+            <Div>PROP_3 {data.prop3.toString()}</Div>
+            <Div>PROP_4 {data.prop4}</Div>
           </Div>
         </Root>
       </ContextMenu.Trigger>
@@ -218,7 +227,11 @@ const FileCard: SFC<TFile> = ({ id, pinned, groups, prop1, prop2, prop3, prop4 }
   )
 }
 
-const TaskCard: SFC<TTask> = ({ id, pinned, groups, name, description }) => {
+// section #########################################################################################
+//  TASK CARD
+// #################################################################################################
+
+export const TaskCard: SFC<TTask> = ({ id, pinned, groups, data }) => {
   const router = useRouter()
   const isActive = useCallback((id: string) => router.query.id === id, [router.query.id])
 
@@ -246,8 +259,8 @@ const TaskCard: SFC<TTask> = ({ id, pinned, groups, name, description }) => {
             {pinned && <Div>PINNED</Div>}
           </Div>
           <Div>
-            <Div>NAME {name}</Div>
-            <Div>DESCRIPTION {description}</Div>
+            <Div>NAME {data.name}</Div>
+            <Div>DESCRIPTION {data.description}</Div>
           </Div>
         </Root>
       </ContextMenu.Trigger>
@@ -301,5 +314,3 @@ const TaskCard: SFC<TTask> = ({ id, pinned, groups, name, description }) => {
     </ContextMenu.Root>
   )
 }
-
-export { FileCard, TaskCard }

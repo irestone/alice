@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
-import { reset as resetDefaultStyles } from '../styles/reset'
-import { global as applyGlobalStyles } from '../styles/global'
+
+import { applyGlobalStyles, resetDefaultStyles } from '../_styles'
 
 function App({ Component, pageProps }: AppProps) {
   resetDefaultStyles()

@@ -2,27 +2,25 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { find, noop } from 'lodash'
 
-import Page from '../../components/page'
+import { useGlobalStore } from '../../_store'
+import { Page, Sidebar, Viewport } from '../../components/layout'
 import ControlPanel from '../../components/controlPanel'
-import Viewport from '../../components/viewport'
 import File from '../../components/file'
-import Sidebar from '../../components/sidebar'
+import Activity from '../../components/widgets/activity'
 import Documents from '../../components/widgets/documents'
-import Activity from '../../components/activity'
-import { useGlobalStore } from '../../store'
 
 // const Page = dynamic(() => import('../../components/page'), { ssr: false })
 
 const FilePage: NextPage = () => {
   const router = useRouter()
   const id = router.query.id as string
-  const files = useGlobalStore((api) => api.files)
+  const files = useGlobalStore((s) => s.data.files.items)
   const file = find(files, { id })
 
   if (!file) {
     return (
       <Page title={`FILE_NOT_FOUND`}>
-        <ControlPanel contentType='files' />
+        <ControlPanel tab='files' />
         <Viewport>FILE NOT FOUND</Viewport>
       </Page>
     )
@@ -30,9 +28,9 @@ const FilePage: NextPage = () => {
 
   return (
     <Page title={`FILE_ID ${file.id}`}>
-      <ControlPanel contentType='files' />
+      <ControlPanel tab='files' />
       <Viewport>
-        <File {...file} onChange={noop} />
+        <File file={file} update={noop} />
         <Activity history={[]} onComment={noop} />
       </Viewport>
       <Sidebar>

@@ -1,5 +1,6 @@
-import { Div, SFC, styled } from '../styles/components'
-import { TTask } from '../types'
+import { TTask } from '../_types'
+import { SFC, styled } from '../_styles'
+import { Div } from './_primitives'
 
 const Content = styled('div', {
   display: 'block',
@@ -13,12 +14,17 @@ const Root = styled('div', {
   margin: '1rem auto 3rem',
 })
 
-const Task: SFC<TTask & { onChange: (values: any) => void }> = ({ id, name, description }) => {
+interface ITask {
+  task: TTask
+  update: (changes: Partial<TTask>) => void
+}
+
+const Task: SFC<ITask> = ({ task, update }) => {
   return (
     <Root>
       <Content>
-        <Div>{name}</Div>
-        <Div>{description}</Div>
+        <Div>{task.data.name}</Div>
+        <Div>{task.data.description}</Div>
       </Content>
     </Root>
   )

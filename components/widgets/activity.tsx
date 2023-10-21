@@ -1,4 +1,5 @@
-import { Button, Div, Item, SFC, Span, Textarea, styled } from '../styles/components'
+import { SFC, styled } from '../../_styles'
+import { Button, Div, Item, Span, Textarea } from '../_primitives'
 
 type TUser = {
   id: string
