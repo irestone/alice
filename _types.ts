@@ -13,7 +13,7 @@ export enum FILE_STATUS {
 }
 
 export type TFile = {
-  id: string
+  readonly id: string
   status: FILE_STATUS
   groups: string[]
   pinned: boolean
@@ -34,7 +34,7 @@ export enum TASK_STATUS {
 }
 
 export type TTask = {
-  id: string
+  readonly id: string
   status: TASK_STATUS
   files: string[]
   groups: string[]
@@ -46,7 +46,7 @@ export type TTask = {
 }
 
 export type TGroup = {
-  id: string
+  readonly id: string
   name: string
 }
 

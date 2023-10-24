@@ -35,10 +35,15 @@ export const Heading5 = styled('h5')
 export const Heading6 = styled('h6')
 export const Paragraph = styled('p')
 
-// Iteraction/Form
-export const Button = styled('button')
+// Form
+export const Form = styled('form')
 export const Input = styled('input')
 export const Textarea = styled('textarea')
+export const Select = styled('select')
+export const Option = styled('option')
+export const Button = styled('button')
+
+// Links
 export const Link = styled('a')
 export const RouteLink = styled(NextLink)
 
