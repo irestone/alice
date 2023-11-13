@@ -1,17 +1,10 @@
-import type { NextPage } from 'next'
+import { Layout } from '@app/layout'
+import { Collection } from '@app/collection'
 
-import { Page, Viewport } from '../../components/layout'
-import ControlPanel from '../../components/controlPanel'
-
-const TasksPage: NextPage = () => {
+export default function TasksPage() {
   return (
-    <Page title={`TASKS_DASHBOARD`}>
-      <ControlPanel tab='tasks' />
-      <Viewport>
-        <p>tasks dashboard</p>
-      </Viewport>
-    </Page>
+    <Layout title='Tasks'>
+      <Collection category='tasks' />
+    </Layout>
   )
 }
-
-export default TasksPage

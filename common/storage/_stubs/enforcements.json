@@ -1,0 +1,62 @@
+[
+  {
+    "id": "a",
+    "note": {
+      "series": "001",
+      "number": null,
+      "issuer": null,
+      "issueDate": null,
+      "sum": null,
+      "transcript": null,
+      "possession": "unknown"
+    },
+    "proceedingStatus": "not_opened",
+    "proceeding": {
+      "osp": null,
+      "region": "RU-KB",
+      "initDate": null,
+      "endDate": null
+    },
+    "notion": null
+  },
+  {
+    "id": "b",
+    "note": {
+      "series": "002",
+      "number": null,
+      "issuer": null,
+      "issueDate": null,
+      "sum": null,
+      "transcript": null,
+      "possession": "unknown"
+    },
+    "proceedingStatus": "not_opened",
+    "proceeding": {
+      "osp": null,
+      "region": "RU-KDA",
+      "initDate": null,
+      "endDate": null
+    },
+    "notion": null
+  },
+  {
+    "id": "c",
+    "note": {
+      "series": "003",
+      "number": null,
+      "issuer": null,
+      "issueDate": null,
+      "sum": null,
+      "transcript": null,
+      "possession": "unknown"
+    },
+    "proceedingStatus": "not_opened",
+    "proceeding": {
+      "osp": null,
+      "region": null,
+      "initDate": null,
+      "endDate": null
+    },
+    "notion": null
+  }
+]

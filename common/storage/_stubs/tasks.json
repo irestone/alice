@@ -1,0 +1,56 @@
+[
+  {
+    "id": "a",
+    "status": "working",
+    "files": [],
+    "groups": [],
+    "pinned": true,
+    "name": "Pariatur voluptatem accusamus deserunt doloremque in aperiam",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, voluptatum! Quaerat, esse libero suscipit, qui officiis ipsum pariatur nesciunt distinctio accusantium dolores consectetur! Pariatur voluptatem accusamus deserunt doloremque in aperiam."
+  },
+  {
+    "id": "b",
+    "status": "working",
+    "files": ["a"],
+    "groups": [],
+    "pinned": true,
+    "name": "Dignissimos corporis facilis mollitia dicta eius voluptatibus, modi illo!",
+    "description": "Adipisci dolorum sed atque sint accusamus neque ad quod id qui sit! Dignissimos corporis facilis mollitia dicta eius voluptatibus, modi illo! Eum."
+  },
+  {
+    "id": "c",
+    "status": "working",
+    "files": [],
+    "groups": ["a"],
+    "pinned": false,
+    "name": "Illum hic molestias saepe quaerat, ab quam laboriosam",
+    "description": null
+  },
+  {
+    "id": "d",
+    "status": "working",
+    "files": ["a", "b"],
+    "groups": ["b"],
+    "pinned": true,
+    "name": "Voluptas nam repudiandae aut culpa!",
+    "description": "Illum hic molestias saepe quaerat, ab quam laboriosam perspiciatis doloremque sunt, labore autem culpa reiciendis provident debitis? Voluptas nam repudiandae aut culpa!"
+  },
+  {
+    "id": "e",
+    "status": "working",
+    "files": ["a"],
+    "groups": ["a", "c"],
+    "pinned": false,
+    "name": "Perspiciatis debitis, quam perferendis ducimus ullam a pariatur quia",
+    "description": "Eveniet, incidunt. Perspiciatis debitis, quam perferendis ducimus ullam a pariatur quia! Atque, saepe sequi. Enim dolorem, facilis nulla in odit nemo dignissimos! Qui reiciendis suscipit reprehenderit voluptate nulla sunt at quam iste quaerat, praesentium fugiat blanditiis magni recusandae provident sit inventore voluptatibus, accusamus eveniet?"
+  },
+  {
+    "id": "f",
+    "status": "working",
+    "files": ["e"],
+    "groups": [],
+    "pinned": true,
+    "name": "Enim dolorem, facilis nulla in odit nemo",
+    "description": null
+  }
+]

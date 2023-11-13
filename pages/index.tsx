@@ -1,11 +1,10 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { Layout } from '@app/layout'
+import { Dashboard } from '@app/dashboard'
 
-const HomePage = () => {
-  const router = useRouter()
-  useEffect(() => {
-    router.push('/files')
-  }, [router])
+export default function HomePage() {
+  return (
+    <Layout title='Dashboard'>
+      <Dashboard />
+    </Layout>
+  )
 }
-
-export default HomePage

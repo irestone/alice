@@ -1,0 +1,422 @@
+[
+  {
+    "id": "a",
+    "name": "Кривенцова Алиса Валерьевна",
+    "status": "working",
+    "groups": ["c", "d"],
+    "pinned": false,
+    "general": {
+      "fullname": "Кривенцова Алиса Валерьевна",
+      "birthday": null,
+      "address": null,
+      "inn": "122323124",
+      "snils": null,
+      "regions": ["RU-KB", "RU-KDA"],
+      "notion": null
+    },
+    "cases": {
+      "initial": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "appealStatus": "undefined",
+      "appeal": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "cassationStatus": "undefined",
+      "cassation": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "collateralProvided": false,
+      "collateral": {
+        "subject": null,
+        "registered": false,
+        "registration": {
+          "place": null,
+          "date": null
+        }
+      },
+      "cooped": false,
+      "cooperators": null,
+      "notion": null
+    },
+    "succession": {
+      "notificationSent": false,
+      "notification": {
+        "sentAt": null,
+        "spi": null
+      },
+      "applicationStatus": "not_sent",
+      "application": {
+        "sentAt": null,
+        "spi": null
+      },
+      "scheduledFor": null,
+      "inAbsence": false,
+      "decisionStatus": "undefined",
+      "appealed": false,
+      "copy": false,
+      "amount": null,
+      "notion": null
+    },
+    "summary": {
+      "amountByCourt": null,
+      "stateDuty": null,
+      "transcript": null,
+      "amountInContract": null,
+      "amountUponContractPayoff": null,
+      "recalcStatus": null,
+      "liqDebtStatus": null,
+      "liqDebt": {
+        "amount": null,
+        "payoffDate": null
+      },
+      "notion": null
+    },
+    "enforcements": ["a", "b"]
+  },
+  {
+    "id": "b",
+    "name": "Бифов Алихан Русланович",
+    "status": "working",
+    "groups": ["f"],
+    "pinned": true,
+    "general": {
+      "fullname": "Бифов Алихан Русланович",
+      "birthday": "9 мая, 1994 г.",
+      "address": "Нальчик, М. Тореза 78",
+      "inn": "98475029387",
+      "snils": "0213-12312-123 123",
+      "regions": ["RU-KB"],
+      "notion": "когда приложение доделаешь ска блять?!"
+    },
+    "cases": {
+      "initial": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "appealStatus": "undefined",
+      "appeal": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "cassationStatus": "undefined",
+      "cassation": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "collateralProvided": false,
+      "collateral": {
+        "subject": null,
+        "registered": false,
+        "registration": {
+          "place": null,
+          "date": null
+        }
+      },
+      "cooped": false,
+      "cooperators": null,
+      "notion": null
+    },
+    "succession": {
+      "notificationSent": false,
+      "notification": {
+        "sentAt": null,
+        "spi": null
+      },
+      "applicationStatus": "not_sent",
+      "application": {
+        "sentAt": null,
+        "spi": null
+      },
+      "scheduledFor": null,
+      "inAbsence": false,
+      "decisionStatus": "undefined",
+      "appealed": false,
+      "copy": false,
+      "amount": null,
+      "notion": null
+    },
+    "summary": {
+      "amountByCourt": null,
+      "stateDuty": null,
+      "transcript": null,
+      "amountInContract": null,
+      "amountUponContractPayoff": null,
+      "recalcStatus": null,
+      "liqDebtStatus": null,
+      "liqDebt": {
+        "amount": null,
+        "payoffDate": null
+      },
+      "notion": null
+    },
+    "enforcements": null
+  },
+  {
+    "id": "c",
+    "name": "Кривенцов Вадим Валерьевич",
+    "status": "working",
+    "groups": ["d", "e"],
+    "pinned": true,
+    "general": {
+      "fullname": "Кривенцов Вадим Валерьевич",
+      "birthday": null,
+      "address": null,
+      "inn": null,
+      "snils": null,
+      "regions": [],
+      "notion": null
+    },
+    "cases": {
+      "initial": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "appealStatus": "undefined",
+      "appeal": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "cassationStatus": "undefined",
+      "cassation": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "collateralProvided": false,
+      "collateral": {
+        "subject": null,
+        "registered": false,
+        "registration": {
+          "place": null,
+          "date": null
+        }
+      },
+      "cooped": false,
+      "cooperators": null,
+      "notion": null
+    },
+    "succession": {
+      "notificationSent": false,
+      "notification": {
+        "sentAt": null,
+        "spi": null
+      },
+      "applicationStatus": "not_sent",
+      "application": {
+        "sentAt": null,
+        "spi": null
+      },
+      "scheduledFor": null,
+      "inAbsence": false,
+      "decisionStatus": "undefined",
+      "appealed": false,
+      "copy": false,
+      "amount": null,
+      "notion": null
+    },
+    "summary": {
+      "amountByCourt": null,
+      "stateDuty": null,
+      "transcript": null,
+      "amountInContract": null,
+      "amountUponContractPayoff": null,
+      "recalcStatus": null,
+      "liqDebtStatus": null,
+      "liqDebt": {
+        "amount": null,
+        "payoffDate": null
+      },
+      "notion": null
+    },
+    "enforcements": null
+  },
+  {
+    "id": "d",
+    "name": "Бифова Изабелла Руслановна",
+    "status": "working",
+    "groups": [],
+    "pinned": false,
+    "general": {
+      "fullname": "Бифова Изабелла Руслановна",
+      "birthday": null,
+      "address": null,
+      "inn": null,
+      "snils": null,
+      "regions": [],
+      "notion": null
+    },
+    "cases": {
+      "initial": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "appealStatus": "undefined",
+      "appeal": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "cassationStatus": "undefined",
+      "cassation": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "collateralProvided": false,
+      "collateral": {
+        "subject": null,
+        "registered": false,
+        "registration": {
+          "place": null,
+          "date": null
+        }
+      },
+      "cooped": false,
+      "cooperators": null,
+      "notion": null
+    },
+    "succession": {
+      "notificationSent": false,
+      "notification": {
+        "sentAt": null,
+        "spi": null
+      },
+      "applicationStatus": "not_sent",
+      "application": {
+        "sentAt": null,
+        "spi": null
+      },
+      "scheduledFor": null,
+      "inAbsence": false,
+      "decisionStatus": "undefined",
+      "appealed": false,
+      "copy": false,
+      "amount": null,
+      "notion": null
+    },
+    "summary": {
+      "amountByCourt": null,
+      "stateDuty": null,
+      "transcript": null,
+      "amountInContract": null,
+      "amountUponContractPayoff": null,
+      "recalcStatus": null,
+      "liqDebtStatus": null,
+      "liqDebt": {
+        "amount": null,
+        "payoffDate": null
+      },
+      "notion": null
+    },
+    "enforcements": null
+  },
+  {
+    "id": "e",
+    "name": "Богатуров Болислав Чейто",
+    "status": "working",
+    "groups": ["f"],
+    "pinned": true,
+    "general": {
+      "fullname": "Богатуров Болислав Чейто",
+      "birthday": null,
+      "address": null,
+      "inn": null,
+      "snils": null,
+      "regions": [],
+      "notion": null
+    },
+    "cases": {
+      "initial": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "appealStatus": "undefined",
+      "appeal": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "cassationStatus": "undefined",
+      "cassation": {
+        "court": null,
+        "caseNumber": null,
+        "decisionDate": null,
+        "copy": false
+      },
+      "collateralProvided": false,
+      "collateral": {
+        "subject": null,
+        "registered": false,
+        "registration": {
+          "place": null,
+          "date": null
+        }
+      },
+      "cooped": false,
+      "cooperators": null,
+      "notion": null
+    },
+    "succession": {
+      "notificationSent": false,
+      "notification": {
+        "sentAt": null,
+        "spi": null
+      },
+      "applicationStatus": "not_sent",
+      "application": {
+        "sentAt": null,
+        "spi": null
+      },
+      "scheduledFor": null,
+      "inAbsence": false,
+      "decisionStatus": "undefined",
+      "appealed": false,
+      "copy": false,
+      "amount": null,
+      "notion": null
+    },
+    "summary": {
+      "amountByCourt": null,
+      "stateDuty": null,
+      "transcript": null,
+      "amountInContract": null,
+      "amountUponContractPayoff": null,
+      "recalcStatus": null,
+      "liqDebtStatus": null,
+      "liqDebt": {
+        "amount": null,
+        "payoffDate": null
+      },
+      "notion": null
+    },
+    "enforcements": []
+  }
+]

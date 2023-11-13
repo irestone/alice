@@ -1,0 +1,50 @@
+[
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-07T10:53:44.225Z",
+    "payload": "a"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-07T10:54:44.225Z",
+    "payload": "a"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-07T10:57:44.225Z",
+    "payload": "b"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-07T11:12:44.225Z",
+    "payload": "c"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-07T11:14:44.225Z",
+    "payload": "e"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-08T06:11:44.225Z",
+    "payload": "a"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-08T06:15:44.225Z",
+    "payload": "b"
+  },
+  {
+    "type": "file_seen",
+    "by": "alice",
+    "at": "2023-11-08T12:15:44.225Z",
+    "payload": "d"
+  }
+]

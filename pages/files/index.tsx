@@ -1,17 +1,10 @@
-import type { NextPage } from 'next'
+import { Layout } from '@app/layout'
+import { Collection } from '@app/collection'
 
-import { Page, Viewport } from '../../components/layout'
-import ControlPanel from '../../components/controlPanel'
-
-const FilesPage: NextPage = () => {
+export default function FilesPage() {
   return (
-    <Page title={`FILES_DASHBOARD`}>
-      <ControlPanel tab='files' />
-      <Viewport>
-        <p>files dashboard</p>
-      </Viewport>
-    </Page>
+    <Layout title='Files'>
+      <Collection category='files' />
+    </Layout>
   )
 }
-
-export default FilesPage
