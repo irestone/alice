@@ -10,7 +10,7 @@ export const regions: NamedEntry[] = [
 ]
 
 export const fileStatusOpts: NamedEntry[] = [
-  { id: 'working', name: 'в работе' },
+  { id: 'working', name: 'текущие' },
   { id: 'on_hold', name: 'отложенные' },
   { id: 'archived', name: 'архив' },
 ]
@@ -206,21 +206,21 @@ export const fileAttrs: ItemAttr[] = [
     id: 'files:cases.appeal.caseNumber',
     path: 'files:cases.appeal.caseNumber',
     name: 'Номер дела',
-    fullname: 'Номер дела суда апелляции.',
+    fullname: 'Номер дела суда апелляции',
     type: 'string',
   },
   {
     id: 'files:cases.appeal.decisionDate',
     path: 'files:cases.appeal.decisionDate',
     name: 'Дата решения',
-    fullname: 'Дата решения суда апелляции.',
+    fullname: 'Дата решения суда апелляции',
     type: 'date',
   },
   {
     id: 'files:cases.appeal.markedDecisionCopyProvided',
     path: 'files:cases.appeal.markedDecisionCopyProvided',
     name: 'Копия решения',
-    fullname: 'Копия решения суда апелляции.',
+    fullname: 'Копия решения суда апелляции',
     type: 'boolean',
   },
   {
@@ -242,21 +242,21 @@ export const fileAttrs: ItemAttr[] = [
     id: 'files:cases.cassation.caseNumber',
     path: 'files:cases.cassation.caseNumber',
     name: 'Номер дела',
-    fullname: 'Номер дела суда кассации.',
+    fullname: 'Номер дела суда кассации',
     type: 'string',
   },
   {
     id: 'files:cases.cassation.decisionDate',
     path: 'files:cases.cassation.decisionDate',
     name: 'Дата решения',
-    fullname: 'Дата решения суда кассации.',
+    fullname: 'Дата решения суда кассации',
     type: 'date',
   },
   {
     id: 'files:cases.cassation.markedDecisionCopyProvided',
     path: 'files:cases.cassation.markedDecisionCopyProvided',
     name: 'Копия решения',
-    fullname: 'Копия решения суда кассации.',
+    fullname: 'Копия решения суда кассации',
     type: 'boolean',
   },
   {
@@ -697,7 +697,7 @@ export const fileModules: (NamedEntry & { attrs: Source })[] = [
 // #################################################################################################
 
 export const taskStatusOpts: NamedEntry[] = [
-  { id: 'working', name: 'в работе' },
+  { id: 'working', name: 'текущие' },
   { id: 'on_hold', name: 'отложенные' },
   { id: 'archived', name: 'архив' },
 ]

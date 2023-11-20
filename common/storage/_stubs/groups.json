@@ -1,26 +1,26 @@
 [
   {
     "id": "a",
-    "name": "group a"
+    "name": "До пятницы"
   },
   {
     "id": "b",
-    "name": "group b"
+    "name": "Заур"
   },
   {
     "id": "c",
-    "name": "group c"
+    "name": "Заполнить общую инфу"
   },
   {
     "id": "d",
-    "name": "group d"
+    "name": "Заур"
   },
   {
     "id": "e",
-    "name": "group e"
+    "name": "Отправить заявления"
   },
   {
     "id": "f",
-    "name": "group f"
+    "name": "Есть исп. лист"
   }
 ]

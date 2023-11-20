@@ -99,6 +99,15 @@ const utils = {
   px: (v: PV<'paddingLeft'>) => ({ paddingLeft: v, paddingRight: v }),
   py: (v: PV<'paddingTop'>) => ({ paddingTop: v, paddingBottom: v }),
 
+  // border
+  bd: (v: PV<'border'>) => ({ border: v }),
+  bdt: (v: PV<'borderTop'>) => ({ borderTop: v }),
+  bdr: (v: PV<'borderRight'>) => ({ borderRight: v }),
+  bdb: (v: PV<'borderBottom'>) => ({ borderBottom: v }),
+  bdl: (v: PV<'borderLeft'>) => ({ borderLeft: v }),
+  bdx: (v: PV<'borderLeft'>) => ({ borderLeft: v, borderRight: v }),
+  bdy: (v: PV<'borderTop'>) => ({ borderTop: v, borderBottom: v }),
+
   // position
   in: (v: PV<'inset'>) => ({ inset: v }),
   t: (v: PV<'top'>) => ({ top: v }),
@@ -121,8 +130,12 @@ const utils = {
   ff: (v: PV<'fontFamily'>) => ({ fontFamily: v }),
   fs: (v: PV<'fontSize'>) => ({ fontSize: v }),
   fw: (v: PV<'fontWeight'>) => ({ fontWeight: v }),
-  c: (v: PV<'color'>) => ({ color: v }),
+  fsl: (v: PV<'fontStyle'>) => ({ fontStyle: v }),
+  c: (v: PV<'color'>) => ({ color: v, '--color': v }),
   lh: (v: PV<'lineHeight'>) => ({ lineHeight: v }),
+  ti: (v: PV<'textIndent'>) => ({ textIndent: v }),
+  ls: (v: PV<'letterSpacing'>) => ({ letterSpacing: v }),
+  tsh: (v: PV<'textShadow'>) => ({ textShadow: v }),
 
   //todo position('absolute', 16, 16) === p=abs, t=16, y=16
   // toher
@@ -132,10 +145,14 @@ const utils = {
   bgc: (v: PV<'backgroundColor'>) => ({ backgroundColor: v }),
   w: (v: PV<'width'>) => ({ width: v }),
   mw: (v: PV<'minWidth'>) => ({ minWidth: v }),
+  xw: (v: PV<'maxWidth'>) => ({ maxWidth: v }),
   h: (v: PV<'height'>) => ({ height: v }),
   mh: (v: PV<'minHeight'>) => ({ minHeight: v }),
+  xh: (v: PV<'maxHeight'>) => ({ maxHeight: v }),
   size: (v: PV<'width'>) => ({ width: v, height: v }),
   s: (v: PV<'width'>) => ({ width: v, height: v }),
+  ms: (v: PV<'width'>) => ({ minWidth: v, minHeight: v }),
+  xs: (v: PV<'width'>) => ({ maxWidth: v, maxHeight: v }),
   container: (v: string) => ({ containerName: v, containerType: 'inline-size' }),
   linearGradient: (v: string) => ({ backgroundImage: `linear-gradient(${v})` }),
   areas: (areas: string[]) => ({ gridTemplateAreas: areas.join(' ') }),
@@ -153,6 +170,12 @@ const utils = {
   tt: (v: PV<'textTransform'>) => ({ textTransform: v }),
   z: (v: PV<'zIndex'>) => ({ zIndex: v }),
   ol: (v?: PV<'color'>) => ({ outline: `1px solid ${v}` }),
+  mode: (v?: PV<'mixBlendMode'>) => ({ mixBlendMode: v }),
+  op: (v?: PV<'opacity'>) => ({ opacity: v }),
+  pe: (v?: PV<'pointerEvents'>) => ({ pointerEvents: v }),
+  bsh: (v?: PV<'boxShadow'>) => ({ boxShadow: v }),
+  us: (v?: PV<'userSelect'>) => ({ userSelect: v }),
+  cnt: (v?: PV<'content'>) => ({ content: `"${v}"` }),
 }
 
 // section #########################################################################################

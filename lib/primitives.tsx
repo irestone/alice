@@ -5,6 +5,8 @@ import * as RadixPopover from '@radix-ui/react-popover'
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as RadixAccordion from '@radix-ui/react-accordion'
 import * as RadixCollapsible from '@radix-ui/react-collapsible'
+import * as RadixSelect from '@radix-ui/react-select'
+import * as RadixSwitch from '@radix-ui/react-switch'
 
 import { styled } from '@common/styles'
 
@@ -57,43 +59,68 @@ export const Image = styled(NextImage)
 // #################################################################################################
 
 export const Popover = {
-  Root: styled(RadixPopover.Root),
-  Trigger: styled(RadixPopover.Trigger),
+  Anchor: styled(RadixPopover.Anchor),
   Arrow: styled(RadixPopover.Arrow),
   Close: styled(RadixPopover.Close),
-  Portal: styled(RadixPopover.Portal),
   Content: styled(RadixPopover.Content),
+  Portal: styled(RadixPopover.Portal),
+  Root: styled(RadixPopover.Root),
+  Trigger: styled(RadixPopover.Trigger),
 }
 
 export const DropdownMenu = {
-  Root: styled(RadixDropdownMenu.Root),
-  Trigger: styled(RadixDropdownMenu.Trigger),
-  Portal: styled(RadixDropdownMenu.Portal),
   Content: styled(RadixDropdownMenu.Content),
-  Label: styled(RadixDropdownMenu.Label),
-  Item: styled(RadixDropdownMenu.Item),
   Group: styled(RadixDropdownMenu.Group),
+  Item: styled(RadixDropdownMenu.Item),
   ItemIndicator: styled(RadixDropdownMenu.ItemIndicator),
+  Label: styled(RadixDropdownMenu.Label),
+  Portal: styled(RadixDropdownMenu.Portal),
   RadioGroup: styled(RadixDropdownMenu.RadioGroup),
   RadioItem: styled(RadixDropdownMenu.RadioItem),
-  Sub: styled(RadixDropdownMenu.Sub),
-  SubTrigger: styled(RadixDropdownMenu.SubTrigger),
-  SubContent: styled(RadixDropdownMenu.SubContent),
+  Root: styled(RadixDropdownMenu.Root),
   Separator: styled(RadixDropdownMenu.Separator),
+  Sub: styled(RadixDropdownMenu.Sub),
+  SubContent: styled(RadixDropdownMenu.SubContent),
+  SubTrigger: styled(RadixDropdownMenu.SubTrigger),
+  Trigger: styled(RadixDropdownMenu.Trigger),
 }
 
 export const Accordion = {
-  Root: styled(RadixAccordion.Root),
-  Item: styled(RadixAccordion.Item),
-  Header: styled(RadixAccordion.Header),
-  Trigger: styled(RadixAccordion.Trigger),
   Content: styled(RadixAccordion.Content),
+  Header: styled(RadixAccordion.Header),
+  Item: styled(RadixAccordion.Item),
+  Root: styled(RadixAccordion.Root),
+  Trigger: styled(RadixAccordion.Trigger),
 }
 
 export const Collapsible = {
+  Content: styled(RadixCollapsible.Content),
   Root: styled(RadixCollapsible.Root),
   Trigger: styled(RadixCollapsible.Trigger),
-  Content: styled(RadixCollapsible.Content),
+}
+
+// export const Select = {
+//   Arrow: styled(RadixSelect.Arrow),
+//   Content: styled(RadixSelect.Content),
+//   Group: styled(RadixSelect.Group),
+//   Icon: styled(RadixSelect.Icon),
+//   Item: styled(RadixSelect.Item),
+//   ItemIndicator: styled(RadixSelect.ItemIndicator),
+//   ItemText: styled(RadixSelect.ItemText),
+//   Label: styled(RadixSelect.Label),
+//   Portal: styled(RadixSelect.Portal),
+//   Root: styled(RadixSelect.Root),
+//   ScrollDownButton: styled(RadixSelect.ScrollDownButton),
+//   ScrollUpButton: styled(RadixSelect.ScrollUpButton),
+//   Separator: styled(RadixSelect.Separator),
+//   Trigger: styled(RadixSelect.Trigger),
+//   Value: styled(RadixSelect.Value),
+//   Viewport: styled(RadixSelect.Viewport),
+// }
+
+export const Switch = {
+  Root: styled(RadixSwitch.Root),
+  Thumb: styled(RadixSwitch.Thumb),
 }
 
 // section #########################################################################################
@@ -101,38 +128,39 @@ export const Collapsible = {
 // #################################################################################################
 
 const Primitive = {
-  Div,
-  Span,
-  Main,
-  Header,
-  Footer,
+  Accordion,
   Article,
-  Section,
   Aside,
-  Nav,
-  Ul,
-  Li,
+  Button,
+  Collapsible,
+  Div,
+  DropdownMenu,
+  Footer,
+  Form,
   H1,
   H2,
   H3,
   H4,
   H5,
   H6,
-  P,
-  Form,
-  Input,
-  Textarea,
-  Select,
-  Option,
-  Button,
-  Label,
-  Link,
-  RouteLink,
+  Header,
   Image,
+  Input,
+  Label,
+  Li,
+  Link,
+  Main,
+  Nav,
+  Option,
+  P,
   Popover,
-  DropdownMenu,
-  Accordion,
-  Collapsible,
+  RouteLink,
+  Section,
+  Select,
+  Span,
+  Switch,
+  Textarea,
+  Ul,
 }
 
 export default Primitive

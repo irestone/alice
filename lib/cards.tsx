@@ -1,12 +1,28 @@
-import { useRef, useEffect, useMemo } from 'react'
-import { isArray, isEmpty, isNull, isString, map, merge } from 'lodash'
+import { useRef, useEffect, useMemo, useState } from 'react'
+import { isArray, isEmpty, isNull, isString, map, merge, random, truncate } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { CSS, SFC } from '@common/styles'
-import { Item, ItemAttr, NamedEntry, RecursivePartial, Task } from '@common/types'
+import {
+  ID,
+  Item,
+  ItemAttr,
+  NamedEntry,
+  RecursivePartial,
+  Task,
+  Group as TGroup,
+} from '@common/types'
 import { Icon } from '@lib/icons'
 import { Button } from '@lib/buttons'
 import { useStorage } from '@common/storage'
 import { Div, H3, P, Span } from './primitives'
+import { holdListener } from '@common/utils'
+import { useSettings } from '@common/settings'
+import * as fonts from '@common/styles/fonts'
+import { Section } from './sections'
+
+// section #########################################################################################
+//  CARD
+// #################################################################################################
 
 export type CardVariant = 'condensed' | 'normal' | 'detailed'
 
@@ -22,6 +38,8 @@ export interface Card {
   options: [string, () => void][]
   variant?: CardVariant
   mobile?: boolean
+  gradient?: string
+  shadow?: string
 }
 
 const Card: SFC<Card> = (props) => {
@@ -30,49 +48,14 @@ const Card: SFC<Card> = (props) => {
   const router = useRouter()
   const showContent = variant !== 'condensed' && !!props.children
   const rootRef = useRef<HTMLDivElement>(null)
-
   const handleClick = () => {
-    if (props.selection) props.toggleSelected && props.toggleSelected()
+    if (props.selection) props.toggleSelected?.()
     else router.push(props.href)
   }
-
   useEffect(() => {
     const { selection, startSelection } = props
-    if (selection || !startSelection) return undefined
-    const dur = 300
-    let root: HTMLElement
-    let holdId: any
-    let setupId: any
-    const set = () => (holdId = setTimeout(startSelection, dur))
-    const clear = () => holdId && clearTimeout(holdId)
-    const clearListeners = () => {
-      root?.removeEventListener('touchstart', set)
-      root?.removeEventListener('touchend', clear)
-    }
-    const addListeners = () => {
-      root?.addEventListener('touchstart', set)
-      root?.addEventListener('touchend', clear)
-      root?.addEventListener('touchcancel', clear)
-      root?.addEventListener('touchmove', clear)
-    }
-    const setup = () => {
-      const { current } = rootRef
-      if (!current) {
-        setupId = setTimeout(setup, 100)
-        return
-      }
-      root = current
-      clearListeners()
-      addListeners()
-    }
-    setup()
-    return () => {
-      if (holdId) clearTimeout(holdId)
-      if (setupId) clearTimeout(setupId)
-      clearListeners()
-    }
+    if (!selection && startSelection) return holdListener(rootRef, startSelection)
   }, [props])
-
   return (
     <Div
       ref={rootRef}
@@ -80,27 +63,51 @@ const Card: SFC<Card> = (props) => {
         d: 'grid',
         gta: '"content controls"',
         gtc: '1fr auto',
-        p: 4,
-        g: 4,
-        rad: 8,
-        bg: '$gray200',
+        rad: 4,
         pos: 'relative',
-        userSelect: 'none',
+        us: 'none',
         of: 'hidden',
-        ...(props.css ?? {}),
+        bg: props.gradient,
+        bsh: props.shadow,
+        '&::before': {
+          content: '""',
+          d: 'block',
+          pos: 'absolute',
+          in: 0,
+          // bg: 'center top / 80px url(https://www.toptal.com/designers/subtlepatterns/uploads/squared_metal.png)',
+          bg: 'center top / 250px url(https://www.toptal.com/designers/subtlepatterns/uploads/halftone.png)',
+          // bg: `center top / 430px url(https://www.toptal.com/designers/subtlepatterns/uploads/tex2res2.png)`,
+          mode: 'color-burn',
+          op: 0.5,
+          pe: 'none',
+        },
       }}
       onClick={handleClick}
     >
-      <Div css={{ gridArea: 'content', pl: 6, isolation: 'isolate' }}>
-        <H3 css={{ fs: 16, fw: 500, lh: 20 / 16, py: 6, px: 4, mh: 32 }}>{props.item.name}</H3>
-        {showContent && <Div css={{ px: 4, pt: 4, pb: 8 }}>{props.children}</Div>}
+      <Div css={{ gridArea: 'content', isolation: 'isolate' }}>
+        <H3
+          css={{
+            ff: fonts.heading.style.fontFamily,
+            fs: 15,
+            fw: 700,
+            lh: 1.15,
+            tsh: '0 0 2px rgba(0 0 0 / 0.5)',
+            px: 16,
+            py: 12,
+            mh: 32,
+            op: 0.8,
+          }}
+        >
+          {props.item.name}
+        </H3>
+        {showContent && <Div css={{ p: 16, pt: 0 }}>{props.children}</Div>}
       </Div>
-      <Div css={{ gridArea: 'controls', isolation: 'isolate' }}>
+      <Div css={{ gridArea: 'controls', isolation: 'isolate', pt: 4, pr: 4 }}>
         {props.selection ? (
           <Button
             icon='checkmark'
             colors={{
-              idle: { color: '#303030' },
+              idle: { color: '#fff5' },
               active: { background: 'cyan', color: '#131313' },
               preset: 'no_bg',
             }}
@@ -118,22 +125,68 @@ const Card: SFC<Card> = (props) => {
   )
 }
 
-const fileCardAttrs = [
-  'files:general.birthday',
-  'files:general.address',
-  'files:general.inn',
-  'files:general.snils',
-  'files:general.regions',
-  'files:general.notion',
-  'files:enforcements->enforcements:proceeding.region',
-]
+const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children }) => {
+  return (
+    <Div
+      css={{
+        '--fs': '15px',
+        '--lh': 1.15,
+        ff: fonts.text.style.fontFamily,
+        fs: 'var(--fs)',
+        lh: 'var(--lh)',
+        c: '#ffffffaa',
+        d: 'flex',
+      }}
+    >
+      <Div
+        css={{
+          '--h': 'calc(var(--fs) * var(--lh))',
+          w: 24,
+          h: 'var(--h)',
+          d: 'grid',
+          pc: 'center',
+          flexShrink: 0,
+        }}
+      >
+        <Icon
+          css={{
+            s: 'var(--h)',
+            c: 'cyan',
+            mt: 2,
+            filter: 'drop-shadow(0 0 2px rgba(0 0 0 / 0.4))',
+          }}
+        />
+      </Div>
+      <Div>
+        <Span
+          css={{
+            ff: fonts.property.style.fontFamily,
+            fs: 12,
+            fw: 600,
+            tt: 'uppercase',
+            c: 'cyan',
+            tsh: '0 0 2px rgba(0 0 0 / 0.5)',
+            mr: 4,
+          }}
+        >
+          {name}:
+        </Span>
+        {children}
+      </Div>
+    </Div>
+  )
+}
 
-export const FileCard: SFC<Omit<Card, 'href' | 'options'>> = (props) => {
+// part ==========================================
+//  FILE
+// ===============================================
+
+export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
   const get = useStorage((s) => s.get)
   const getValue = useStorage((s) => s.getValue)
-
-  const rows = useMemo(() => {
-    return fileCardAttrs
+  const settings = useSettings('files')
+  const content = useMemo(() => {
+    return settings.content
       .map((id) => {
         const attr = get<ItemAttr>('fileAttrs', id)
         const results = getValue(props.item, attr)
@@ -149,99 +202,110 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options'>> = (props) => {
           .map((v) => (!selectable ? v : !isArray(v) ? v.name : map(v, 'name')))
           .flat()
           .join(', ')
+
         return (
-          <Div key={id}>
-            <Span css={{ fs: 13, fw: 600 }}>{name}:</Span>
-            <Span css={{ fs: 13, pl: 4, c: '#c9d1db', fontStyle: 'italic' }}>{value}</Span>
-          </Div>
+          <Property key={id} Icon={Icon.Property} name={name}>
+            {value}
+          </Property>
         )
       })
       .filter((v) => !!v)
-  }, [get, getValue, props.item])
+  }, [props.item, settings.content, get, getValue])
 
   return (
     <Card
       href={`/files/${props.item.id}`}
       options={[]}
+      gradient='radial-gradient(circle at left bottom, rgb(127 129 133), rgb(45 50 57))'
+      shadow='-2px 2px 12px rgb(167 162 133 / 0.1)'
       {...props}
-      css={{
-        bg: 'linear-gradient(45deg, rgb(111 175 253), rgb(37 33 25))',
-        // bg: 'linear-gradient(45deg, rgb(67 173 247), rgb(39, 39, 39))',
-        // bg: 'linear-gradient(45deg, rgb(43 153 231), rgb(39, 39, 39))',
-        // bg: 'linear-gradient(45deg, rgb(25, 173, 173), rgb(39 39 39))',
-        filter: 'drop-shadow(-1px 0 4px rgb(67 173 247 / 0.07))',
-        '&::before': {
-          content: '""',
-          d: 'block',
-          pos: 'absolute',
-          in: 0,
-          bg: 'no-repeat center -14px / 400px auto url(/textures/Texturelabs_Paper_338S.jpg)',
-          // mixBlendMode: 'screen',
-          mixBlendMode: 'hard-light',
-          filter: 'opacity(0.5)',
-          pointerEvents: 'none',
-          userSelect: 'none',
-        },
-      }}
     >
-      {!isEmpty(rows) && <Div css={{ d: 'flex', fd: 'column', g: 2 }}>{rows}</Div>}
+      {!isEmpty(content) && <Div css={{ d: 'grid', g: 2 }}>{content}</Div>}
     </Card>
   )
 }
 
-export const TaskCard: SFC<Omit<Card, 'href' | 'options'>> = (props) => {
+// part ==========================================
+//  TASK
+// ===============================================
+
+export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
   const get = useStorage((s) => s.get)
   const getValue = useStorage((s) => s.getValue)
-
-  const descAttr = get<ItemAttr>('taskAttrs', 'tasks:description')
-  const descRes = getValue(props.item, descAttr)
+  const settings = useSettings('tasks')
+  const showDescription = settings.content.includes('tasks:description')
+  const descriptionAttr = get<ItemAttr>('taskAttrs', 'tasks:description')
+  const descriptionProp = getValue(props.item, descriptionAttr)
   return (
     <Card
       href={`/tasks/${props.item.id}`}
       options={[]}
+      gradient='radial-gradient(circle at left bottom, rgb(131 123 105), rgb(55 52 45))'
+      shadow='-2px 2px 12px rgb(249 204 42 / 0.1)'
       {...props}
-      css={{
-        bg: 'linear-gradient(45deg, rgb(249 204 42), rgb(39, 39, 39))',
-        filter: 'drop-shadow(-1px 0 4px rgb(249 204 42 / 0.07))',
-        '&::before': {
-          content: '""',
-          d: 'block',
-          pos: 'absolute',
-          in: 0,
-          bg: 'no-repeat center -14px / 400px auto url(/textures/Texturelabs_Paper_338S.jpg)',
-          mixBlendMode: 'hard-light',
-          filter: 'opacity(0.5)',
-          pointerEvents: 'none',
-          userSelect: 'none',
-        },
-      }}
     >
-      {!!descRes.value && (
-        <Div
-          css={{
-            fs: 13,
-            fontStyle: 'italic',
-            c: 'rgb(223 217 191)',
-            textIndent: 12,
-            pos: 'relative',
-          }}
-        >
-          <Icon.Quote
-            css={{
-              s: 20,
-              pos: 'absolute',
-              l: 4,
-              t: -5,
-              '--color': 'rgb(223 217 191)',
-              // '--color': 'rgb(249 204 42)',
-              filter: 'drop-shadow(0 0 8px rgb(249 204 42 / 0.9))',
-              rotate: '180deg',
-              z: 0,
-            }}
-          />
-          <P css={{ pos: 'relative', px: 16 }}>{descRes.value}</P>
-        </Div>
+      {showDescription && !!descriptionProp.value && (
+        <Property Icon={Icon.QuoteStart} name={descriptionAttr.fullname ?? descriptionAttr.name}>
+          {descriptionProp.value}
+        </Property>
       )}
     </Card>
+  )
+}
+
+// section #########################################################################################
+//  GROUP
+// #################################################################################################
+
+export const Group: SFC<{
+  group: TGroup
+  updateGroup: (changes: Partial<TGroup>) => void
+  deleteGroup: () => void
+  expanded: boolean
+  toggleExpanded: () => void
+}> = ({ group, children }) => {
+  const [editing, setEditing] = useState(false)
+  return (
+    <Section
+      title={group.name}
+      actions={
+        editing
+          ? [
+              <Button
+                key='delete'
+                icon='delete'
+                colors={{ color: 'indianred', preset: 'no_bg' }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              />,
+              <Button
+                key='save'
+                icon='checkmark'
+                colors={{ color: 'cyan', preset: 'no_bg' }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setEditing(false)
+                }}
+              />,
+            ]
+          : [
+              <Button
+                key='edit'
+                icon='edit'
+                colors={{ preset: 'no_bg', color: 'cyan' }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setEditing(true)
+                }}
+              />,
+            ]
+      }
+      stickHeadAt={101}
+      collapsible
+      counter
+    >
+      {children}
+    </Section>
   )
 }

@@ -7,7 +7,7 @@
     "pinned": false,
     "general": {
       "fullname": "Кривенцова Алиса Валерьевна",
-      "birthday": null,
+      "birthday": "14 июля, 1888 г.",
       "address": null,
       "inn": "122323124",
       "snils": null,
@@ -172,14 +172,14 @@
     "name": "Кривенцов Вадим Валерьевич",
     "status": "working",
     "groups": ["d", "e"],
-    "pinned": true,
+    "pinned": false,
     "general": {
       "fullname": "Кривенцов Вадим Валерьевич",
-      "birthday": null,
-      "address": null,
-      "inn": null,
-      "snils": null,
-      "regions": [],
+      "birthday": "7 июня, 1994 г.",
+      "address": "Нальчик, Ахохова 37б, кв. 32",
+      "inn": "32942309840",
+      "snils": "4364-4355-5645 123",
+      "regions": ["RU-KDA"],
       "notion": null
     },
     "cases": {
@@ -259,12 +259,12 @@
     "pinned": false,
     "general": {
       "fullname": "Бифова Изабелла Руслановна",
-      "birthday": null,
-      "address": null,
+      "birthday": "13 апреля, 2002 г.",
+      "address": "Нальчик, М. Тореза 78",
       "inn": null,
       "snils": null,
       "regions": [],
-      "notion": null
+      "notion": "пинай брата епт"
     },
     "cases": {
       "initial": {
@@ -347,8 +347,8 @@
       "address": null,
       "inn": null,
       "snils": null,
-      "regions": [],
-      "notion": null
+      "regions": ["RU-KDA"],
+      "notion": "не помню отчество"
     },
     "cases": {
       "initial": {

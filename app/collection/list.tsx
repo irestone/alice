@@ -3,13 +3,13 @@ import lodash, { filter, isEmpty, noop, xor } from 'lodash'
 import { SFC, styled } from '@common/styles'
 import * as T from '@common/types'
 import { useStorage } from '@common/storage'
-import { Mobile } from '@lib/mobile'
-import { Card, FileCard, TaskCard } from '@lib/cards'
+import { useSettings } from '@common/settings'
 import { Div } from '@lib/primitives'
-import { useSettings } from './list/storage'
-import { Group, groupBy } from './list/groups'
+import { Mobile } from '@lib/mobile'
+import { Card, FileCard, Group, TaskCard } from '@lib/cards'
+import { Controls } from './list/controls'
 import { Selection } from './list/selection'
-import { Controls, useFilterPredicate } from './list/controls'
+import { groupBy, useFilterPredicate } from './list/utils'
 
 const assets: Record<
   T.Category,
@@ -17,7 +17,8 @@ const assets: Record<
     title: string
     groupingOpts: T.CollectionName
     statusOpts: T.CollectionName
-    filterAttrs: T.CollectionName
+    attrs: T.CollectionName
+    attrModules: T.CollectionName | null
     Card: SFC<Card>
   }
 > = {
@@ -25,20 +26,22 @@ const assets: Record<
     title: 'Каталог',
     groupingOpts: 'fileGroupingOpts',
     statusOpts: 'fileStatusOpts',
-    filterAttrs: 'fileAttrs',
+    attrs: 'fileAttrs',
+    attrModules: 'fileModules',
     Card: FileCard,
   },
   tasks: {
     title: 'Задания',
     groupingOpts: 'taskGroupingOpts',
     statusOpts: 'taskStatusOpts',
-    filterAttrs: 'taskAttrs',
+    attrs: 'taskAttrs',
+    attrModules: null,
     Card: TaskCard,
   },
 }
 
 // section #########################################################################################
-//  LAYOUT
+//  COMPONENTS
 // #################################################################################################
 
 const Head: SFC<{ mobile?: boolean } & Partial<ComponentProps<typeof Mobile.Head>>> = (props) => {
@@ -63,7 +66,7 @@ const Root = styled(Mobile.Root, {
 })
 
 // section #########################################################################################
-//  MAIN
+//  LIST
 // #################################################################################################
 
 export const List: SFC<{
@@ -72,11 +75,12 @@ export const List: SFC<{
 }> = ({ category: cat, mobile }) => {
   const { Card, title } = assets[cat]
   const settings = useSettings(cat)
-  const collections = useStorage((s: any) => ({
+  const storage = useStorage((s: any) => ({
     items: s.collections[cat],
     groups: s.collections.groups,
     statusOpts: s.collections[assets[cat].statusOpts],
-    filterAttrs: s.collections[assets[cat].filterAttrs],
+    attrs: s.collections[assets[cat].attrs],
+    modules: assets[cat].attrModules ? s.collections[assets[cat].attrModules as any] : null,
     groupingOpts: s.collections[assets[cat].groupingOpts],
     get: s.get,
     add: s.add,
@@ -84,16 +88,17 @@ export const List: SFC<{
     del: s.del,
   }))
 
-  const predicate = useFilterPredicate(settings.filter, assets[cat].filterAttrs)
-  const filtered = useMemo<any[]>(() => {
-    return lodash
-      .chain(collections.items)
-      .filter({ status: settings.status })
-      .filter(predicate)
-      .value()
-  }, [collections.items, settings, predicate])
+  //todo add 'filterable' prop to entries to filter out 'pinned', 'status' etc from this
+  const attrs = storage.modules
+    ? storage.modules.map((m: any) => [m, storage.get(m.attrs.src, m.attrs.target)])
+    : storage.attrs
 
-  const grouped = groupBy(filtered, collections.groups, settings.grouping)
+  const predicate = useFilterPredicate(settings.filter, assets[cat].attrs)
+  const filtered = useMemo<any[]>(() => {
+    return lodash.chain(storage.items).filter({ status: settings.status }).filter(predicate).value()
+  }, [storage.items, settings, predicate])
+
+  const grouped = groupBy(filtered, storage.groups, settings.grouping)
 
   const [selection, setSelection] = useState<string[]>([])
   const selected = useMemo(() => {
@@ -107,20 +112,26 @@ export const List: SFC<{
           <Controls
             status={settings.status}
             setStatus={(v) => settings.set({ status: v })}
-            statusOptions={collections.statusOpts}
-            filter={settings.filter}
-            setFilter={(v) => settings.set({ filter: v })}
-            filterAttrs={collections.filterAttrs}
+            statusOptions={storage.statusOpts}
             grouping={settings.grouping}
             setGrouping={(v) => settings.set({ grouping: v })}
-            groupingOptions={collections.groupingOpts}
+            groupingOptions={storage.groupingOpts}
+            variant={settings.variant}
+            setVariant={(v) => settings.set({ variant: v })}
+            content={settings.content}
+            setContent={(v) => settings.set({ content: v })}
+            filtering={settings.filtering}
+            setFiltering={(v) => settings.set({ filtering: v })}
+            filter={settings.filter}
+            setFilter={(v) => settings.set({ filter: v })}
+            attrs={attrs}
           />
         ) : (
           <Selection
             status={settings.status}
             items={selected}
-            updateItems={(v) => collections.upd(cat, selection, v)}
-            deleteItems={() => collections.del(cat, selection)}
+            updateItems={(v) => storage.upd(cat, selection, v)}
+            deleteItems={() => storage.del(cat, selection)}
             clearSelection={() => setSelection([])}
           />
         )}
@@ -130,8 +141,8 @@ export const List: SFC<{
           <Group
             key={group.id}
             group={group}
-            updateGroup={(v) => collections.upd(cat, group.id, v)}
-            deleteGroup={() => collections.del(cat, group.id)}
+            updateGroup={(v) => storage.upd(cat, group.id, v)}
+            deleteGroup={() => storage.del(cat, group.id)}
             expanded={settings.expandedGroups.includes(group.id)}
             toggleExpanded={() => {
               settings.set({ expandedGroups: xor(settings.expandedGroups, [group.id]) })
@@ -143,14 +154,14 @@ export const List: SFC<{
                 href={`/${cat}/${item.id}`}
                 options={[]}
                 item={item}
-                updItem={(v) => collections.upd(cat, item.id, v)}
-                delItem={() => collections.del(cat, item.id)}
+                updItem={(v) => storage.upd(cat, item.id, v)}
+                delItem={() => storage.del(cat, item.id)}
                 selection={!isEmpty(selection)}
                 startSelection={() => setSelection([item.id])}
                 selected={selection.includes(item.id)}
                 toggleSelected={() => setSelection(xor(selection, [item.id]))}
+                variant={settings.variant}
                 mobile={mobile}
-                variant={settings.cardVariant}
               />
             ))}
           </Group>

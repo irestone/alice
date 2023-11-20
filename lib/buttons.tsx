@@ -1,11 +1,12 @@
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useEffect, useRef } from 'react'
 import { isString, merge } from 'lodash'
 import { CSS, SFC } from '@common/styles'
 import { RecursivePartial } from '@common/types'
 import { Icon } from '@lib/icons'
 import Primitive, { RouteLink, Span } from './primitives'
+import { holdListener } from '@common/utils'
 
-type IconName =
+export type IconName =
   | 'home'
   | 'catalog'
   | 'checklist'
@@ -32,6 +33,11 @@ type IconName =
   | 'archive'
   | 'grouping'
   | 'task'
+  | 'plus'
+  | 'list'
+  | 'property'
+  | 'filter2'
+  | 'back'
 
 const icons: Record<IconName, { default: SFC; filled: SFC }> = {
   home: { default: Icon.Home, filled: Icon.HomeFilled },
@@ -60,12 +66,23 @@ const icons: Record<IconName, { default: SFC; filled: SFC }> = {
   history: { default: Icon.History, filled: Icon.History },
   link: { default: Icon.Link, filled: Icon.Link },
   task: { default: Icon.Task, filled: Icon.TaskFilled },
+  plus: { default: Icon.Plus, filled: Icon.Plus },
+  list: { default: Icon.List, filled: Icon.List },
+  property: { default: Icon.Property, filled: Icon.Property },
+  filter2: { default: Icon.Filter2, filled: Icon.Filter2 },
+  back: { default: Icon.Back, filled: Icon.Back },
 }
 
 type ButtonState = 'idle' | 'hovered' | 'focused' | 'active'
 type ColorSet = { color: string; background: string }
 type ColorPreset = Record<ButtonState, ColorSet>
-type ColorPresetName = 'default' | 'no_bg' | 'active_bg' | 'dimmed'
+type ColorPresetName =
+  | 'default'
+  | 'no_bg'
+  | 'active_bg'
+  | 'dimmed'
+  | 'default_inversed'
+  | 'no_bg_inversed'
 
 const colorPresets: Record<ColorPresetName, ColorPreset> = {
   default: {
@@ -74,11 +91,23 @@ const colorPresets: Record<ColorPresetName, ColorPreset> = {
     focused: { color: '#eaeaea', background: '#232323' },
     active: { color: '#232323', background: '#eaeaea' },
   },
+  default_inversed: {
+    idle: { color: '#232323', background: '#eaeaea' },
+    hovered: { color: '#232323', background: '#c9c9c9' },
+    focused: { color: '#232323', background: '#c9c9c9' },
+    active: { color: '#eaeaea', background: '#191919' },
+  },
   no_bg: {
     idle: { color: '#eaeaea', background: 'none' },
     hovered: { color: '#eaeaea', background: 'none' },
     focused: { color: '#eaeaea', background: 'none' },
     active: { color: '#eaeaea', background: 'none' },
+  },
+  no_bg_inversed: {
+    idle: { color: '#232323', background: 'none' },
+    hovered: { color: '#232323', background: 'none' },
+    focused: { color: '#232323', background: 'none' },
+    active: { color: '#232323', background: 'none' },
   },
   active_bg: {
     idle: { color: '#eaeaea', background: 'none' },
@@ -117,21 +146,19 @@ const produceColorPreset = (
     const basePreset = colorPresets[colors.preset ?? 'default']
     cp = merge({}, basePreset, customPreset)
   }
-  if (active) console.log('active', cp)
-  const r = {
-    '--color': active ? cp.active.color : cp.idle.color,
-    background: active ? cp.active.background : cp.idle.background,
-    '&:hover': {
-      '--color': active ? cp.active.color : cp.hovered.color,
-      background: active ? cp.active.background : cp.hovered.background,
-    },
-    '&:focus': {
-      '--color': active ? cp.active.color : cp.focused.color,
-      background: active ? cp.active.background : cp.focused.background,
-    },
-  }
-  if (active) console.log('active', cp, r)
-  return r
+  return active
+    ? {
+        c: cp.active.color,
+        bg: cp.active.background,
+        '&:hover': { c: cp.active.color, bg: cp.active.background },
+        '&:focus': { c: cp.active.color, bg: cp.active.background },
+      }
+    : {
+        c: cp.idle.color,
+        bg: cp.idle.background,
+        '&:hover': { c: cp.hovered.color, bg: cp.hovered.background },
+        '&:focus': { c: cp.focused.color, bg: cp.focused.background },
+      }
 }
 
 export const Button: SFC<{
@@ -145,24 +172,32 @@ export const Button: SFC<{
   caption?: boolean
   href?: string
   onClick?: MouseEventHandler
+  onHold?: () => void
   css?: CSS
 }> = (props) => {
   const { size = 0, corners = 0, active, children } = props
   const outS = 32 + 8 * size
   const inS = 16 + 4 * size
+  const d = outS - inS
   const colors = produceColorPreset(props.colors, active)
   const Root = props.href ? RouteLink : Primitive.Button
   const Icon = props.icon && (active ? icons[props.icon].filled : icons[props.icon].default)
 
-  if (props.caption && props.icon && props.children) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (props.onHold) return holdListener(rootRef, props.onHold, 150)
+  }, [props.onHold])
+
+  const captionedIcons = props.caption && props.icon && props.children
+  if (captionedIcons) {
     return (
       // @ts-expect-error
       <Root
+        ref={rootRef}
         href={props.href}
         css={{
           h: outS,
           w: children ? 'auto' : outS,
-          // px: children ? 0.5 * (outS - inS) : 0,
           d: 'flex',
           jc: 'center',
           ai: 'center',
@@ -171,8 +206,7 @@ export const Button: SFC<{
           ...colors,
           fd: 'column',
           g: 6,
-          // bg: '#232323',
-          px: 0.25 * (outS - inS),
+          px: 0.25 * d,
           ...(props.css ?? {}),
         }}
         onClick={props.onClick}
@@ -181,11 +215,8 @@ export const Button: SFC<{
         {children && (
           <Span
             css={{
-              // fs: 1.1 * inS,
               lh: 1 / 1.1,
               c: 'var(--color)',
-              // ml: Icon ? 0.5 * (outS - inS) - 0.1 * inS : 0,
-              // fw: 300,
               fs: 0.52 * inS,
               whiteSpace: 'nowrap',
             }}
@@ -200,16 +231,20 @@ export const Button: SFC<{
   return (
     // @ts-expect-error
     <Root
+      ref={rootRef}
       href={props.href}
       css={{
-        h: outS,
-        w: children ? 'auto' : outS,
-        px: children ? 0.5 * (outS - inS) : 0,
         d: 'flex',
         jc: 'center',
         ai: 'center',
+        h: outS,
+        w: children ? 'auto' : outS,
+        pl: Icon && !children ? 0 : Icon ? 0.5 * d : children ? 0.75 * d : 0,
+        pr: children ? 0.75 * d : 0,
+        g: 0.5 * d - 0.1 * inS,
         rad: !corners || corners === 'round' ? 999 : corners === 'smooth' ? 8 : corners,
         flexShrink: 0,
+        whiteSpace: 'nowrap',
         ...colors,
         ...(props.css ?? {}),
       }}
@@ -219,12 +254,13 @@ export const Button: SFC<{
       {children && (
         <Span
           css={{
-            // fs: 1.1 * inS,
-            // lh: 1 / 1.1,
             fs: 13,
             c: 'var(--color)',
-            ml: Icon ? 0.5 * (outS - inS) - 0.1 * inS : 0,
             fw: 300,
+            whiteSpace: 'nowrap',
+            d: 'flex',
+            ai: 'center',
+            g: 4,
           }}
         >
           {children}

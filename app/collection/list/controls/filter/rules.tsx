@@ -1,4 +1,4 @@
-import { Div, DropdownMenu, Span } from 'lib/primitives'
+import { Div, DropdownMenu, Span, Select, Option } from 'lib/primitives'
 import { useStorage } from '@common/storage'
 import { SFC, styled } from '@common/styles'
 import { AttrType, CollectionName, Entry, ID, ItemAttr, NamedEntry } from '@common/types'
@@ -10,77 +10,45 @@ import { AttrField } from '@lib/fields'
 export type Rule = Entry & { attr: ID; operator: ID; input?: any }
 export type NewRule = { attr: ID; operator: ID; input?: any }
 
-// section #########################################################################################
-//  RULES
-// #################################################################################################
-
 export const Rule: SFC<{
   rule: Rule
-  updRule: (changes: Partial<Rule>) => void
-  delRule: () => void
-  attrs: CollectionName
+  updateRule: (changes: Partial<Rule>) => void
+  deleteRule: () => void
+  attrs: ItemAttr[]
 }> = (props) => {
-  const { rule, updRule, delRule } = props
+  const { rule, updateRule, deleteRule } = props
+  const attr = find(props.attrs, { id: rule.attr })
+  if (!attr) throw new Error(`attr not found ${rule.attr}`)
   const get = useStorage((s) => s.get)
-  const attr = get<ItemAttr>(props.attrs, rule.attr)
-  const attrs = get<ItemAttr[]>(props.attrs)
-  const inputOpts = attr.options ? get<NamedEntry[]>(attr.options) : null
-  const InputField = AttrField
+  const attrOptions = attr.options ? get<NamedEntry[]>(attr.options) : null
+  const attrOperators = getOperator((op) => op.attrTypes.includes(attr.type))
+  const operator = getOperator(rule.operator)
+  const SelectOperator = AttrField.select
+  const InputField = AttrField[attr.type]
   return (
-    <Div css={{ d: 'flex', g: '.5rem', input: { bg: 'white' } }}>
-      <select value={rule.attr} onChange={(e) => updRule({ attr: e.target.value })}>
-        {attrs.map((el) => (
-          <option key={el.id} value={el.id}>
-            {el.name}
-          </option>
-        ))}
-      </select>
-      <select value={rule.operator} onChange={(e) => updRule({ operator: e.target.value })}>
-        {getOperator((op) => op.attrTypes.includes(attr.type)).map((op) => (
-          <option key={op.id} value={op.id}>
-            {op.name}
-          </option>
-        ))}
-      </select>
-      {/* {getOperator(rule.operator).type === 'binary' && (
+    <Div css={{ d: 'flex', fd: 'column', g: 8 }}>
+      <Div css={{ flex: 1, d: 'flex', jc: 'space-between' }}>
+        <Span css={{ fs: 13, lh: 16 / 13, ml: 8, my: 8 }}>{attr.fullname ?? attr.name}</Span>
+        <Button icon='close' colors={{ preset: 'no_bg', color: '#aaa' }} onClick={deleteRule} />
+      </Div>
+      <SelectOperator
+        value={rule.operator}
+        onChange={(e: any) => updateRule({ operator: e.target.value })}
+        options={attrOperators}
+        css={{ w: '100%' }}
+      />
+      {operator.type === 'binary' && (
         <InputField
           value={rule.input}
-          onChange={(e: any) => updRule({ input: e.target.value })}
-          options={inputOpts}
+          onChange={(e: any) => updateRule({ input: e.target.value })}
+          options={attrOptions}
         />
-      )} */}
-      <Button onClick={delRule}>убрать</Button>
+      )}
     </Div>
   )
 }
 
-export const Ruleset = styled('div', { p: 8, d: 'flex', fd: 'column', g: 4 })
-
-// section #########################################################################################
-//  MENU
-// #################################################################################################
-
-export const Menu: SFC<{
-  attrs: CollectionName
-  addRule: (values: NewRule) => void
-}> = (props) => {
-  const get = useStorage((s) => s.get)
-  const attrs = get(props.attrs) as ItemAttr[]
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>+ add rule</DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
-          {attrs.map((opt) => (
-            <DropdownMenu.Item
-              key={opt.id}
-              onClick={() => console.log(`add rule: ${opt.fullname}`)}
-            >
-              {opt.fullname}
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  )
+export const createRule = (attr: ItemAttr): Rule => {
+  const op = getOperator((op) => op.attrTypes.includes(attr.type))[0]
+  return { id: new Date().toISOString(), attr: attr.id, operator: op.id }
 }

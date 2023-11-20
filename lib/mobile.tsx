@@ -28,7 +28,7 @@ const MobileHead: SFC<{ title: string; actions?: ReactNode[]; search?: boolean }
 }
 
 const MobileRoot = styled('div', { height: '100%', overflow: 'auto' })
-const MobileBody = styled('div', { display: 'flex', flexDirection: 'column', gap: 8, pb: 8 })
+const MobileBody = styled('div', { display: 'flex', flexDirection: 'column', pb: 8 })
 
 export const Mobile = {
   Root: MobileRoot,

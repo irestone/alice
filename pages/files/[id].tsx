@@ -1,6 +1,6 @@
 import { Layout } from '@app/layout'
 import { Collection } from '@app/collection'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 
 export default function FilePage() {
   const router = useRouter()

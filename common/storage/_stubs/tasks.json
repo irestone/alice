@@ -5,25 +5,25 @@
     "files": [],
     "groups": [],
     "pinned": true,
-    "name": "Pariatur voluptatem accusamus deserunt doloremque in aperiam",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, voluptatum! Quaerat, esse libero suscipit, qui officiis ipsum pariatur nesciunt distinctio accusantium dolores consectetur! Pariatur voluptatem accusamus deserunt doloremque in aperiam."
+    "name": "Идейные соображения высшего порядка, а также новая модель организационной деятельности",
+    "description": "С другой стороны постоянный количественный повседневной работы по формированию позиции играет важную роль в формировании позиций, занимаемых участниками в отношении поставленных задач. С другой стороны постоянный количественный рост и сфера нашей активности играет важную роль в формировании существенных финансовых и административных условий."
   },
   {
     "id": "b",
     "status": "working",
     "files": ["a"],
     "groups": [],
-    "pinned": true,
-    "name": "Dignissimos corporis facilis mollitia dicta eius voluptatibus, modi illo!",
-    "description": "Adipisci dolorum sed atque sint accusamus neque ad quod id qui sit! Dignissimos corporis facilis mollitia dicta eius voluptatibus, modi illo! Eum."
+    "pinned": false,
+    "name": "Повседневная практика показывает",
+    "description": "Задача организации, в особенности же дальнейшее развитие различных форм деятельности требуют от нас анализа систем массового участия."
   },
   {
     "id": "c",
     "status": "working",
     "files": [],
-    "groups": ["a"],
+    "groups": ["b"],
     "pinned": false,
-    "name": "Illum hic molestias saepe quaerat, ab quam laboriosam",
+    "name": "Постоянное информационно-пропагандистское обеспечение",
     "description": null
   },
   {
@@ -31,18 +31,18 @@
     "status": "working",
     "files": ["a", "b"],
     "groups": ["b"],
-    "pinned": true,
-    "name": "Voluptas nam repudiandae aut culpa!",
-    "description": "Illum hic molestias saepe quaerat, ab quam laboriosam perspiciatis doloremque sunt, labore autem culpa reiciendis provident debitis? Voluptas nam repudiandae aut culpa!"
+    "pinned": false,
+    "name": "Задача организации, в особенности же постоянный количественный рост и сфера",
+    "description": "Таким образом постоянное информационно-пропагандистское обеспечение нашей деятельности позволяет выполнять важные задания по разработке систем массового участия. Повседневная практика показывает, что дальнейшее развитие различных форм деятельности представляет собой интересный эксперимент проверки соответствующий условий активизации."
   },
   {
     "id": "e",
     "status": "working",
     "files": ["a"],
-    "groups": ["a", "c"],
+    "groups": ["a", "b"],
     "pinned": false,
-    "name": "Perspiciatis debitis, quam perferendis ducimus ullam a pariatur quia",
-    "description": "Eveniet, incidunt. Perspiciatis debitis, quam perferendis ducimus ullam a pariatur quia! Atque, saepe sequi. Enim dolorem, facilis nulla in odit nemo dignissimos! Qui reiciendis suscipit reprehenderit voluptate nulla sunt at quam iste quaerat, praesentium fugiat blanditiis magni recusandae provident sit inventore voluptatibus, accusamus eveniet?"
+    "name": "Таким образом реализация намеченных плановых заданий обеспечивает широкому кругу (специалистов) участие",
+    "description": "Повседневная практика показывает, что начало повседневной работы по формированию позиции позволяет выполнять важные задания по разработке модели развития."
   },
   {
     "id": "f",
@@ -50,7 +50,7 @@
     "files": ["e"],
     "groups": [],
     "pinned": true,
-    "name": "Enim dolorem, facilis nulla in odit nemo",
+    "name": "Значимость этих проблем настолько очевидна",
     "description": null
   }
 ]

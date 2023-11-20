@@ -1,5 +1,5 @@
 import { ReactNode, useState, Children } from 'react'
-import { SFC } from '@common/styles'
+import { SFC, mixin } from '@common/styles'
 import Primitive, { Div, H2, Span } from '@lib/primitives'
 import { noop } from 'lodash'
 import { Icon } from '@lib/icons'
@@ -15,48 +15,60 @@ export const Section: SFC<{
 }> = (props) => {
   const [open, setOpen] = useState(props.defaultOpen ?? true)
   const toggle = props.collapsible ? () => setOpen((s) => !s) : noop
+  const stickyHead = props.stickyHead ?? true
   return (
-    <Primitive.Section css={{ px: 16, isolation: 'isolate' }}>
+    <Primitive.Section css={{ isolation: 'isolate' }}>
       <Div
         css={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: 40,
-          background: '$gray100',
-          px: 16,
-          ...(props.stickyHead ?? true
-            ? {
-                position: 'sticky',
-                top: props.stickHeadAt ?? 0,
-                zIndex: 1,
-              }
-            : {}),
+          d: 'flex',
+          jc: 'space-between',
+          ai: 'center',
+          h: 40,
+          bg: '$gray100',
+          px: 32,
+          ...mixin(stickyHead, {
+            position: 'sticky',
+            top: props.stickHeadAt ?? 0,
+            bsh: '0 4px 16px rgb(0 0 0 / 0.5)',
+            // bsh: '0 8px 24px rgb(0 0 0 / 0.4)',
+            zIndex: 1,
+          }),
         }}
       >
         <H2
           css={{
-            flex: 1,
             d: 'flex',
             ai: 'center',
             h: '100%',
-            fs: 15,
-            fw: 500,
-            userSelect: 'none',
+            fs: 13,
+            ls: '0.05em',
+            fw: 200,
+            tt: 'uppercase',
+            flex: 1,
+            us: 'none',
           }}
           onClick={toggle}
         >
-          <Icon.Chevron
+          <Span
             css={{
-              s: 15,
-              opacity: props.collapsible ? 1 : 0,
-              rotate: open ? '180deg' : '90deg',
-              '--color': 'cyan',
+              w: 24,
+              d: 'grid',
+              pc: 'center',
+              flexShrink: 0,
             }}
-          />
-          <Span css={{ mx: 4, tt: 'uppercase', fs: 13 }}>{props.title}</Span>
+          >
+            <Icon.ChevronFilled
+              css={{
+                d: props.collapsible ? 'block' : 'none',
+                s: 15,
+                c: 'cyan',
+                rotate: open ? '180deg' : '90deg',
+              }}
+            />
+          </Span>
+          <Span>{props.title}</Span>
           {props.counter && (
-            <Span css={{ fs: 13, fw: 400, c: 'cyan', ml: 4 }}>
+            <Span css={{ fs: 13, fw: 400, c: 'cyan', ml: 8 }}>
               {Children.count(props.children)}
             </Span>
           )}
@@ -64,7 +76,7 @@ export const Section: SFC<{
         <Div css={{ display: 'flex', gap: 8 }}>{props.actions}</Div>
       </Div>
       {open && (
-        <Div css={{ display: 'flex', flexDirection: 'column', gap: 8, py: 8 }}>
+        <Div css={{ display: 'flex', flexDirection: 'column', gap: 8, px: 16, py: 8 }}>
           {props.children}
         </Div>
       )}

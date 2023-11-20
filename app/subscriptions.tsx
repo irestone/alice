@@ -4,9 +4,9 @@ import { Section } from '@lib/sections'
 
 export const Subscriptions: SFC = () => {
   return (
-    <Mobile.Root css={{ height: '100%', overflow: 'auto' }}>
+    <Mobile.Root>
       <Mobile.Head title='Подписки' />
-      <Mobile.Body css={{ display: 'flex', flexDirection: 'column', gap: 8, pb: 16 }}>
+      <Mobile.Body>
         <Section title='Сегодня' counter stickHeadAt={53}>
           <div style={{ height: 60, background: 'gray' }}>block</div>
           <div style={{ height: 80, background: 'gray' }}>block</div>

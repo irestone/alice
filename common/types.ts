@@ -138,6 +138,7 @@ export type CollectionName =
   | 'tasks'
   | 'groups'
   | 'fileAttrs'
+  | 'fileModules'
   | 'regions'
   | 'fileStatusOpts'
   | 'courtOpts'

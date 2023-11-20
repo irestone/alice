@@ -122,3 +122,42 @@ export function cq(a: string | number, b?: number, c?: number): string {
   const min = a
   return `@container (min-width: ${min}px)`
 }
+
+// section #########################################################################################
+//  EVENTS
+// #################################################################################################
+
+//!fix handle mouse hold
+export const holdListener = (ref: any, cb: () => void, dur?: number) => {
+  const d = dur ?? 300
+  let el: HTMLElement
+  let holdId: any
+  const set = () => void (holdId = setTimeout(cb, d))
+  const clear = () => void (holdId && clearTimeout(holdId))
+  const addListeners = () => {
+    el?.addEventListener('touchstart', set)
+    el?.addEventListener('touchend', clear)
+    el?.addEventListener('touchcancel', clear)
+    el?.addEventListener('touchmove', clear)
+  }
+  const removeListeners = () => {
+    el?.removeEventListener('touchstart', set)
+    el?.removeEventListener('touchend', clear)
+    el?.removeEventListener('touchcancel', clear)
+    el?.removeEventListener('touchmove', clear)
+  }
+  let setupId: any
+  const setup = (): void => {
+    const { current } = ref
+    if (!current) return void (setupId = setTimeout(setup, 100))
+    el = current
+    removeListeners()
+    addListeners()
+  }
+  setup()
+  return () => {
+    removeListeners()
+    if (holdId) clearTimeout(holdId)
+    if (setupId) clearTimeout(setupId)
+  }
+}
