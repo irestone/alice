@@ -39,7 +39,7 @@ export const Controls: SFC<{
   setFiltering: (filtering: boolean) => void
   filter: Rule[]
   setFilter: (rules: Rule[]) => void
-  attrs: ItemAttr[] | [NamedEntry, ItemAttr[]]
+  attrs: ItemAttr[]
 }> = (props) => {
   const { status, setStatus, statusOptions } = props
   const { grouping, setGrouping, groupingOptions } = props

@@ -1,0 +1,731 @@
+[
+  {
+    "id": "files:status",
+    "path": "files:status",
+    "name": "Статус",
+    "type": "select",
+    "options": "fileStatuses"
+  },
+  {
+    "id": "files:groups",
+    "path": "files:groups",
+    "name": "Группы",
+    "type": "multi_select",
+    "options": "groups"
+  },
+  {
+    "id": "files:pinned",
+    "path": "files:pinned",
+    "name": "Закреплен",
+    "type": "boolean"
+  },
+  {
+    "id": "files:general.fullname",
+    "path": "files:general.fullname",
+    "name": "ФИО",
+    "type": "string",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.birthday",
+    "path": "files:general.birthday",
+    "name": "Дата рож.",
+    "type": "date",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.address",
+    "path": "files:general.address",
+    "name": "Адрес рег.",
+    "type": "string",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.inn",
+    "path": "files:general.inn",
+    "name": "ИНН",
+    "type": "string",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.snils",
+    "path": "files:general.snils",
+    "name": "СНИЛС",
+    "type": "string",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.regions",
+    "path": "files:general.regions",
+    "name": "Регионы исп. произ-ва",
+    "type": "multi_select",
+    "options": "regions",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:general.notion",
+    "path": "files:general.notion",
+    "name": "Примечание",
+    "fullname": "Прим. к общей инф-ции",
+    "type": "string",
+    "module": "general",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.court",
+    "path": "files:cases.court",
+    "name": "Суд",
+    "fullname": "Суд 1й инст.",
+    "type": "select",
+    "options": "courts",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.number",
+    "path": "files:cases.number",
+    "name": "Номер дела",
+    "fullname": "Номер дела суда 1й инст.",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.date",
+    "path": "files:cases.date",
+    "name": "Дата решения",
+    "fullname": "Дата решения суда 1й инст.",
+    "type": "date",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.copyAvailable",
+    "path": "files:cases.copyAvailable",
+    "name": "Копия решения",
+    "fullname": "Копия решения суда 1й инст.",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appealed",
+    "path": "files:cases.appealed",
+    "name": "Апелляция",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appeal.court",
+    "path": "files:cases.appeal.court",
+    "name": "Суд",
+    "fullname": "Суд апелляции",
+    "type": "select",
+    "options": "courts",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appeal.number",
+    "path": "files:cases.appeal.number",
+    "name": "Номер дела",
+    "fullname": "Номер дела суда апелляции",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appeal.date",
+    "path": "files:cases.appeal.date",
+    "name": "Дата решения",
+    "fullname": "Дата решения суда апелляции",
+    "type": "date",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appeal.result",
+    "path": "files:cases.appeal.result",
+    "name": "Результат",
+    "fullname": "Результат апелляции",
+    "type": "select",
+    "options": "trialResults",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.appeal.copyAvailable",
+    "path": "files:cases.appeal.copyAvailable",
+    "name": "Копия решения",
+    "fullname": "Копия решения суда апелляции",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassationed",
+    "path": "files:cases.cassationed",
+    "name": "Кассация",
+    "type": "select",
+    "options": "trialStatusOpts",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassation.court",
+    "path": "files:cases.cassation.court",
+    "name": "Суд",
+    "fullname": "Суд кассации",
+    "type": "select",
+    "options": "courts",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassation.number",
+    "path": "files:cases.cassation.number",
+    "name": "Номер дела",
+    "fullname": "Номер дела суда кассации",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassation.date",
+    "path": "files:cases.cassation.date",
+    "name": "Дата решения",
+    "fullname": "Дата решения суда кассации",
+    "type": "date",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassation.result",
+    "path": "files:cases.cassation.result",
+    "name": "Результат",
+    "fullname": "Результат кассации",
+    "type": "select",
+    "options": "trialResults",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cassation.copyAvailable",
+    "path": "files:cases.cassation.copyAvailable",
+    "name": "Копия решения",
+    "fullname": "Копия решения суда кассации",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.collateralProvided",
+    "path": "files:cases.collateralProvided",
+    "name": "Залог",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.collateral.subject",
+    "path": "files:cases.collateral.subject",
+    "name": "Предмет",
+    "fullname": "Предмет залога",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.collateral.registered",
+    "path": "files:cases.collateral.registered",
+    "name": "Зарегистрирован",
+    "fullname": "Залог зарегистрирован",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.collateral.registration.place",
+    "path": "files:cases.collateral.registration.place",
+    "name": "Место",
+    "fullname": "Место регистрации залога",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.collateral.registration.date",
+    "path": "files:cases.collateral.registration.date",
+    "name": "Дата",
+    "fullname": "Дата регистрации залога",
+    "type": "date",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cooped",
+    "path": "files:cases.cooped",
+    "name": "Солидарно",
+    "type": "boolean",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.cooperators",
+    "path": "files:cases.cooperators",
+    "name": "Солидарные (ФИО)",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:cases.notion",
+    "path": "files:cases.notion",
+    "name": "Примечание",
+    "fullname": "Прим. к судебной инф-ции",
+    "type": "string",
+    "module": "cases",
+    "filter": true,
+    "display": true
+  },
+
+  {
+    "id": "files:summary.amountByCourt",
+    "path": "files:summary.amountByCourt",
+    "name": "Сумма по решению суда",
+    "type": "number",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.stateDuty",
+    "path": "files:summary.stateDuty",
+    "name": "Госпошлина",
+    "type": "select",
+    "options": "stateDuties",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.transcript",
+    "path": "files:summary.transcript",
+    "name": "Расшифровка",
+    "fullname": "Расшифровка суммы по решению суда",
+    "type": "string",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.amountInContract",
+    "path": "files:summary.amountInContract",
+    "name": "Сумма по договору",
+    "type": "number",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.amountUponContractPayoff",
+    "path": "files:summary.amountUponContractPayoff",
+    "name": "Сумма на дату полно оплаты",
+    "type": "number",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.recalcNeeded",
+    "path": "files:summary.recalcNeeded",
+    "name": "Перерасчет",
+    "type": "boolean",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.recalcDone",
+    "path": "files:summary.recalcDone",
+    "name": "Произведен",
+    "fullname": "Перерасчет произведен",
+    "type": "select",
+    "options": "recalcStatusOpts",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.liqInDebt",
+    "path": "files:summary.liqInDebt",
+    "name": "КУ нам должен",
+    "type": "boolean",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.liqDebt.amount",
+    "path": "files:summary.liqDebt.amount",
+    "name": "Сумма",
+    "fullname": "Сумма долга КУ",
+    "type": "number",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.liqDebt.paid",
+    "path": "files:summary.liqDebt.paid",
+    "name": "Выплачено",
+    "fullname": "КУ выплатил долг",
+    "type": "boolean",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.liqDebt.payoffDate",
+    "path": "files:summary.liqDebt.payoffDate",
+    "name": "Дата перечисления",
+    "fullname": "Дата перечисления долга КУ",
+    "type": "string",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:summary.notion",
+    "path": "files:summary.notion",
+    "name": "Примечание",
+    "fullname": "Прим. к суммам",
+    "type": "string",
+    "module": "summary",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:series",
+    "path": "files:enforcementNotes->enforcementNotes:series",
+    "name": "Серия",
+    "fullname": "Серия исп. листа",
+    "type": "string",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:number",
+    "path": "files:enforcementNotes->enforcementNotes:number",
+    "name": "Номер",
+    "fullname": "Номер исп. листа",
+    "type": "string",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:issuer",
+    "path": "files:enforcementNotes->enforcementNotes:issuer",
+    "name": "Кем выдан",
+    "fullname": "Кем выдан исп. лист",
+    "type": "string",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:issueDate",
+    "path": "files:enforcementNotes->enforcementNotes:issueDate",
+    "name": "Дата выдачи",
+    "fullname": "Дата выдачи исп. листа",
+    "type": "date",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:sum",
+    "path": "files:enforcementNotes->enforcementNotes:sum",
+    "name": "Сумма",
+    "fullname": "Сумма в исп. листе",
+    "type": "number",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:transcript",
+    "path": "files:enforcementNotes->enforcementNotes:transcript",
+    "name": "Расшифровка",
+    "fullname": "Расшифровка исп. листа",
+    "type": "string",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:whereabouts",
+    "path": "files:enforcementNotes->enforcementNotes:whereabouts",
+    "name": "Местонахождение",
+    "fullname": "Местонахождение исп. листа",
+    "type": "select",
+    "options": "enforcementNoteWhereabouts",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementNotes->enforcementNotes:notion",
+    "path": "files:enforcementNotes->enforcementNotes:notion",
+    "name": "Примечание",
+    "fullname": "Прим. к исп. листу",
+    "type": "string",
+    "module": "enforcementNotes",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:note",
+    "path": "files:enforcementProceedings->enforcementProceedings:note",
+    "name": "Исп. лист",
+    "fullname": "Исп. лист произ-ва",
+    "type": "select",
+    "options": "enforcementNotes",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:number",
+    "path": "files:enforcementProceedings->enforcementProceedings:number",
+    "name": "Номер",
+    "fullname": "Номер исп. произ-ва",
+    "type": "string",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:bailiffDept",
+    "path": "files:enforcementProceedings->enforcementProceedings:bailiffDept",
+    "name": "ОСП",
+    "fullname": "ОСП исп. произ-ва",
+    "type": "select",
+    "options": "bailiffDepts",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:region",
+    "path": "files:enforcementProceedings->enforcementProceedings:region",
+    "name": "Регион",
+    "fullname": "Регион исп. произ-ва",
+    "type": "select",
+    "options": "regions",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:initDate",
+    "path": "files:enforcementProceedings->enforcementProceedings:initDate",
+    "name": "Дата возбуждения",
+    "fullname": "Дата возбуждения исп. произ-ва",
+    "type": "date",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:ended",
+    "path": "files:enforcementProceedings->enforcementProceedings:ended",
+    "name": "Окончено",
+    "fullname": "Исп. произ-во окончено",
+    "type": "boolean",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:endDate",
+    "path": "files:enforcementProceedings->enforcementProceedings:endDate",
+    "name": "Дата окончания",
+    "fullname": "Дата окончания исп. произ-ва",
+    "type": "date",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:enforcementProceedings->enforcementProceedings:notion",
+    "path": "files:enforcementProceedings->enforcementProceedings:notion",
+    "name": "Примечание",
+    "fullname": "Прим. к исп. произ-ву",
+    "type": "string",
+    "module": "enforcementProceedings",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.notificationSent",
+    "path": "files:succession.notificationSent",
+    "name": "Направлено увед. должнику",
+    "fullname": "Направлено увед. должнику о правоприемстве",
+    "type": "boolean",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.notification.date",
+    "path": "files:succession.notification.date",
+    "name": "Дата",
+    "fullname": "Дата увед. должника о правоприемстве",
+    "type": "date",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.notification.spi",
+    "path": "files:succession.notification.spi",
+    "name": "ШПИ",
+    "fullname": "ШПИ увед. должника о правоприемстве",
+    "type": "string",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.applicationSentWith",
+    "path": "files:succession.applicationSentWith",
+    "name": "Направлено заяв. в суд",
+    "fullname": "Направлено заяв. в суд о правоприемстве",
+    "type": "select",
+    "options": "applicationSystems",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.application.date",
+    "path": "files:succession.application.date",
+    "name": "Дата",
+    "fullname": "Дата заяв. в суд о правоприемстве",
+    "type": "date",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.application.spi",
+    "path": "files:succession.application.spi",
+    "name": "ШПИ",
+    "fullname": "ШПИ заяв. в суд о правоприемстве",
+    "type": "string",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.scheduledFor",
+    "path": "files:succession.scheduledFor",
+    "name": "Назначено на",
+    "fullname": "Слушание о правоприемстве назначено на",
+    "type": "date",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.inAbsence",
+    "path": "files:succession.inAbsence",
+    "name": "В отсутствие",
+    "fullname": "Слушание о правоприемстве в отсутствие",
+    "type": "boolean",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.status",
+    "path": "files:succession.status",
+    "name": "Решение",
+    "fullname": "Решение о правоприемстве",
+    "type": "select",
+    "options": "successionStatuses",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.copyAvailable",
+    "path": "files:succession.copyAvailable",
+    "name": "Копия решения",
+    "fullname": "Копия решения о правоприемстве",
+    "type": "boolean",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.copyAmount",
+    "path": "files:succession.copyAmount",
+    "name": "Число копий",
+    "fullname": "Число копий решения о правоприемстве",
+    "type": "number",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "files:succession.notion",
+    "path": "files:succession.notion",
+    "name": "Примечание",
+    "fullname": "Прим. к правопреемству",
+    "type": "string",
+    "module": "succession",
+    "filter": true,
+    "display": true
+  }
+]

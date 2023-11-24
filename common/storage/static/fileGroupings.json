@@ -1,0 +1,6 @@
+[
+  { "id": "custom", "name": "мои группы" },
+  { "id": "courts", "name": "суды 1й инст." },
+  { "id": "regions", "name": "регионы" },
+  { "id": "bailiff_depts", "name": "ОСП" }
+]

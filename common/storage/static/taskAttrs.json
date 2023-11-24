@@ -1,0 +1,56 @@
+[
+  {
+    "id": "tasks:name",
+    "path": "tasks:name",
+    "name": "Название",
+    "type": "string",
+    "filter": true
+  },
+  {
+    "id": "tasks:description",
+    "path": "tasks:description",
+    "name": "Описание",
+    "type": "string",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "tasks:priority",
+    "path": "tasks:priority",
+    "name": "Приоритет",
+    "type": "select",
+    "options": "taskPriorities",
+    "filter": true,
+    "display": true
+  },
+
+  {
+    "id": "tasks:files",
+    "path": "tasks:files",
+    "name": "Файлы",
+    "type": "multi_select",
+    "options": "files",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "tasks:status",
+    "path": "tasks:status",
+    "name": "Статус",
+    "type": "select",
+    "options": "taskStatuses"
+  },
+  {
+    "id": "tasks:pinned",
+    "path": "tasks:pinned",
+    "name": "Закреплен",
+    "type": "boolean"
+  },
+  {
+    "id": "tasks:groups",
+    "path": "tasks:groups",
+    "name": "Группы",
+    "type": "multi_select",
+    "options": "groups"
+  }
+]

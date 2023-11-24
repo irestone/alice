@@ -1,0 +1,7 @@
+[
+  { "id": "highest", "name": "высший", "level": 1 },
+  { "id": "high", "name": "высокий", "level": 2 },
+  { "id": "medium", "name": "средний", "level": 3 },
+  { "id": "low", "name": "низкий", "level": 4 },
+  { "id": "lowest", "name": "низший", "level": 5 }
+]

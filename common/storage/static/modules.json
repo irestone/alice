@@ -1,0 +1,8 @@
+[
+  { "id": "general", "name": "Общая информация", "order": 1 },
+  { "id": "cases", "name": "Судебная информация", "order": 2 },
+  { "id": "summary", "name": "Суммы", "order": 3 },
+  { "id": "enforcementNotes", "name": "Исполнительные листы", "order": 4 },
+  { "id": "enforcementProceedings", "name": "Исполнительные производства", "order": 5 },
+  { "id": "succession", "name": "Правопреемство", "order": 6 }
+]

@@ -18,13 +18,14 @@ type State = Record<Category, Settings & { set: Setter }>
 
 const init: StateCreator<State> = (set) => ({
   files: {
-    status: 'working',
+    status: 'current',
     grouping: 'custom',
     expandedGroups: [],
     variant: 'normal',
     content: [
       'files:general.fullname',
       'files:general.birthday',
+      'files:general.address',
       'files:general.inn',
       'files:general.snils',
       'files:general.regions',
@@ -35,11 +36,11 @@ const init: StateCreator<State> = (set) => ({
     set: (values) => set((s) => ({ ...s, files: { ...s.files, ...values } })),
   },
   tasks: {
-    status: 'working',
+    status: 'current',
     grouping: 'custom',
     expandedGroups: [],
     variant: 'normal',
-    content: ['tasks:description'],
+    content: ['tasks:description', 'tasks:priority', 'tasks:files'],
     filtering: false,
     filter: [],
     set: (values) => set((s) => ({ ...s, tasks: { ...s.tasks, ...values } })),

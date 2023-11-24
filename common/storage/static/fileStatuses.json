@@ -1,0 +1,5 @@
+[
+  { "id": "current", "name": "текущие" },
+  { "id": "postponed", "name": "отложенные" },
+  { "id": "archived", "name": "архив" }
+]

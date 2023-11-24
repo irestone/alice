@@ -1,0 +1,68 @@
+[
+  {
+    "id": "a",
+    "series": "3232 234",
+    "number": "123345",
+    "issuer": null,
+    "issueDate": null,
+    "sum": 120000,
+    "transcript": null,
+    "whereabouts": "searching",
+    "notion": "lala"
+  },
+  {
+    "id": "b",
+    "series": "4354 577",
+    "number": null,
+    "issuer": "кем-то",
+    "issueDate": "14 июня, 2023 г.",
+    "sum": 73000,
+    "transcript": null,
+    "whereabouts": "us",
+    "notion": null
+  },
+  {
+    "id": "c",
+    "series": "4663 564",
+    "number": "66433421",
+    "issuer": null,
+    "issueDate": null,
+    "sum": 54000,
+    "transcript": null,
+    "whereabouts": "searching",
+    "notion": null
+  },
+  {
+    "id": "d",
+    "series": null,
+    "number": null,
+    "issuer": null,
+    "issueDate": null,
+    "sum": 17000,
+    "transcript": null,
+    "whereabouts": "liq",
+    "notion": "долг"
+  },
+  {
+    "id": "e",
+    "series": "3454 877",
+    "number": "4576345",
+    "issuer": null,
+    "issueDate": null,
+    "sum": 6000,
+    "transcript": null,
+    "whereabouts": "searching",
+    "notion": null
+  },
+  {
+    "id": "f",
+    "series": null,
+    "number": "675647",
+    "issuer": null,
+    "issueDate": null,
+    "sum": 5300,
+    "transcript": null,
+    "whereabouts": "lost",
+    "notion": null
+  }
+]

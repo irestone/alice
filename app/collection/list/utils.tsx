@@ -31,32 +31,31 @@ export const useFilterPredicate = (rules: Rule[], attrs: CollectionName) => {
 //  GROUPING
 // #################################################################################################
 
-type ItemGroup = [Group, any[]]
+type GroupEntry = [Group, Item[]]
 
 const specialGroups: Record<string, Group> = {
   pinned: { id: 'pinned', name: 'Закрепленные' },
   ungrouped: { id: 'ungrouped', name: 'Без группы' },
 }
 
-const collectCustomGroupIds = (items: any[]) => {
-  return lodash.chain(items).map('groups').flatten().uniq().sortBy().value()
-}
-
-const findGroup = (groups: Group[], predicate: any) => {
-  const group = find(groups, predicate)
-  if (!group) throw new Error(`GROUP NOT FOUND`)
-  return group
-}
-
-export const groupBy = (items: any[], groups: Group[], grouping: ID): ItemGroup[] => {
+export const groupBy = (items: Item[], groups: Group[], grouping: ID): GroupEntry[] => {
   if (grouping === 'custom') {
-    return [
-      [specialGroups.pinned, items.filter((el) => el.pinned)],
-      ...(collectCustomGroupIds(items).map((id) => {
-        return [findGroup(groups, { id }), items.filter((el) => el.groups.includes(id))]
-      }) as ItemGroup[]),
-      [specialGroups.ungrouped, items.filter((el) => !el.pinned && isEmpty(el.groups))],
-    ].filter(([_, items]) => !isEmpty(items)) as any
+    const pinned = [specialGroups.pinned, items.filter((i) => i.pinned)]
+    const ungrouped = [specialGroups.ungrouped, items.filter((i) => !i.pinned && isEmpty(i.groups))]
+    const custom = lodash
+      .chain(items)
+      .map('groups')
+      .flatten()
+      .uniq()
+      .map((id) => {
+        const group = find(groups, { id })
+        if (!group) throw new Error(`GROUP ${id} NOT FOUND`)
+        return group
+      })
+      .sortBy('name')
+      .map((g) => [g, items.filter((i) => i.groups.includes(g.id))])
+      .value()
+    return [pinned, ...custom, ungrouped].filter(([_, items]) => !isEmpty(items)) as GroupEntry[]
   }
   console.error('Uncommon grouping needs implementation')
   return []

@@ -1,37 +1,20 @@
 import { useState } from 'react'
-import { SFC, styled } from '@common/styles'
-import { useStorage } from '@common/storage'
-import lodash, { filter, isString, merge, noop } from 'lodash'
-import { File, ActivityType } from '@common/types'
 import { useRouter } from 'next/navigation'
-import { Div } from '@lib/primitives'
+import { SFC } from '@common/styles'
+import { useStorage } from '@common/storage'
+import lodash, { filter } from 'lodash'
+import { File, ActivityType } from '@common/types'
 import { Button } from '@lib/buttons'
 import { Mobile } from '@lib/mobile'
 import { FileCard, TaskCard } from '@lib/cards'
 import { Section } from '@lib/sections'
 
-const ShowMore: SFC<{
-  shown: boolean
-  showMore: () => void
-  openHistory: () => void
-}> = (props) => {
-  const text = props.shown ? 'Посмотреть историю' : 'Развернуть'
-  const handler = props.shown ? props.openHistory : props.showMore
-  return (
-    <Div css={{ mt: 8, px: 8, d: 'flex', jc: 'center' }}>
-      <Button key='gototasks' colors={{ color: '#999', preset: 'no_bg' }} onClick={handler}>
-        {text}
-      </Button>
-    </Div>
-  )
-}
-
 export const Dashboard: SFC = () => {
   const router = useRouter()
-  const collections = useStorage((s) => ({
+  const storage = useStorage((s) => ({
+    activity: s.collections.activity,
     files: s.collections.files,
     tasks: s.collections.tasks,
-    activity: s.collections.activity,
     get: s.get,
     upd: s.upd,
     del: s.del,
@@ -39,13 +22,13 @@ export const Dashboard: SFC = () => {
 
   const [moreRecentFiles, setMoreRecentFiles] = useState(false)
   const allRecentFiles = lodash
-    .chain(collections.activity)
+    .chain(storage.activity)
     .filter({ type: ActivityType.fileSeen, by: 'alice' })
-    .map((act) => collections.get<File>('files', act.payload))
+    .map((act) => storage.get<File>('files', act.payload))
     .value()
   const recentFiles = moreRecentFiles ? allRecentFiles : allRecentFiles.slice(0, 5)
-  const pinnedFiles = filter(collections.files, 'pinned')
-  const pinnedTasks = filter(collections.tasks, 'pinned')
+  const pinnedFiles = filter(storage.files, 'pinned')
+  const pinnedTasks = filter(storage.tasks, 'pinned')
 
   return (
     <Mobile.Root>
@@ -64,8 +47,8 @@ export const Dashboard: SFC = () => {
             <FileCard
               key={file.id}
               item={file}
-              updItem={(v) => collections.upd('files', file.id, v)}
-              delItem={() => collections.del('files', file.id)}
+              updateItem={(v) => storage.upd('files', file.id, v)}
+              deleteItem={() => storage.del('files', file.id)}
               variant='condensed'
             />
           ))}
@@ -96,8 +79,8 @@ export const Dashboard: SFC = () => {
             <FileCard
               key={file.id}
               item={file}
-              updItem={(v) => collections.upd('files', file.id, v)}
-              delItem={() => collections.del('files', file.id)}
+              updateItem={(v) => storage.upd('files', file.id, v)}
+              deleteItem={() => storage.del('files', file.id)}
             />
           ))}
         </Section>
@@ -119,8 +102,8 @@ export const Dashboard: SFC = () => {
             <TaskCard
               key={file.id}
               item={file}
-              updItem={(v) => collections.upd('tasks', file.id, v)}
-              delItem={() => collections.del('tasks', file.id)}
+              updateItem={(v) => storage.upd('tasks', file.id, v)}
+              deleteItem={() => storage.del('tasks', file.id)}
             />
           ))}
         </Section>

@@ -15,27 +15,24 @@ const assets: Record<
   T.Category,
   {
     title: string
-    groupingOpts: T.CollectionName
-    statusOpts: T.CollectionName
+    groupings: T.CollectionName
+    statuses: T.CollectionName
     attrs: T.CollectionName
-    attrModules: T.CollectionName | null
     Card: SFC<Card>
   }
 > = {
   files: {
     title: 'Каталог',
-    groupingOpts: 'fileGroupingOpts',
-    statusOpts: 'fileStatusOpts',
+    groupings: 'fileGroupings',
+    statuses: 'fileStatuses',
     attrs: 'fileAttrs',
-    attrModules: 'fileModules',
     Card: FileCard,
   },
   tasks: {
     title: 'Задания',
-    groupingOpts: 'taskGroupingOpts',
-    statusOpts: 'taskStatusOpts',
+    groupings: 'taskGroupings',
+    statuses: 'taskStatuses',
     attrs: 'taskAttrs',
-    attrModules: null,
     Card: TaskCard,
   },
 }
@@ -76,22 +73,17 @@ export const List: SFC<{
   const { Card, title } = assets[cat]
   const settings = useSettings(cat)
   const storage = useStorage((s: any) => ({
+    statuses: s.collections[assets[cat].statuses],
+    attrs: s.collections[assets[cat].attrs],
+    groupings: s.collections[assets[cat].groupings],
     items: s.collections[cat],
     groups: s.collections.groups,
-    statusOpts: s.collections[assets[cat].statusOpts],
-    attrs: s.collections[assets[cat].attrs],
-    modules: assets[cat].attrModules ? s.collections[assets[cat].attrModules as any] : null,
-    groupingOpts: s.collections[assets[cat].groupingOpts],
+    modules: s.collections.modules,
     get: s.get,
     add: s.add,
     upd: s.upd,
     del: s.del,
   }))
-
-  //todo add 'filterable' prop to entries to filter out 'pinned', 'status' etc from this
-  const attrs = storage.modules
-    ? storage.modules.map((m: any) => [m, storage.get(m.attrs.src, m.attrs.target)])
-    : storage.attrs
 
   const predicate = useFilterPredicate(settings.filter, assets[cat].attrs)
   const filtered = useMemo<any[]>(() => {
@@ -112,10 +104,10 @@ export const List: SFC<{
           <Controls
             status={settings.status}
             setStatus={(v) => settings.set({ status: v })}
-            statusOptions={storage.statusOpts}
+            statusOptions={storage.statuses}
             grouping={settings.grouping}
             setGrouping={(v) => settings.set({ grouping: v })}
-            groupingOptions={storage.groupingOpts}
+            groupingOptions={storage.groupings}
             variant={settings.variant}
             setVariant={(v) => settings.set({ variant: v })}
             content={settings.content}
@@ -124,7 +116,7 @@ export const List: SFC<{
             setFiltering={(v) => settings.set({ filtering: v })}
             filter={settings.filter}
             setFilter={(v) => settings.set({ filter: v })}
-            attrs={attrs}
+            attrs={storage.attrs}
           />
         ) : (
           <Selection
@@ -154,8 +146,8 @@ export const List: SFC<{
                 href={`/${cat}/${item.id}`}
                 options={[]}
                 item={item}
-                updItem={(v) => storage.upd(cat, item.id, v)}
-                delItem={() => storage.del(cat, item.id)}
+                updateItem={(v) => storage.upd(cat, item.id, v)}
+                deleteItem={() => storage.del(cat, item.id)}
                 selection={!isEmpty(selection)}
                 startSelection={() => setSelection([item.id])}
                 selected={selection.includes(item.id)}

@@ -1,80 +1,84 @@
 import { StateCreator, create as zustand } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import * as constant from './storage/static'
-import * as database from './storage/db'
 import { produce } from 'immer'
-import lodash, {
-  cond,
-  filter,
-  find,
-  first,
-  flatten,
-  isArray,
-  isEmpty,
-  isObject,
-  isString,
-  map,
-} from 'lodash'
+import lodash, { first, flatten, isArray, isEmpty, map } from 'lodash'
 import {
   Activity,
   CollectionName,
-  Enforcement,
   File,
   Group,
-  MutCollectionName,
   Target,
   Task,
   Item,
   ItemAttr,
   ID,
+  BailiffDept,
+  Court,
+  EnforcementNote,
+  EnforcementProceeding,
 } from '@common/types'
+import { getTarget } from './utils'
+import * as database from './storage/db'
+import * as constant from './storage/static'
 
 interface Storage {
   collections: {
-    files: File[]
-    enforcements: Enforcement[]
-    tasks: Task[]
-    groups: Group[]
     activity: Activity[]
+    bailiffDepts: BailiffDept[]
+    courts: Court[]
+    enforcementNotes: EnforcementNote[]
+    enforcementProceedings: EnforcementProceeding[]
+    files: File[]
+    groups: Group[]
+    tasks: Task[]
   }
-  load: (name?: MutCollectionName) => Promise<void>
+  load: (cname?: CollectionName) => Promise<void>
   initialized: boolean
   init: () => Promise<void>
   get: <T = unknown>(cname: CollectionName, target?: Target) => T
-  add: <T = unknown>(cname: MutCollectionName, values: Partial<T>) => Promise<T>
-  upd: <T = unknown>(cname: MutCollectionName, target: Target, values: Partial<T>) => void
-  del: <T = unknown>(cname: MutCollectionName, target: Target) => void
+  add: <T = unknown>(cname: CollectionName, values: Partial<T>) => Promise<T>
+  upd: <T = unknown>(cname: CollectionName, target: Target, values: Partial<T>) => void
+  del: <T = unknown>(cname: CollectionName, target: Target) => void
   getValue: (item: Item, attr: ItemAttr) => { item: Item; path: string; value: any }
 }
 
-const init: StateCreator<Storage> = (set, get) => ({
+const create: StateCreator<Storage> = (set, get) => ({
   collections: {
-    files: [],
-    enforcements: [],
-    tasks: [],
-    groups: [],
     activity: [],
+    bailiffDepts: [],
+    courts: [],
+    enforcementNotes: [],
+    enforcementProceedings: [],
+    files: [],
+    groups: [],
+    tasks: [],
     ...constant,
   },
-  load: async (name?: MutCollectionName) => {
-    if (name) {
-      const collection = await database[name].get()
-      const recipe = (s: Storage) => void (s.collections[name] = collection as any)
+  load: async (cname?: CollectionName) => {
+    if (cname) {
+      // @ts-expect-error
+      const collection = await database[cname].get()
+      // @ts-expect-error
+      const recipe = (s: Storage) => void (s.collections[cname] = collection as any)
       set(produce(recipe))
     } else {
-      const [files, enforcements, tasks, groups, activity] = await Promise.all([
-        database.files.get(),
-        database.enforcements.get(),
-        database.tasks.get(),
-        database.groups.get(),
-        database.activity.get(),
-      ])
+      const cnames: CollectionName[] = [
+        'activity',
+        'bailiffDepts',
+        'courts',
+        'enforcementNotes',
+        'enforcementProceedings',
+        'files',
+        'groups',
+        'tasks',
+      ]
+      // @ts-expect-error
+      const result = await Promise.all(cnames.map((cname) => database[cname].get()))
       const recipe = (s: Storage) => {
-        s.collections.files = files
-        s.collections.enforcements = enforcements
-        s.collections.tasks = tasks
-        s.collections.groups = groups
-        s.collections.activity = activity
+        cnames.forEach((cname, index) => {
+          // @ts-expect-error
+          s.collections[cname] = result[index]
+        })
       }
       set(produce(recipe))
     }
@@ -91,60 +95,35 @@ const init: StateCreator<Storage> = (set, get) => ({
     // @ts-expect-error
     const collection = get().collections[c]
     if (!t) return collection
-    const elements = cond([
-      [() => isString(t), () => find(collection, { id: t })],
-      [() => isArray(t), () => filter(collection, (el) => t.includes(el.id))],
-      [() => isObject(t), () => filter(collection, t)],
-    ])()
+    const elements = getTarget(collection, t)
     if (!elements) console.error(`NOT FOUND: ${cname} collection with target ${target}`)
     return elements
   },
   add: async (cname, values) => {
-    const [c, v] = [cname, values] as any
-    const created = await cond<Promise<any>>([
-      [() => c === 'files', () => database.files.create(v)],
-      [() => c === 'enforcements', () => database.enforcements.create()],
-      [() => c === 'tasks', () => database.tasks.create(v)],
-      [() => c === 'groups', () => database.groups.create(v)],
-    ])()
+    // @ts-expect-error
+    const item = await database[cname].create(values)
     await get().load(cname)
-    return created
+    return item
   },
   upd: async (cname, target, values) => {
     const [c, t, v] = [cname, target, values] as any
     // @ts-expect-error
     const collection = get().collections[c]
-    const elements = cond([
-      [() => isString(t), () => [find(collection, { id: t })]],
-      [() => isArray(t), () => filter(collection, (el) => t.includes(el.id))],
-      [() => isObject(t), () => filter(collection, t)],
-    ])()
+    const elements = getTarget(collection, t)
     const ids = map(elements, 'id')
-    await cond<Promise<any>>([
-      [() => c === 'files', () => database.files.update(ids, v)],
-      [() => c === 'enforcements', () => database.enforcements.update(ids, v)],
-      [() => c === 'tasks', () => database.tasks.update(ids, v)],
-      [() => c === 'groups', () => database.groups.update(ids, v)],
-    ])()
-    await get().load(cname)
+    // @ts-expect-error
+    await database[c].update(ids, v)
+    await get().load(c)
   },
   del: async (cname, target) => {
     const [c, t, v] = [cname, target] as any
     // @ts-expect-error
     const collection = get().collections[c]
-    const elements = cond([
-      [() => isString(t), () => [find(collection, { id: t })]],
-      [() => isArray(t), () => filter(collection, (el) => t.includes(el.id))],
-      [() => isObject(t), () => filter(collection, t)],
-    ])()
+    const elements = getTarget(collection, t)
     const ids = map(elements, 'id')
-    await cond<Promise<any>>([
-      [() => c === 'files', () => database.files.delete(ids)],
-      [() => c === 'enforcements', () => database.enforcements.delete(ids)],
-      [() => c === 'tasks', () => database.tasks.delete(ids)],
-      [() => c === 'groups', () => database.groups.delete(ids)],
-    ])()
-    await get().load(cname)
+    // @ts-expect-error
+    await database[c].delete(ids)
+    await get().load(c)
   },
   getValue: (item: Item, attr: ItemAttr) => {
     const [[_, path], ...rest] = attr.path.split('->').map((chunk) => chunk.split(':'))
@@ -164,7 +143,7 @@ const init: StateCreator<Storage> = (set, get) => ({
   },
 })
 
-export const useStorage = zustand<Storage>()(devtools(init)) //todo persist
+export const useStorage = zustand<Storage>()(devtools(create))
 
 // update('groups', 'id1', { name: 'new' })
 // update('groups', ['id1', 'id2'], { name: 'new' })

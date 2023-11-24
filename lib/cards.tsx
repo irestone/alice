@@ -1,20 +1,12 @@
 import { useRef, useEffect, useMemo, useState } from 'react'
-import { isArray, isEmpty, isNull, isString, map, merge, random, truncate } from 'lodash'
+import { isArray, isEmpty, isNull, map } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
-import { CSS, SFC } from '@common/styles'
-import {
-  ID,
-  Item,
-  ItemAttr,
-  NamedEntry,
-  RecursivePartial,
-  Task,
-  Group as TGroup,
-} from '@common/types'
+import { SFC, mixin } from '@common/styles'
+import { Item, ItemAttr, NamedEntry, Task, Group as TGroup } from '@common/types'
 import { Icon } from '@lib/icons'
 import { Button } from '@lib/buttons'
 import { useStorage } from '@common/storage'
-import { Div, H3, P, Span } from './primitives'
+import { Div, H3, Span } from './primitives'
 import { holdListener } from '@common/utils'
 import { useSettings } from '@common/settings'
 import * as fonts from '@common/styles/fonts'
@@ -29,8 +21,8 @@ export type CardVariant = 'condensed' | 'normal' | 'detailed'
 export interface Card {
   href: string
   item: Item
-  updItem: (changes: Partial<File> | Partial<Task>) => void
-  delItem: () => void
+  updateItem: (changes: Partial<File> | Partial<Task>) => void
+  deleteItem: () => void
   selection?: boolean
   startSelection?: () => void
   selected?: boolean
@@ -74,8 +66,8 @@ const Card: SFC<Card> = (props) => {
           d: 'block',
           pos: 'absolute',
           in: 0,
-          // bg: 'center top / 80px url(https://www.toptal.com/designers/subtlepatterns/uploads/squared_metal.png)',
           bg: 'center top / 250px url(https://www.toptal.com/designers/subtlepatterns/uploads/halftone.png)',
+          // bg: 'center top / 80px url(https://www.toptal.com/designers/subtlepatterns/uploads/squared_metal.png)',
           // bg: `center top / 430px url(https://www.toptal.com/designers/subtlepatterns/uploads/tex2res2.png)`,
           mode: 'color-burn',
           op: 0.5,
@@ -125,7 +117,7 @@ const Card: SFC<Card> = (props) => {
   )
 }
 
-const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children }) => {
+const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children, css }) => {
   return (
     <Div
       css={{
@@ -136,6 +128,7 @@ const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children }) =>
         lh: 'var(--lh)',
         c: '#ffffffaa',
         d: 'flex',
+        ...css,
       }}
     >
       <Div
@@ -209,9 +202,8 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
           </Property>
         )
       })
-      .filter((v) => !!v)
+      .filter(Boolean)
   }, [props.item, settings.content, get, getValue])
-
   return (
     <Card
       href={`/files/${props.item.id}`}
@@ -233,9 +225,46 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
   const get = useStorage((s) => s.get)
   const getValue = useStorage((s) => s.getValue)
   const settings = useSettings('tasks')
-  const showDescription = settings.content.includes('tasks:description')
-  const descriptionAttr = get<ItemAttr>('taskAttrs', 'tasks:description')
-  const descriptionProp = getValue(props.item, descriptionAttr)
+  const content = useMemo(() => {
+    return settings.content
+      .map((id) => {
+        const attr = get<ItemAttr>('taskAttrs', id)
+        const results = getValue(props.item, attr)
+        const initial = isArray(results) ? map(results, 'value') : [results.value]
+        const filtered = initial.filter((v) => !isNull(v) && !isEmpty(v))
+        if (isEmpty(filtered)) return null
+        const name = attr.fullname ?? attr.name
+        const selectable = ['select', 'multi_select'].includes(attr.type) && !!attr.options
+        const final = selectable
+          ? filtered.map((v) => get<NamedEntry[]>(attr.options as any, v))
+          : filtered
+        console.log(final)
+        const value = final
+          .map((v) => (!selectable ? v : !isArray(v) ? v.name : map(v, 'name')))
+          .flat()
+          .join(', ')
+        const Ic =
+          attr.id === 'tasks:description'
+            ? Icon.QuoteStart
+            : attr.id === 'tasks:priority'
+            ? Icon.Priority
+            : Icon.Property
+        return (
+          <Property
+            key={id}
+            Icon={Ic}
+            name={name}
+            css={{
+              ...mixin(attr.id === 'tasks:priority' && final[0].id === 'high', { c: '#cf9e69' }),
+              ...mixin(attr.id === 'tasks:priority' && final[0].id === 'highest', { c: '#ff9320' }),
+            }}
+          >
+            {value}
+          </Property>
+        )
+      })
+      .filter(Boolean)
+  }, [props.item, settings.content, get, getValue])
   return (
     <Card
       href={`/tasks/${props.item.id}`}
@@ -244,11 +273,7 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
       shadow='-2px 2px 12px rgb(249 204 42 / 0.1)'
       {...props}
     >
-      {showDescription && !!descriptionProp.value && (
-        <Property Icon={Icon.QuoteStart} name={descriptionAttr.fullname ?? descriptionAttr.name}>
-          {descriptionProp.value}
-        </Property>
-      )}
+      {!isEmpty(content) && <Div css={{ d: 'grid', g: 2 }}>{content}</Div>}
     </Card>
   )
 }

@@ -55,7 +55,7 @@ export const Row: SFC<{ attr: ItemAttr; actions?: ReactNode }> = ({ attr, action
 
 export const Section: SFC<{ name?: string }> = ({ name, children, css }) => (
   <Div css={{ d: 'flex', fd: 'column', g: 8, '& + &': { mt: 16 }, ...css }}>
-    {name && <H3 css={{ fs: 16, mb: 8, px: 8, xw: 'calc(100% - 32px)' }}>{name}</H3>}
+    {name && <H3 css={{ fs: 16, m: 8, xw: 'calc(100% - 32px)' }}>{name}</H3>}
     {children}
   </Div>
 )

@@ -1,5 +1,8 @@
 import {
   concat,
+  cond,
+  filter,
+  find,
   isArray,
   isNull,
   isObject,
@@ -14,6 +17,7 @@ import {
 } from 'lodash'
 import useMeasure from 'react-use-measure'
 import { create } from 'zustand'
+import { Target } from './types'
 
 // section #########################################################################################
 //  ARRAYS
@@ -45,6 +49,8 @@ export const update: <T>(arr: T[], predicate: any, updatement: T) => T[] = (
   return map(arr, (el) => (match(el) ? merge(el, u) : el))
 }
 
+export const purge = (arr: any[]) => arr.filter((el) => !isUndefined(el) && !isNull(el))
+
 export const Collection = {
   add: (collection: any[], items: any) => {
     return concat(collection, items)
@@ -57,7 +63,13 @@ export const Collection = {
   },
 }
 
-export const purge = (arr: any[]) => arr.filter((el) => !isUndefined(el) && !isNull(el))
+export const getTarget = (arr: any[], t: Target) => {
+  return cond([
+    [() => isString(t), () => find(arr, { id: t })],
+    [() => isArray(t), () => filter(arr, (el) => (t as any).includes(el.id))],
+    [() => isObject(t), () => filter(arr, t)],
+  ])()
+}
 
 // section #########################################################################################
 //  MEDIA & CONTAINER QUERIES
