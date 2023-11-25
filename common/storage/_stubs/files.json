@@ -15,7 +15,7 @@
       "notion": null
     },
     "cases": {
-      "court": null,
+      "court": "1",
       "number": null,
       "date": null,
       "copyAvailable": false,
@@ -101,7 +101,7 @@
       "notion": "когда приложение доделаешь ска блять?!"
     },
     "cases": {
-      "court": null,
+      "court": "1",
       "number": null,
       "date": null,
       "copyAvailable": false,
@@ -175,7 +175,7 @@
     "id": "c",
     "name": "Кривенцов Вадим Валерьевич",
     "status": "current",
-    "groups": ["a", "c"],
+    "groups": [],
     "pinned": false,
     "general": {
       "fullname": "Кривенцов Вадим Валерьевич",
@@ -261,7 +261,7 @@
     "id": "d",
     "name": "Бифова Изабелла Руслановна",
     "status": "current",
-    "groups": [],
+    "groups": ["a", "c"],
     "pinned": false,
     "general": {
       "fullname": "Бифова Изабелла Руслановна",
@@ -273,7 +273,7 @@
       "notion": "пинай брата епт"
     },
     "cases": {
-      "court": null,
+      "court": "1",
       "number": null,
       "date": null,
       "copyAvailable": false,
@@ -347,7 +347,7 @@
     "id": "e",
     "name": "Богатуров Болислав Чейто",
     "status": "current",
-    "groups": ["b"],
+    "groups": ["a", "b"],
     "pinned": true,
     "general": {
       "fullname": "Богатуров Болислав Чейто",
@@ -359,7 +359,7 @@
       "notion": "не помню отчество"
     },
     "cases": {
-      "court": null,
+      "court": "2",
       "number": null,
       "date": null,
       "copyAvailable": false,

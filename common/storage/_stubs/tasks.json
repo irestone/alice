@@ -55,7 +55,7 @@
     "files": ["e"],
     "groups": ["f"],
     "pinned": true,
-    "priority": "low",
+    "priority": "lowest",
     "name": "Значимость этих проблем настолько очевидна",
     "description": null
   }

@@ -16,7 +16,7 @@ export const Select: SFC<{
   const option = find(props.options, { id: props.value })
   const [open, setOpen] = useState(false)
   return (
-    <Primitive.Popover.Root open={open} onOpenChange={setOpen}>
+    <Primitive.Popover.Root open={open} onOpenChange={setOpen} modal={true}>
       <Primitive.Popover.Trigger css={{ flexShrink: 0 }}>
         <Button icon={props.icon} corners='smooth'>
           {option?.name}

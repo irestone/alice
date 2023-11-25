@@ -9,7 +9,7 @@ import { Mobile } from '@lib/mobile'
 import { Card, FileCard, Group, TaskCard } from '@lib/cards'
 import { Controls } from './list/controls'
 import { Selection } from './list/selection'
-import { groupBy, useFilterPredicate } from './list/utils'
+import { useFilterPredicate, useGrouping } from './list/utils'
 
 const assets: Record<
   T.Category,
@@ -90,7 +90,7 @@ export const List: SFC<{
     return lodash.chain(storage.items).filter({ status: settings.status }).filter(predicate).value()
   }, [storage.items, settings, predicate])
 
-  const grouped = groupBy(filtered, storage.groups, settings.grouping)
+  const grouped = useGrouping(filtered, settings.grouping)
 
   const [selection, setSelection] = useState<string[]>([])
   const selected = useMemo(() => {

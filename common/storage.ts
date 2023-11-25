@@ -21,6 +21,11 @@ import { getTarget } from './utils'
 import * as database from './storage/db'
 import * as constant from './storage/static'
 
+type GetValueFn = <T = any>(
+  item: Item,
+  attr: ItemAttr
+) => { item: Item; path: string; value: T } | { item: Item; path: string; value: T }[]
+
 interface Storage {
   collections: {
     activity: Activity[]
@@ -39,7 +44,7 @@ interface Storage {
   add: <T = unknown>(cname: CollectionName, values: Partial<T>) => Promise<T>
   upd: <T = unknown>(cname: CollectionName, target: Target, values: Partial<T>) => void
   del: <T = unknown>(cname: CollectionName, target: Target) => void
-  getValue: (item: Item, attr: ItemAttr) => { item: Item; path: string; value: any }
+  getValue: GetValueFn
 }
 
 const create: StateCreator<Storage> = (set, get) => ({

@@ -25,8 +25,7 @@
     "name": "ФИО",
     "type": "string",
     "module": "general",
-    "filter": true,
-    "display": true
+    "filter": true
   },
   {
     "id": "files:general.birthday",
