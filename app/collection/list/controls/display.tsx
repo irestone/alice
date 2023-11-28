@@ -49,15 +49,22 @@ export const Display: SFC<{
           icon={variant === 'normal' ? 'collapse' : 'expand'}
           colors='no_bg'
           onClick={(e) => {
-            onVariantChange(variant === 'normal' ? 'condensed' : 'normal')
-            setOpen(false)
+            const nextVariant = variant === 'normal' ? 'condensed' : 'normal'
+            onVariantChange(nextVariant)
+            if (nextVariant === 'normal' && isEmpty(content)) setOpen(true)
             e.stopPropagation()
           }}
-          onHold={() => setOpen(true)}
+          onHold={() => {
+            setOpen(true)
+            onVariantChange('normal')
+          }}
         />
       }
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(o) => {
+        setOpen(o)
+        if (!o && isEmpty(content)) onVariantChange('condensed')
+      }}
       modal={true}
       css={{ w: 280, xh: '300px', of: 'auto' }}
     >

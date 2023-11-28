@@ -86,16 +86,17 @@ export const List: SFC<{
   }))
 
   const predicate = useFilterPredicate(settings.filter, assets[cat].attrs)
-  const filtered = useMemo<any[]>(() => {
-    return lodash.chain(storage.items).filter({ status: settings.status }).filter(predicate).value()
+  const items = useMemo<any[]>(() => {
+    const withStatus = filter(storage.items, { status: settings.status })
+    return settings.filtering ? filter(withStatus, predicate) : withStatus
   }, [storage.items, settings, predicate])
 
-  const grouped = useGrouping(filtered, settings.grouping)
+  const grouped = useGrouping(items, settings.grouping)
 
   const [selection, setSelection] = useState<string[]>([])
   const selected = useMemo(() => {
-    return filtered.filter((el) => selection.includes(el.id))
-  }, [selection, filtered])
+    return items.filter((el) => selection.includes(el.id))
+  }, [selection, items])
 
   return (
     <Root mobile={mobile}>

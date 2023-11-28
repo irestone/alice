@@ -25,7 +25,7 @@ export const Filter: SFC<{
 
   // @ts-expect-error
   const modules = useStorage((s) => s.collections.modules) as Module[]
-  const attrs = filter(props.attrs, 'display')
+  const attrs = filter(props.attrs, 'filter')
   const rows = reject(attrs, 'module')
   const sections: [Module, ItemAttr[]] = lodash
     .chain(attrs)
@@ -58,15 +58,22 @@ export const Filter: SFC<{
           corners='smooth'
           active={applied}
           onClick={(e) => {
-            onAppliedChange(!applied)
-            setOpen(false)
+            const nextApplied = !applied
+            onAppliedChange(nextApplied)
+            if (nextApplied && isEmpty(rules)) setOpen(true)
             e.stopPropagation()
           }}
-          onHold={() => setOpen(true)}
+          onHold={() => {
+            setOpen(true)
+            onAppliedChange(true)
+          }}
         />
       }
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(o) => {
+        setOpen(o)
+        if (!o && isEmpty(rules)) onAppliedChange(false)
+      }}
       modal={true}
       css={{ w: 280, xh: '300px', of: 'auto' }}
     >

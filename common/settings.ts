@@ -32,7 +32,7 @@ const init: StateCreator<State> = (set) => ({
       'files:cases.court',
     ],
     filtering: false,
-    filter: [],
+    filter: [{ id: 'default', attr: 'files:general.snils', operator: 'defined' }],
     set: (values) => set((s) => ({ ...s, files: { ...s.files, ...values } })),
   },
   tasks: {
@@ -42,7 +42,7 @@ const init: StateCreator<State> = (set) => ({
     variant: 'normal',
     content: ['tasks:description', 'tasks:priority', 'tasks:files'],
     filtering: false,
-    filter: [],
+    filter: [{ id: 'default', attr: 'tasks:description', operator: 'contains', input: 'pr' }],
     set: (values) => set((s) => ({ ...s, tasks: { ...s.tasks, ...values } })),
   },
 })
