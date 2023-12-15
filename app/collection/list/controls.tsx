@@ -2,7 +2,7 @@ import react from 'react'
 import { SFC, styled } from '@common/styles'
 import { ID, ItemAttr, NamedEntry } from '@common/types'
 import { Rule } from './controls/filter/rules'
-import { Select } from '@lib/fields'
+import { ControlSelect } from '@lib/fields'
 import { CardVariant } from '@lib/cards'
 import { Display } from './controls/display'
 import { Filter } from './controls/filter'
@@ -49,8 +49,13 @@ export const Controls: SFC<{
   return (
     <Root>
       <Start>
-        <Select icon='status' value={status} onChange={setStatus} options={statusOptions} />
-        <Select icon='grouping' value={grouping} onChange={setGrouping} options={groupingOptions} />
+        <ControlSelect icon='status' value={status} onChange={setStatus} options={statusOptions} />
+        <ControlSelect
+          icon='grouping'
+          value={grouping}
+          onChange={setGrouping}
+          options={groupingOptions}
+        />
       </Start>
       <End>
         <Display

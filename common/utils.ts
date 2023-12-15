@@ -36,17 +36,19 @@ export const replace: <T>(arr: T[], predicate: any, replacement: T) => T[] = (
   return map(arr, (el) => (match(el) ? r : el))
 }
 
-export const update: <T>(arr: T[], predicate: any, updatement: T) => T[] = (
+export const update: <T>(arr: T[], predicate: any, updatement: T, set?: boolean) => T[] = (
   arr,
   p: any,
-  u: any
+  u: any,
+  set
 ) => {
   let match: (v: any) => boolean
   if (isObject(p)) match = matches(p)
   else if (isArray(p)) match = matchesProperty(p[0], p[1])
   else if (isString(p)) match = (el: any) => !!property(p)(el)
   else throw new Error('Unknown predicate format')
-  return map(arr, (el) => (match(el) ? merge(el, u) : el))
+  const upd = set ? (el: any) => ({ ...el, ...u }) : merge
+  return map(arr, (el) => (match(el) ? upd(el, u) : el))
 }
 
 export const purge = (arr: any[]) => arr.filter((el) => !isUndefined(el) && !isNull(el))
@@ -172,4 +174,22 @@ export const holdListener = (ref: any, cb: () => void, dur?: number) => {
     if (holdId) clearTimeout(holdId)
     if (setupId) clearTimeout(setupId)
   }
+}
+
+// section #########################################################################################
+//  OTHER
+// #################################################################################################
+
+export const toRUB = (v: number) => {
+  return new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+    maximumFractionDigits: 0,
+  }).format(v)
+}
+
+export const toDate = (v: string) => {
+  return new Intl.DateTimeFormat('ru-RU', {
+    dateStyle: 'long',
+  }).format(new Date(v))
 }

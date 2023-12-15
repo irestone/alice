@@ -1,5 +1,6 @@
 [
   { "id": "1", "name": "осп 1", "region": "RU-KB" },
   { "id": "2", "name": "осп 2", "region": "RU-KB" },
-  { "id": "3", "name": "осп 3", "region": "RU-KDA" }
+  { "id": "3", "name": "осп 3", "region": "RU-KDA" },
+  { "id": "4", "name": "осп 4", "region": "RU-STA" }
 ]

@@ -39,38 +39,38 @@ export type IconName =
   | 'filter2'
   | 'back'
 
-const icons: Record<IconName, { default: SFC; filled: SFC }> = {
-  home: { default: Icon.Home, filled: Icon.HomeFilled },
-  catalog: { default: Icon.Catalog, filled: Icon.CatalogFilled },
-  checklist: { default: Icon.Checklist, filled: Icon.ChecklistFilled },
-  subscribe: { default: Icon.Subscribe, filled: Icon.SubscribeFilled },
-  profile: { default: Icon.Profile, filled: Icon.ProfileFilled },
-  options: { default: Icon.Options, filled: Icon.Options },
-  options_h: { default: Icon.OptionsHorizontal, filled: Icon.OptionsHorizontal },
-  settings: { default: Icon.Settings, filled: Icon.Settings },
-  checkmark: { default: Icon.Checkmark, filled: Icon.Checkmark },
-  close: { default: Icon.Close, filled: Icon.Close },
-  search: { default: Icon.Search, filled: Icon.Search },
-  filter: { default: Icon.Filter, filled: Icon.Filter },
-  pin: { default: Icon.Pin, filled: Icon.Pin },
-  delete: { default: Icon.Delete, filled: Icon.Delete },
-  expand: { default: Icon.Expand, filled: Icon.Expand },
-  collapse: { default: Icon.Collapse, filled: Icon.Collapse },
-  edit: { default: Icon.Edit, filled: Icon.Edit },
-  status: { default: Icon.Status, filled: Icon.Status },
-  work: { default: Icon.Work, filled: Icon.Work },
-  postpone: { default: Icon.Postpone, filled: Icon.Postpone },
-  archive: { default: Icon.Archive, filled: Icon.Archive },
-  grouping: { default: Icon.Grouping, filled: Icon.Grouping },
-  chevron: { default: Icon.Chevron, filled: Icon.Chevron },
-  history: { default: Icon.History, filled: Icon.History },
-  link: { default: Icon.Link, filled: Icon.Link },
-  task: { default: Icon.Task, filled: Icon.TaskFilled },
-  plus: { default: Icon.Plus, filled: Icon.Plus },
-  list: { default: Icon.List, filled: Icon.List },
-  property: { default: Icon.Property, filled: Icon.Property },
-  filter2: { default: Icon.Filter2, filled: Icon.Filter2 },
-  back: { default: Icon.Back, filled: Icon.Back },
+const icons: Record<IconName, { default: SFC; active: SFC }> = {
+  home: { default: Icon.Home, active: Icon.HomeFilled },
+  catalog: { default: Icon.Catalog, active: Icon.CatalogFilled },
+  checklist: { default: Icon.Checklist, active: Icon.Checklist },
+  subscribe: { default: Icon.Subscribe, active: Icon.SubscribeFilled },
+  profile: { default: Icon.Profile, active: Icon.ProfileFilled },
+  options: { default: Icon.Options, active: Icon.Options },
+  options_h: { default: Icon.OptionsHorizontal, active: Icon.OptionsHorizontal },
+  settings: { default: Icon.Settings, active: Icon.Settings },
+  checkmark: { default: Icon.Checkmark, active: Icon.Checkmark },
+  close: { default: Icon.Close, active: Icon.Close },
+  search: { default: Icon.Search, active: Icon.Search },
+  filter: { default: Icon.Filter, active: Icon.Filter },
+  pin: { default: Icon.Pin, active: Icon.Pin },
+  delete: { default: Icon.Delete, active: Icon.Delete },
+  expand: { default: Icon.Expand, active: Icon.Expand },
+  collapse: { default: Icon.Collapse, active: Icon.Collapse },
+  edit: { default: Icon.Edit, active: Icon.Edit },
+  status: { default: Icon.Status, active: Icon.Status },
+  work: { default: Icon.Work, active: Icon.Work },
+  postpone: { default: Icon.Postpone, active: Icon.Postpone },
+  archive: { default: Icon.Archive, active: Icon.Archive },
+  grouping: { default: Icon.Grouping, active: Icon.Grouping },
+  chevron: { default: Icon.Chevron, active: Icon.Chevron },
+  history: { default: Icon.History, active: Icon.History },
+  link: { default: Icon.Link, active: Icon.Link },
+  task: { default: Icon.Task, active: Icon.TaskFilled },
+  plus: { default: Icon.Plus, active: Icon.Plus },
+  list: { default: Icon.List, active: Icon.List },
+  property: { default: Icon.Property, active: Icon.Property },
+  filter2: { default: Icon.Filter2, active: Icon.Filter2 },
+  back: { default: Icon.Back, active: Icon.Back },
 }
 
 type ButtonState = 'idle' | 'hovered' | 'focused' | 'active'
@@ -124,7 +124,6 @@ const colorPresets: Record<ColorPresetName, ColorPreset> = {
 }
 
 const produceColorPreset = (
-  // colors?: any,
   colors?:
     | ColorPresetName
     | (Partial<ColorSet> & RecursivePartial<ColorPreset> & { preset?: ColorPresetName }),
@@ -163,6 +162,9 @@ const produceColorPreset = (
 
 export const Button: SFC<{
   icon?: IconName
+  iconStart?: IconName
+  iconEnd?: IconName
+  chevron?: boolean
   size?: number
   corners?: number | 'round' | 'smooth'
   colors?:
@@ -181,7 +183,10 @@ export const Button: SFC<{
   const d = outS - inS
   const colors = produceColorPreset(props.colors, active)
   const Root = props.href ? RouteLink : Primitive.Button
-  const Icon = props.icon && (active ? icons[props.icon].filled : icons[props.icon].default)
+  const iconStart = props.icon ?? props.iconStart
+  const iconEnd = props.iconEnd
+  const IconStart = iconStart && icons[iconStart][active ? 'active' : 'default']
+  const IconEnd = iconEnd && icons[iconEnd][active ? 'active' : 'default']
 
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -211,7 +216,7 @@ export const Button: SFC<{
         }}
         onClick={props.onClick}
       >
-        {Icon && <Icon css={{ s: inS }} />}
+        {IconStart && <IconStart css={{ s: inS }} />}
         {children && (
           <Span
             css={{
@@ -245,27 +250,20 @@ export const Button: SFC<{
         rad: !corners || corners === 'round' ? 999 : corners === 'smooth' ? 8 : corners,
         flexShrink: 0,
         whiteSpace: 'nowrap',
+        svg: { flexShrink: 0 },
         ...colors,
         ...(props.css ?? {}),
       }}
       onClick={props.onClick}
     >
-      {Icon && <Icon css={{ s: inS }} />}
+      {IconStart && <IconStart css={{ s: inS }} />}
       {children && (
-        <Span
-          css={{
-            fs: 13,
-            c: 'var(--color)',
-            fw: 300,
-            whiteSpace: 'nowrap',
-            d: 'flex',
-            ai: 'center',
-            g: 4,
-          }}
-        >
+        <Span css={{ fs: 13, c: 'var(--color)', fw: 300, whiteSpace: 'nowrap', of: 'hidden' }}>
           {children}
         </Span>
       )}
+      {IconEnd && <IconEnd css={{ s: inS }} />}
+      {props.chevron && <Icon.Chevron css={{ c: '#eaeaea', s: 9, rotate: '180deg' }} />}
     </Root>
   )
 }

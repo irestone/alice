@@ -204,6 +204,7 @@ export type ItemAttr = NamedEntry & {
   module?: ID // Module
   filter?: boolean
   display?: boolean
+  currency?: boolean
 }
 export type FileAttr = ItemAttr
 export type FileGrouping = NamedEntry & { id: 'custom' | 'regions' | 'bailiff_depts' | 'courts' }

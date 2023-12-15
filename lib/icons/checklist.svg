@@ -1,10 +1,6 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M56 76H86" stroke="var(--color, white)" stroke-width="6" stroke-linecap="round"/>
-<path d="M56 94H116" stroke="var(--color, white)" stroke-width="6" stroke-linecap="round"/>
-<path d="M56 112H106" stroke="var(--color, white)" stroke-width="6" stroke-linecap="round"/>
-<path d="M56 28H91" stroke="var(--color, white)" stroke-width="6" stroke-linecap="round"/>
-<path d="M56 46H116" stroke="var(--color, white)" stroke-width="6" stroke-linecap="round"/>
-<circle cx="25" cy="86" r="16" stroke="var(--color, white)" stroke-width="5"/>
-<circle cx="25" cy="38" r="16" stroke="var(--color, white)" stroke-width="5"/>
-<circle cx="25" cy="38" r="4" fill="var(--color, white)" stroke="var(--color, white)" stroke-width="5"/>
+<path d="M10.25 41.8113L21.7885 52L40.25 32" stroke="var(--color)" stroke-width="8" stroke-linecap="round"/>
+<path d="M64.25 42H117.25" stroke="var(--color)" stroke-width="8" stroke-linecap="round"/>
+<path d="M10.25 85.8113L21.7885 96L40.25 76" stroke="var(--color)" stroke-width="8" stroke-linecap="round"/>
+<path d="M64.25 86H96.25" stroke="var(--color)" stroke-width="8" stroke-linecap="round"/>
 </svg>

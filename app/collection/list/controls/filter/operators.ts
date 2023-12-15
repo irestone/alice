@@ -22,50 +22,53 @@ export type Operator = NamedEntry & {
   compare: Comparator
 }
 
-const n = (s: string) => s?.toLowerCase()
+// normalizers
+const ns = (v: any) => String(v).toLowerCase()
+const nn = (v: any) => parseInt(v)
+const nb = (v: any) => Boolean(v)
 
 const operators: Operator[] = [
   {
     id: 'is',
     name: '—',
     type: 'binary',
-    attrTypes: ['string', 'select'],
-    compare: (v, i) => v === i,
+    attrTypes: ['string', 'select', 'date'],
+    compare: (v, i) => (isUndefined(i) ? isNull(v) : v === i),
   },
   {
     id: 'not',
     name: 'не',
     type: 'binary',
-    attrTypes: ['string', 'select'],
-    compare: (v, i) => v !== i,
+    attrTypes: ['string', 'select', 'date'],
+    compare: (v, i) => (isUndefined(i) ? !isNull(v) : v !== i),
   },
   {
     id: 'contains',
     name: 'содержит',
     type: 'binary',
     attrTypes: ['string'],
-    compare: (v, i) => n(v)?.includes(n(i)),
+    compare: (v, i) => (isUndefined(i) ? true : ns(v)?.includes(ns(i))),
   },
   {
     id: 'doesNotContain',
     name: 'не содержит',
     type: 'binary',
     attrTypes: ['string'],
-    compare: (v, i) => !n(v)?.includes(i),
+    compare: (v, i) => (isUndefined(i) ? true : !ns(v)?.includes(i)),
   },
   {
     id: 'startsWith',
     name: 'начинается на',
     type: 'binary',
     attrTypes: ['string'],
-    compare: (v, i) => n(v).startsWith(n(i)),
+    compare: (v, i) => (isUndefined(i) ? true : ns(v).startsWith(ns(i))),
   },
   {
     id: 'endsWith',
     name: 'кончается на',
     type: 'binary',
     attrTypes: ['string'],
-    compare: (v, i) => n(v).endsWith(n(i)),
+    compare: (v, i) => (isUndefined(i) ? true : ns(v).endsWith(ns(i))),
   },
   {
     id: 'containsAll',
@@ -100,62 +103,76 @@ const operators: Operator[] = [
     name: '=',
     type: 'binary',
     attrTypes: ['number'],
-    compare: (v, i) => v === i,
+    compare: (v, i) => (isUndefined(i) ? isNull(v) : nn(v) === nn(i)),
   },
   {
     id: 'neq',
     name: '≠',
     type: 'binary',
     attrTypes: ['number'],
-    compare: (v, i) => v !== i,
+    compare: (v, i) => (isUndefined(i) ? !isNull(v) : nn(v) !== nn(i)),
   },
   {
     id: 'lt',
     name: '<',
     type: 'binary',
     attrTypes: ['number'],
-    compare: (v, i) => v < i,
-  },
-  {
-    id: 'gt',
-    name: '>',
-    type: 'binary',
-    attrTypes: ['number'],
-    compare: (v, i) => v > i,
+    compare: (v, i) => (isUndefined(i) ? true : isNull(v) ? false : nn(v) < nn(i)),
   },
   {
     id: 'lte',
     name: '≤',
     type: 'binary',
     attrTypes: ['number'],
-    compare: (v, i) => v <= i,
+    compare: (v, i) => (isUndefined(i) ? true : isNull(v) ? false : nn(v) <= nn(i)),
+  },
+  {
+    id: 'gt',
+    name: '>',
+    type: 'binary',
+    attrTypes: ['number'],
+    compare: (v, i) => (isUndefined(i) ? true : isNull(v) ? false : nn(v) > nn(i)),
   },
   {
     id: 'gte',
     name: '≥',
     type: 'binary',
     attrTypes: ['number'],
-    compare: (v, i) => v >= i,
+    compare: (v, i) => (isUndefined(i) ? true : isNull(v) ? false : nn(v) >= nn(i)),
   },
   {
-    id: 'checked',
-    name: 'отмечено',
+    id: 'true',
+    name: 'да',
     type: 'unary',
     attrTypes: ['boolean'],
-    compare: (v) => Boolean(v),
+    compare: (v) => nb(v),
   },
   {
-    id: 'unchecked',
-    name: 'не отмечено',
+    id: 'false',
+    name: 'нет',
     type: 'unary',
     attrTypes: ['boolean'],
-    compare: (v) => Boolean(v),
+    compare: (v) => !nb(v),
+  },
+  {
+    id: 'before',
+    name: 'до',
+    type: 'binary',
+    attrTypes: ['date'],
+    compare: (v, i) => v && new Date(v) < new Date(i),
+  },
+  {
+    id: 'after',
+    name: 'после',
+    type: 'binary',
+    attrTypes: ['date'],
+    compare: (v, i) => v && new Date(v) > new Date(i),
   },
   {
     id: 'defined',
-    name: 'указано',
+    name: 'задано',
     type: 'unary',
-    attrTypes: ['string', 'number', 'select', 'multi_select'],
+    attrTypes: ['string', 'number', 'select', 'multi_select', 'date'],
     compare: (v) => {
       if (isString(v)) return !isEmpty(v) && !isNull(v)
       if (isArray(v)) return !isEmpty(v)
@@ -164,9 +181,9 @@ const operators: Operator[] = [
   },
   {
     id: 'undefined',
-    name: 'не указано',
+    name: 'не задано',
     type: 'unary',
-    attrTypes: ['string', 'number', 'select', 'multi_select'],
+    attrTypes: ['string', 'number', 'select', 'multi_select', 'date'],
     compare: (v) => {
       if (isString(v)) return isEmpty(v) || isNull(v)
       if (isArray(v)) return isEmpty(v)
@@ -174,31 +191,6 @@ const operators: Operator[] = [
     },
   },
 ]
-
-// const operatorsByAttrType: Record<AttrType, string[]> = {
-//   string: [
-//     'is',
-//     'not',
-//     'contains',
-//     'doesNotContain',
-//     'startsWith',
-//     'endsWith',
-//     'defined',
-//     'undefined',
-//   ],
-//   number: ['eq', 'neq', 'lt', 'gt', 'lte', 'gte', 'defined', 'undefined'],
-//   boolean: ['checked', 'unchecked'],
-//   date: [],
-//   select: ['is', 'not', 'defined', 'undefined'],
-//   multi_select: [
-//     'containsAll',
-//     'containsSome',
-//     'doesNotContainAny',
-//     'doesNotContainSome',
-//     'defined',
-//     'undefined',
-//   ],
-// }
 
 type Callback = (op: Operator) => boolean
 

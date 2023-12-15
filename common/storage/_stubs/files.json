@@ -7,7 +7,7 @@
     "pinned": false,
     "general": {
       "fullname": "Кривенцова Алиса Валерьевна",
-      "birthday": "14 июля, 1888 г.",
+      "birthday": "1990-09-03T15:25:25.097Z",
       "address": null,
       "inn": "7743013902",
       "snils": null,
@@ -19,7 +19,7 @@
       "number": null,
       "date": null,
       "copyAvailable": false,
-      "appealed": false,
+      "appealed": true,
       "appeal": {
         "court": null,
         "number": null,
@@ -49,11 +49,11 @@
       "notion": null
     },
     "summary": {
-      "amountByCourt": null,
+      "amountByCourt": 70000,
       "stateDuty": null,
       "transcript": null,
-      "amountInContract": null,
-      "amountUponContractPayoff": null,
+      "amountInContract": 50000,
+      "amountUponContractPayoff": 43500,
       "recalcNeeded": false,
       "recalcDone": false,
       "liqInDebt": false,
@@ -93,7 +93,7 @@
     "pinned": true,
     "general": {
       "fullname": "Бифов Алихан Русланович",
-      "birthday": "9 мая, 1994 г.",
+      "birthday": "1994-05-09T11:30:00.000Z",
       "address": "Нальчик, М. Тореза 78",
       "inn": "8836729009",
       "snils": "213-231-123 23",
@@ -135,10 +135,10 @@
       "notion": null
     },
     "summary": {
-      "amountByCourt": null,
+      "amountByCourt": 12000,
       "stateDuty": null,
       "transcript": null,
-      "amountInContract": null,
+      "amountInContract": 12000,
       "amountUponContractPayoff": null,
       "recalcNeeded": false,
       "recalcDone": false,
@@ -191,7 +191,7 @@
       "number": null,
       "date": null,
       "copyAvailable": false,
-      "appealed": false,
+      "appealed": true,
       "appeal": {
         "court": null,
         "number": null,
@@ -221,11 +221,11 @@
       "notion": null
     },
     "summary": {
-      "amountByCourt": null,
+      "amountByCourt": 35200,
       "stateDuty": null,
       "transcript": null,
-      "amountInContract": null,
-      "amountUponContractPayoff": null,
+      "amountInContract": 30000,
+      "amountUponContractPayoff": 25700,
       "recalcNeeded": false,
       "recalcDone": false,
       "liqInDebt": false,
@@ -265,7 +265,7 @@
     "pinned": false,
     "general": {
       "fullname": "Бифова Изабелла Руслановна",
-      "birthday": "13 апреля, 2002 г.",
+      "birthday": null,
       "address": "Нальчик, М. Тореза 78",
       "inn": null,
       "snils": null,
@@ -351,7 +351,7 @@
     "pinned": true,
     "general": {
       "fullname": "Богатуров Болислав Чейто",
-      "birthday": null,
+      "birthday": "1992-12-13T15:25:25.097Z",
       "address": null,
       "inn": null,
       "snils": null,
@@ -393,11 +393,11 @@
       "notion": null
     },
     "summary": {
-      "amountByCourt": null,
+      "amountByCourt": 130000,
       "stateDuty": null,
       "transcript": null,
-      "amountInContract": null,
-      "amountUponContractPayoff": null,
+      "amountInContract": 60000,
+      "amountUponContractPayoff": 60000,
       "recalcNeeded": false,
       "recalcDone": false,
       "liqInDebt": false,

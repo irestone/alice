@@ -1,13 +1,13 @@
-import { useRef, useEffect, useMemo, useState } from 'react'
-import { isArray, isEmpty, isNull, map } from 'lodash'
+import { useRef, useEffect, useMemo, useState, useCallback } from 'react'
+import lodash, { flow, isArray, isEmpty, isNull, map, reject } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
-import { SFC, mixin } from '@common/styles'
-import { Item, ItemAttr, NamedEntry, Task, Group as TGroup } from '@common/types'
+import { SFC, mixin, styled } from '@common/styles'
+import { Item, ItemAttr, Task, Group as TGroup, Category, CollectionName } from '@common/types'
 import { Icon } from '@lib/icons'
 import { Button } from '@lib/buttons'
 import { useStorage } from '@common/storage'
 import { Div, H3, Span } from './primitives'
-import { holdListener } from '@common/utils'
+import { holdListener, toDate, toRUB } from '@common/utils'
 import { useSettings } from '@common/settings'
 import * as fonts from '@common/styles/fonts'
 import { Section } from './sections'
@@ -117,6 +117,8 @@ const Card: SFC<Card> = (props) => {
   )
 }
 
+const Content = styled('div', { d: 'grid', g: 2 })
+
 const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children, css }) => {
   return (
     <Div
@@ -162,7 +164,7 @@ const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children, css 
             mr: 4,
           }}
         >
-          {name}:
+          {`${name}:`}
         </Span>
         {children}
       </Div>
@@ -170,40 +172,65 @@ const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children, css 
   )
 }
 
+const useCardContent = (item: Item, category: Category, attrCollection: CollectionName) => {
+  const get = useStorage((s) => s.get)
+  const getValue = useStorage((s) => s.getValue)
+
+  const getRawValue = flow([
+    (attr) => getValue(item, attr),
+    (results) => (isArray(results) ? map(results, 'value') : [results.value]),
+    (values) => reject(values, (v) => isNull(v) || (isArray(v) && isEmpty(v))),
+  ])
+
+  const getFormatter = useCallback(
+    (attr: ItemAttr) => {
+      return (value: any) => {
+        let result = [value]
+        if (attr.type === 'select' || attr.type === 'multi_select') {
+          const opt = get<any>(attr.options as any, value)
+          result = isArray(opt) ? map(opt, 'name') : [opt.name]
+        } else if (attr.type === 'number' && attr.currency) {
+          result = result.map(toRUB)
+        } else if (attr.type === 'boolean') {
+          result = result.map((value) => (value ? 'да' : 'нет'))
+        } else if (attr.type === 'date') {
+          result = result.map(toDate)
+        }
+        return result
+      }
+    },
+    [get]
+  )
+
+  const settings = useSettings(category)
+
+  const content = useMemo(() => {
+    return settings.content
+      .map((attrId) => {
+        const attr = get<ItemAttr>(attrCollection, attrId)
+        const name = attr.fullname ?? attr.name
+        const rawValue = getRawValue(attr)
+        const value = lodash
+          .chain(rawValue)
+          .map(getFormatter(attr))
+          .flatten()
+          .uniq()
+          .join(', ')
+          .value()
+        return { attr, name, value, rawValue }
+      })
+      .filter(({ value }) => !!value)
+  }, [settings.content, attrCollection, get, getRawValue, getFormatter])
+
+  return content
+}
+
 // part ==========================================
 //  FILE
 // ===============================================
 
 export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
-  const get = useStorage((s) => s.get)
-  const getValue = useStorage((s) => s.getValue)
-  const settings = useSettings('files')
-  const content = useMemo(() => {
-    return settings.content
-      .map((id) => {
-        const attr = get<ItemAttr>('fileAttrs', id)
-        const results = getValue(props.item, attr)
-        const initial = isArray(results) ? map(results, 'value') : [results.value]
-        const filtered = initial.filter((v) => !isNull(v) && !isEmpty(v))
-        if (isEmpty(filtered)) return null
-        const name = attr.fullname ?? attr.name
-        const selectable = ['select', 'multi_select'].includes(attr.type) && !!attr.options
-        const final = selectable
-          ? filtered.map((v) => get<NamedEntry[]>(attr.options as any, v))
-          : filtered
-        const value = final
-          .map((v) => (!selectable ? v : !isArray(v) ? v.name : map(v, 'name')))
-          .flat()
-          .join(', ')
-
-        return (
-          <Property key={id} Icon={Icon.Property} name={name}>
-            {value}
-          </Property>
-        )
-      })
-      .filter(Boolean)
-  }, [props.item, settings.content, get, getValue])
+  const content = useCardContent(props.item, 'files', 'fileAttrs')
   return (
     <Card
       href={`/files/${props.item.id}`}
@@ -212,7 +239,15 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
       shadow='-2px 2px 12px rgb(167 162 133 / 0.1)'
       {...props}
     >
-      {!isEmpty(content) && <Div css={{ d: 'grid', g: 2 }}>{content}</Div>}
+      {!isEmpty(content) && (
+        <Content>
+          {content.map(({ attr, name, value }) => (
+            <Property key={attr.id} Icon={Icon.Property} name={name}>
+              {value}
+            </Property>
+          ))}
+        </Content>
+      )}
     </Card>
   )
 }
@@ -222,49 +257,7 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
 // ===============================================
 
 export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
-  const get = useStorage((s) => s.get)
-  const getValue = useStorage((s) => s.getValue)
-  const settings = useSettings('tasks')
-  const content = useMemo(() => {
-    return settings.content
-      .map((id) => {
-        const attr = get<ItemAttr>('taskAttrs', id)
-        const results = getValue(props.item, attr)
-        const initial = isArray(results) ? map(results, 'value') : [results.value]
-        const filtered = initial.filter((v) => !isNull(v) && !isEmpty(v))
-        if (isEmpty(filtered)) return null
-        const name = attr.fullname ?? attr.name
-        const selectable = ['select', 'multi_select'].includes(attr.type) && !!attr.options
-        const final = selectable
-          ? filtered.map((v) => get<NamedEntry[]>(attr.options as any, v))
-          : filtered
-        console.log(final)
-        const value = final
-          .map((v) => (!selectable ? v : !isArray(v) ? v.name : map(v, 'name')))
-          .flat()
-          .join(', ')
-        const Ic =
-          attr.id === 'tasks:description'
-            ? Icon.QuoteStart
-            : attr.id === 'tasks:priority'
-            ? Icon.Priority
-            : Icon.Property
-        return (
-          <Property
-            key={id}
-            Icon={Ic}
-            name={name}
-            css={{
-              ...mixin(attr.id === 'tasks:priority' && final[0].id === 'high', { c: '#cf9e69' }),
-              ...mixin(attr.id === 'tasks:priority' && final[0].id === 'highest', { c: '#ff9320' }),
-            }}
-          >
-            {value}
-          </Property>
-        )
-      })
-      .filter(Boolean)
-  }, [props.item, settings.content, get, getValue])
+  const content = useCardContent(props.item, 'tasks', 'taskAttrs')
   return (
     <Card
       href={`/tasks/${props.item.id}`}
@@ -273,7 +266,27 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
       shadow='-2px 2px 12px rgb(249 204 42 / 0.1)'
       {...props}
     >
-      {!isEmpty(content) && <Div css={{ d: 'grid', g: 2 }}>{content}</Div>}
+      {!isEmpty(content) && (
+        <Content>
+          {content.map(({ attr, name, value, rawValue }) => {
+            const isDescription = attr.id === 'tasks:description'
+            const isPriority = attr.id === 'tasks:priority'
+            return (
+              <Property
+                key={attr.id}
+                Icon={isDescription ? Icon.QuoteStart : isPriority ? Icon.Priority : Icon.Property}
+                name={name}
+                css={{
+                  ...mixin(isPriority && rawValue[0] === 'high', { c: '#cf9e69' }),
+                  ...mixin(isPriority && rawValue[0] === 'highest', { c: '#ff9320' }),
+                }}
+              >
+                {value}
+              </Property>
+            )
+          })}
+        </Content>
+      )}
     </Card>
   )
 }

@@ -88,7 +88,9 @@ export const List: SFC<{
   const predicate = useFilterPredicate(settings.filter, assets[cat].attrs)
   const items = useMemo<any[]>(() => {
     const withStatus = filter(storage.items, { status: settings.status })
-    return settings.filtering ? filter(withStatus, predicate) : withStatus
+    return settings.filtering && !isEmpty(settings.filter)
+      ? filter(withStatus, predicate)
+      : withStatus
   }, [storage.items, settings, predicate])
 
   const grouped = useGrouping(items, settings.grouping)

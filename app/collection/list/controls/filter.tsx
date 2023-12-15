@@ -84,7 +84,7 @@ export const Filter: SFC<{
               <Section key={r.id}>
                 <Rule
                   rule={r}
-                  updateRule={(c) => onRulesChange(update(rules, { id: r.id }, c) as any)}
+                  updateRule={(c) => onRulesChange(update(rules, { id: r.id }, c, true) as any)}
                   deleteRule={() => onRulesChange(reject(rules, { id: r.id }))}
                   attrs={attrs}
                 />
