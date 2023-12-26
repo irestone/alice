@@ -4,7 +4,9 @@
     "path": "tasks:name",
     "name": "Название",
     "type": "string",
-    "filter": true
+    "filter": true,
+    "search": true,
+    "searchWeight": 2
   },
   {
     "id": "tasks:description",
@@ -12,7 +14,8 @@
     "name": "Описание",
     "type": "string",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "tasks:priority",

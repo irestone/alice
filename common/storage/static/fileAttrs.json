@@ -25,7 +25,9 @@
     "name": "ФИО",
     "type": "string",
     "module": "general",
-    "filter": true
+    "filter": true,
+    "search": true,
+    "searchWeight": 2
   },
   {
     "id": "files:general.birthday",
@@ -43,7 +45,8 @@
     "type": "string",
     "module": "general",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:general.inn",
@@ -52,7 +55,8 @@
     "type": "string",
     "module": "general",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:general.snils",
@@ -61,7 +65,8 @@
     "type": "string",
     "module": "general",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:general.regions",
@@ -81,7 +86,8 @@
     "type": "string",
     "module": "general",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.court",
@@ -102,7 +108,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.date",
@@ -152,7 +159,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.appeal.date",
@@ -214,7 +222,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.cassation.date",
@@ -264,7 +273,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.collateral.registered",
@@ -284,7 +294,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.collateral.registration.date",
@@ -312,7 +323,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:cases.notion",
@@ -322,7 +334,8 @@
     "type": "string",
     "module": "cases",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
 
   {
@@ -353,7 +366,8 @@
     "type": "string",
     "module": "summary",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:summary.amountInContract",
@@ -368,7 +382,7 @@
   {
     "id": "files:summary.amountUponContractPayoff",
     "path": "files:summary.amountUponContractPayoff",
-    "name": "Сумма на дату полно оплаты",
+    "name": "Сумма на дату полной оплаты",
     "type": "number",
     "currency": true,
     "module": "summary",
@@ -430,7 +444,7 @@
     "path": "files:summary.liqDebt.payoffDate",
     "name": "Дата перечисления",
     "fullname": "Дата перечисления долга КУ",
-    "type": "string",
+    "type": "date",
     "module": "summary",
     "filter": true,
     "display": true
@@ -443,7 +457,8 @@
     "type": "string",
     "module": "summary",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementNotes->enforcementNotes:series",
@@ -453,7 +468,8 @@
     "type": "string",
     "module": "enforcementNotes",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementNotes->enforcementNotes:number",
@@ -463,7 +479,8 @@
     "type": "string",
     "module": "enforcementNotes",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementNotes->enforcementNotes:issuer",
@@ -473,7 +490,8 @@
     "type": "string",
     "module": "enforcementNotes",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementNotes->enforcementNotes:issueDate",
@@ -504,7 +522,8 @@
     "type": "string",
     "module": "enforcementNotes",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementNotes->enforcementNotes:whereabouts",
@@ -525,7 +544,8 @@
     "type": "string",
     "module": "enforcementNotes",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementProceedings->enforcementProceedings:note",
@@ -546,7 +566,8 @@
     "type": "string",
     "module": "enforcementProceedings",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:enforcementProceedings->enforcementProceedings:bailiffDept",
@@ -608,7 +629,8 @@
     "type": "string",
     "module": "enforcementProceedings",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:succession.notificationSent",
@@ -638,7 +660,8 @@
     "type": "string",
     "module": "succession",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:succession.applicationSentWith",
@@ -669,7 +692,8 @@
     "type": "string",
     "module": "succession",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   },
   {
     "id": "files:succession.scheduledFor",
@@ -730,6 +754,7 @@
     "type": "string",
     "module": "succession",
     "filter": true,
-    "display": true
+    "display": true,
+    "search": true
   }
 ]

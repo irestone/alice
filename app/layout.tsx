@@ -6,9 +6,10 @@ import { BarLoader } from 'react-spinners'
 import { SFC, Breakpoint, styled } from '@common/styles'
 import { mq, useMediaQueries } from '@common/utils'
 import { useStorage } from '@common/storage'
-import { Div, Span } from '@lib/primitives'
+import { Button, Div, Span } from '@lib/primitives'
 
 import { Menu, TMenuDisplay } from './layout/menu'
+import { Mobile } from '@lib/mobile'
 
 // section #########################################################################################
 //  LOADER
@@ -66,6 +67,7 @@ const Root = styled('div', {
 
 export const Layout: SFC<{ title: string }> = (props) => {
   const initialized = useStorage((s) => s.initialized)
+  const mobileSearch = useStorage((s) => s.mobileSearch)
   const mq = useMediaQueries()
   const ready = initialized && mq(1) // mq(1) checks if viewport has been measured
 
@@ -88,105 +90,7 @@ export const Layout: SFC<{ title: string }> = (props) => {
         <Menu display={menuDisplay} />
         <Viewport>{props.children}</Viewport>
       </Root>
+      {mobileSearch && <Mobile.Search />}
     </>
   )
 }
-
-// export const Main = styled('div', {
-//   flex: '999 1 780px',
-//   bgc: 'cyan',
-// })
-
-// export const Related = styled('div', {
-//   flex: '1 0 420px',
-//   display: 'flex',
-//   flexDirection: 'column',
-//   gap: 16,
-//   bg: 'yellow',
-// })
-
-// export const Viewport = styled('main', {
-//   container: 'viewport',
-//   gridArea: 'viewport',
-//   overflow: 'auto',
-//   display: 'flex',
-//   flexWrap: 'wrap',
-//   alignItems: 'start',
-//   scrollbarSize: 8,
-//   scrollbarTrackColor: '#232323',
-//   scrollbarThumbColor: '#666',
-//   scrollbarThumbColorHovered: '#777',
-//   bg: 'blue',
-// })
-
-// const Root = styled('div', {
-//   container: 'page',
-//   display: 'grid',
-//   height: '100%',
-//   overflow: 'hidden',
-//   position: 'relative',
-//   [mq(0, 1000)]: {
-//     gridTemplateAreas: '"viewport" "menu"',
-//     gridTemplateRows: '1fr auto',
-//   },
-//   [mq(1000, 1300)]: {
-//     gridTemplateAreas: '"menu" "viewport"',
-//     gridTemplateRows: 'auto 1fr',
-//   },
-//   [mq(1300)]: {
-//     gridTemplateAreas: '"menu menu" "panel viewport"',
-//     gridTemplateColumns: '480px 1fr',
-//     gridTemplateRows: 'auto 1fr',
-//   },
-// })
-
-// interface IPage {
-//   title: string
-//   // tab: TCategory
-//   // setTab: (tab: TCategory) => void
-// }
-
-// export const Page: SFC<IPage> = ({ title, children }) => {
-//   // const tab='files'
-//   // const setTab={(tab) => router.push(`/${tab}`, { scroll: false } as any)}
-//   // setting up useGobalStore
-//   //todo show a loader while loading
-//   const hasDataLoaded = useGlobalStore((api) => api.data.loaded)
-//   const loadData = useGlobalStore((api) => api.data.load)
-//   useEffect(() => {
-//     if (!hasDataLoaded) loadData()
-//   }, [hasDataLoaded, loadData])
-
-//   // setting up useWindowSizeStore for useMediaQueries to work properly
-//   const [bpref, measure] = useMeasure()
-//   const setWindowSize = useWindowSizeStore((s) => s.setWindowSize)
-//   useEffect(() => {
-//     setWindowSize({ width: measure.width, height: measure.height })
-//   }, [setWindowSize, measure])
-
-//   const mq = useMediaQueries()
-//   const menuDisplay: TMenuDisplay = mq(0, 1000) ? 'mobile' : mq(1000, 1300) ? 'small' : 'normal'
-//   const panelDisplay: TPanelDisplay = mq(1300) ? 'static' : 'overlay'
-//   const [isPanelVisible, setIsPanelVisible] = useState(false)
-
-//   useEffect(() => {
-//     setIsPanelVisible(panelDisplay === 'static')
-//   }, [panelDisplay])
-
-//   return (
-//     <>
-//       <Head>
-//         <title>{title}</title>
-//       </Head>
-//       <Root ref={bpref}>
-//         <Menu display={menuDisplay} />
-//         {/* <Panel
-//           display={panelDisplay}
-//           visible={isPanelVisible}
-//           hide={() => setIsPanelVisible(false)}
-//         /> */}
-//         <Viewport>{children}</Viewport>
-//       </Root>
-//     </>
-//   )
-// }

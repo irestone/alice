@@ -1,7 +1,7 @@
 import { StateCreator, create as zustand } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { produce } from 'immer'
-import lodash, { first, flatten, isArray, isEmpty, map } from 'lodash'
+import lodash, { first, flatten, isArray, isEmpty, isString, map } from 'lodash'
 import {
   Activity,
   CollectionName,
@@ -23,7 +23,7 @@ import * as constant from './storage/static'
 
 type GetValueFn = <T = any>(
   item: Item,
-  attr: ItemAttr
+  attr: ItemAttr | string
 ) => { item: Item; path: string; value: T } | { item: Item; path: string; value: T }[]
 
 interface Storage {
@@ -45,6 +45,8 @@ interface Storage {
   upd: <T = unknown>(cname: CollectionName, target: Target, values: Partial<T>) => void
   del: <T = unknown>(cname: CollectionName, target: Target) => void
   getValue: GetValueFn
+  mobileSearch: boolean
+  setMobileSearch: (v: boolean) => void
 }
 
 const create: StateCreator<Storage> = (set, get) => ({
@@ -130,8 +132,9 @@ const create: StateCreator<Storage> = (set, get) => ({
     await database[c].delete(ids)
     await get().load(c)
   },
-  getValue: (item: Item, attr: ItemAttr) => {
-    const [[_, path], ...rest] = attr.path.split('->').map((chunk) => chunk.split(':'))
+  getValue: (item: Item, attr: ItemAttr | string) => {
+    const fullpath = isString(attr) ? attr : attr.path
+    const [[_, path], ...rest] = fullpath.split('->').map((chunk) => chunk.split(':'))
     const value = lodash.get(item, path)
     if (isEmpty(rest)) return { item, path, value }
     const iter = (chunks: string[][], i: number, id: ID): any => {
@@ -146,6 +149,8 @@ const create: StateCreator<Storage> = (set, get) => ({
     const res = isArray(value) ? value.map((v) => iter(rest, 0, v)) : iter(rest, 0, value)
     return !isArray(res) || !isArray(first(res)) ? res : flatten(res)
   },
+  mobileSearch: false,
+  setMobileSearch: (value) => set({ mobileSearch: value }),
 })
 
 export const useStorage = zustand<Storage>()(devtools(create))

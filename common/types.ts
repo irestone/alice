@@ -200,11 +200,13 @@ export type ItemAttr = NamedEntry & {
   path: string
   fullname?: string
   type: AttrType
+  currency?: boolean
   options?: CollectionName
   module?: ID // Module
-  filter?: boolean
   display?: boolean
-  currency?: boolean
+  filter?: boolean
+  search?: boolean
+  searchWeight?: number
 }
 export type FileAttr = ItemAttr
 export type FileGrouping = NamedEntry & { id: 'custom' | 'regions' | 'bailiff_depts' | 'courts' }

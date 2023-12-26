@@ -1,5 +1,5 @@
 import { useRef, useEffect, useMemo, useState, useCallback } from 'react'
-import lodash, { flow, isArray, isEmpty, isNull, map, reject } from 'lodash'
+import lodash, { find, flow, isArray, isEmpty, isNull, map, reject, without } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { SFC, mixin, styled } from '@common/styles'
 import { Item, ItemAttr, Task, Group as TGroup, Category, CollectionName } from '@common/types'
@@ -28,10 +28,12 @@ export interface Card {
   selected?: boolean
   toggleSelected?: () => void
   options: [string, () => void][]
+  content?: string[]
   variant?: CardVariant
   mobile?: boolean
   gradient?: string
   shadow?: string
+  onClick?: () => void
 }
 
 const Card: SFC<Card> = (props) => {
@@ -41,8 +43,12 @@ const Card: SFC<Card> = (props) => {
   const showContent = variant !== 'condensed' && !!props.children
   const rootRef = useRef<HTMLDivElement>(null)
   const handleClick = () => {
-    if (props.selection) props.toggleSelected?.()
-    else router.push(props.href)
+    if (props.selection) {
+      props.toggleSelected?.()
+    } else {
+      router.push(props.href)
+      props.onClick?.()
+    }
   }
   useEffect(() => {
     const { selection, startSelection } = props
@@ -61,6 +67,7 @@ const Card: SFC<Card> = (props) => {
         of: 'hidden',
         bg: props.gradient,
         bsh: props.shadow,
+        flexShrink: 0,
         '&::before': {
           content: '""',
           d: 'block',
@@ -172,7 +179,7 @@ const Property: SFC<{ Icon: SFC; name: string }> = ({ Icon, name, children, css 
   )
 }
 
-const useCardContent = (item: Item, category: Category, attrCollection: CollectionName) => {
+const useCardContent = (item: Item, keys: string[], attrs: ItemAttr[]) => {
   const get = useStorage((s) => s.get)
   const getValue = useStorage((s) => s.getValue)
 
@@ -202,12 +209,11 @@ const useCardContent = (item: Item, category: Category, attrCollection: Collecti
     [get]
   )
 
-  const settings = useSettings(category)
-
   const content = useMemo(() => {
-    return settings.content
-      .map((attrId) => {
-        const attr = get<ItemAttr>(attrCollection, attrId)
+    return keys
+      .map((id) => {
+        const attr = find(attrs, { id })
+        if (!attr) throw new Error(`Attribute ${id} not found`)
         const name = attr.fullname ?? attr.name
         const rawValue = getRawValue(attr)
         const value = lodash
@@ -220,7 +226,7 @@ const useCardContent = (item: Item, category: Category, attrCollection: Collecti
         return { attr, name, value, rawValue }
       })
       .filter(({ value }) => !!value)
-  }, [settings.content, attrCollection, get, getRawValue, getFormatter])
+  }, [keys, attrs, getRawValue, getFormatter])
 
   return content
 }
@@ -230,7 +236,10 @@ const useCardContent = (item: Item, category: Category, attrCollection: Collecti
 // ===============================================
 
 export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
-  const content = useCardContent(props.item, 'files', 'fileAttrs')
+  const settings = useSettings('files')
+  const keys = without(props.content ?? settings.content, 'files:general.fullname')
+  const attrs = useStorage((s) => (s.collections as any).fileAttrs) as ItemAttr[]
+  const content = useCardContent(props.item, keys, attrs)
   return (
     <Card
       href={`/files/${props.item.id}`}
@@ -257,7 +266,10 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
 // ===============================================
 
 export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
-  const content = useCardContent(props.item, 'tasks', 'taskAttrs')
+  const settings = useSettings('tasks')
+  const keys = without(props.content ?? settings.content, 'tasks:name')
+  const attrs = useStorage((s) => (s.collections as any).taskAttrs) as ItemAttr[]
+  const content = useCardContent(props.item, keys, attrs)
   return (
     <Card
       href={`/tasks/${props.item.id}`}

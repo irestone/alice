@@ -2,12 +2,13 @@ import { ReactNode, useState } from 'react'
 import { CollectionName, Entry, ItemAttr, Module, NamedEntry } from '@common/types'
 import { Rule, createRule } from './filter/rules'
 import { SFC, styled } from '@common/styles'
-import lodash, { filter, find, isEmpty, isPlainObject, noop, reject } from 'lodash'
+import lodash, { filter, find, isEmpty, isPlainObject, map, noop, reject } from 'lodash'
 import { Button } from '@lib/buttons'
 import { Popover } from '@lib/popover'
 import { Body, Foot, Head, Root, Row, Search, Section } from './common'
 import { update } from '@common/utils'
 import { useStorage } from '@common/storage'
+import Fuse from 'fuse.js'
 
 // section #########################################################################################
 //  FILTER
@@ -22,28 +23,34 @@ export const Filter: SFC<{
 }> = (props) => {
   const { applied, onAppliedChange } = props
   const { rules, onRulesChange } = props
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
 
   // @ts-expect-error
   const modules = useStorage((s) => s.collections.modules) as Module[]
-  const attrs = filter(props.attrs, 'filter')
-  const rows = reject(attrs, 'module')
-  const sections: [Module, ItemAttr[]] = lodash
-    .chain(attrs)
-    .filter('module')
-    .map('module')
-    .flatten()
-    .uniq()
-    .map((id: string) => {
-      const mod = find(modules, { id })
-      if (!mod) throw new Error(`MODULE ${id} NOT FOUND`)
-      return mod
-    })
-    .sortBy('order')
-    .map((m: Module) => [m, attrs.filter((i) => i.module === m.id)])
-    .value() as any
+  const attrs = props.attrs
+    .filter((attr) => attr.filter)
+    .map((attr) => (attr.fullname ? attr : { ...attr, fullname: attr.name }))
+  const fuse = new Fuse(attrs, { keys: ['fullname'], threshold: 0.4, ignoreLocation: true })
 
-  const [open, setOpen] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
+  const rows = isEmpty(query) ? reject(attrs, 'module') : map(fuse.search(query), 'item')
+  const sections: [Module, ItemAttr[]] = isEmpty(query)
+    ? (lodash
+        .chain(attrs)
+        .filter('module')
+        .map('module')
+        .flatten()
+        .uniq()
+        .map((id: string) => {
+          const mod = find(modules, { id })
+          if (!mod) throw new Error(`MODULE ${id} NOT FOUND`)
+          return mod
+        })
+        .sortBy('order')
+        .map((m: Module) => [m, attrs.filter((i) => i.module === m.id)])
+        .value() as any)
+    : []
+
   const [view, setView] = useState<'attrs' | 'rules'>(isEmpty(props.rules) ? 'attrs' : 'rules')
   const onAddRule = (attr: any) => {
     onRulesChange([...rules, createRule(attr)])
@@ -101,7 +108,7 @@ export const Filter: SFC<{
         <Root>
           {attrs.length > 10 && (
             <Head>
-              <Search value={searchValue} onChange={setSearchValue} />
+              <Search value={query} onChange={setQuery} />
             </Head>
           )}
           <Body>

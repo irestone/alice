@@ -60,6 +60,10 @@ export const Section: SFC<{ name?: string }> = ({ name, children, css }) => (
   </Div>
 )
 
+export const NoResults: SFC = () => (
+  <Div css={{ px: 8, fs: 13, lh: 16 / 13 }}>Нет результатов поиска</Div>
+)
+
 export const Head = styled('div', { p: 8, pb: 0, pos: 'sticky', t: 0 })
 export const Body = styled('div', { p: 8, py: 16 })
 export const Foot = styled('div', { p: 8, pt: 0, pos: 'sticky', b: 0 })

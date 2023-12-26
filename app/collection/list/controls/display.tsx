@@ -4,9 +4,10 @@ import { ID, ItemAttr, Module, NamedEntry } from '@common/types'
 import { Button } from '@lib/buttons'
 import { CardVariant } from '@lib/cards'
 import { Popover } from '@lib/popover'
-import lodash, { filter, find, isArray, isEmpty, isPlainObject, reject, xor } from 'lodash'
-import { Body, Foot, Head, Row, Search, Section } from './common'
+import lodash, { filter, find, isArray, isEmpty, isPlainObject, map, reject, xor } from 'lodash'
+import { Body, Foot, Head, NoResults, Row, Search, Section } from './common'
 import { useStorage } from '@common/storage'
+import Fuse from 'fuse.js'
 
 // todo: keep attr order from props.attrs when
 
@@ -19,28 +20,33 @@ export const Display: SFC<{
 }> = (props) => {
   const { variant, onVariantChange } = props
   const { content, onContentChange } = props
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
 
   // @ts-expect-error
   const modules = useStorage((s) => s.collections.modules) as Module[]
-  const attrs = filter(props.attrs, 'display')
-  const rows = reject(attrs, 'module')
-  const sections: [Module, ItemAttr[]] = lodash
-    .chain(attrs)
-    .filter('module')
-    .map('module')
-    .flatten()
-    .uniq()
-    .map((id: string) => {
-      const mod = find(modules, { id })
-      if (!mod) throw new Error(`MODULE ${id} NOT FOUND`)
-      return mod
-    })
-    .sortBy('order')
-    .map((m: Module) => [m, attrs.filter((i) => i.module === m.id)])
-    .value() as any
+  const attrs = props.attrs
+    .filter((attr) => attr.display)
+    .map((attr) => (attr.fullname ? attr : { ...attr, fullname: attr.name }))
+  const fuse = new Fuse(attrs, { keys: ['fullname'], threshold: 0.4, ignoreLocation: true })
 
-  const [open, setOpen] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
+  const rows = isEmpty(query) ? reject(attrs, 'module') : map(fuse.search(query), 'item')
+  const sections: [Module, ItemAttr[]] = isEmpty(query)
+    ? (lodash
+        .chain(attrs)
+        .filter('module')
+        .map('module')
+        .flatten()
+        .uniq()
+        .map((id: string) => {
+          const m = find(modules, { id })
+          if (!m) throw new Error(`MODULE ${id} NOT FOUND`)
+          return m
+        })
+        .sortBy('order')
+        .map((m: Module) => [m, attrs.filter((attr) => attr.module === m.id)])
+        .value() as any)
+    : []
 
   return (
     <Popover
@@ -70,10 +76,11 @@ export const Display: SFC<{
     >
       {attrs.length > 10 && (
         <Head>
-          <Search value={searchValue} onChange={setSearchValue} />
+          <Search value={query} onChange={setQuery} />
         </Head>
       )}
       <Body>
+        {query && isEmpty(rows) && isEmpty(sections) && <NoResults />}
         {!isEmpty(rows) && (
           <Section>
             {rows.map((attr) => (
