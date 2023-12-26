@@ -265,6 +265,12 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
 //  TASK
 // ===============================================
 
+const taskCardAssets: any = {
+  'tasks:description': { Icon: Icon.QuoteStart },
+  'tasks:priority': { Icon: Icon.Priority },
+  'tasks:files': { Icon: Icon.Files },
+}
+
 export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'>> = (props) => {
   const settings = useSettings('tasks')
   const keys = without(props.content ?? settings.content, 'tasks:name')
@@ -281,12 +287,12 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
       {!isEmpty(content) && (
         <Content>
           {content.map(({ attr, name, value, rawValue }) => {
-            const isDescription = attr.id === 'tasks:description'
+            const { Icon } = taskCardAssets[attr.id]
             const isPriority = attr.id === 'tasks:priority'
             return (
               <Property
                 key={attr.id}
-                Icon={isDescription ? Icon.QuoteStart : isPriority ? Icon.Priority : Icon.Property}
+                Icon={Icon ?? Icon.Property}
                 name={name}
                 css={{
                   ...mixin(isPriority && rawValue[0] === 'high', { c: '#cf9e69' }),

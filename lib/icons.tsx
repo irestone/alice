@@ -39,6 +39,7 @@ import Plus from './icons/plus.svg'
 import List from './icons/list.svg'
 import Filter2 from './icons/rules.svg'
 import Priority from './icons/priority.svg'
+import Files from './icons/files.svg'
 
 export const Icon = {
   Archive: styled(Archive),
@@ -84,4 +85,5 @@ export const Icon = {
   List: styled(List),
   Filter2: styled(Filter2),
   Priority: styled(Priority),
+  Files: styled(Files),
 }
