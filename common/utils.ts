@@ -177,7 +177,7 @@ export const holdListener = (ref: any, cb: () => void, dur?: number) => {
 }
 
 // section #########################################################################################
-//  OTHER
+//  FORMATTERS
 // #################################################################################################
 
 export const toRUB = (v: number) => {
@@ -193,3 +193,5 @@ export const toDate = (v: string) => {
     dateStyle: 'long',
   }).format(new Date(v))
 }
+
+export const toBool = (v: boolean) => (v ? 'да' : 'нет')

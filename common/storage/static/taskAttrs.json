@@ -18,21 +18,20 @@
     "search": true
   },
   {
-    "id": "tasks:priority",
-    "path": "tasks:priority",
-    "name": "Приоритет",
-    "type": "select",
-    "options": "taskPriorities",
-    "filter": true,
-    "display": true
-  },
-
-  {
     "id": "tasks:files",
     "path": "tasks:files",
     "name": "Файлы",
     "type": "multi_select",
     "options": "files",
+    "filter": true,
+    "display": true
+  },
+  {
+    "id": "tasks:priority",
+    "path": "tasks:priority",
+    "name": "Приоритет",
+    "type": "select",
+    "options": "taskPriorities",
     "filter": true,
     "display": true
   },

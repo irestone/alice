@@ -6,8 +6,8 @@ import { Item, ItemAttr, Task, Group as TGroup, Category, CollectionName } from 
 import { Icon } from '@lib/icons'
 import { Button } from '@lib/buttons'
 import { useStorage } from '@common/storage'
-import { Div, H3, Span } from './primitives'
-import { holdListener, toDate, toRUB } from '@common/utils'
+import { Div, H3, RouteLink, Span } from './primitives'
+import { holdListener, toBool, toDate, toRUB } from '@common/utils'
 import { useSettings } from '@common/settings'
 import * as fonts from '@common/styles/fonts'
 import { Section } from './sections'
@@ -192,18 +192,20 @@ const useCardContent = (item: Item, keys: string[], attrs: ItemAttr[]) => {
   const getFormatter = useCallback(
     (attr: ItemAttr) => {
       return (value: any) => {
-        let result = [value]
         if (attr.type === 'select' || attr.type === 'multi_select') {
-          const opt = get<any>(attr.options as any, value)
-          result = isArray(opt) ? map(opt, 'name') : [opt.name]
-        } else if (attr.type === 'number' && attr.currency) {
-          result = result.map(toRUB)
-        } else if (attr.type === 'boolean') {
-          result = result.map((value) => (value ? 'да' : 'нет'))
-        } else if (attr.type === 'date') {
-          result = result.map(toDate)
+          const option = get<any>(attr.options as any, value)
+          return { data: option, text: option.name }
         }
-        return result
+        const data = value
+        const text =
+          attr.type === 'number' && attr.currency
+            ? toRUB(value)
+            : attr.type === 'boolean'
+            ? toBool(value)
+            : attr.type === 'date'
+            ? toDate(value)
+            : value
+        return { data, text }
       }
     },
     [get]
@@ -216,16 +218,10 @@ const useCardContent = (item: Item, keys: string[], attrs: ItemAttr[]) => {
         if (!attr) throw new Error(`Attribute ${id} not found`)
         const name = attr.fullname ?? attr.name
         const rawValue = getRawValue(attr)
-        const value = lodash
-          .chain(rawValue)
-          .map(getFormatter(attr))
-          .flatten()
-          .uniq()
-          .join(', ')
-          .value()
+        const value = lodash.chain(rawValue).flatten().uniq().map(getFormatter(attr)).value()
         return { attr, name, value, rawValue }
       })
-      .filter(({ value }) => !!value)
+      .filter(({ value }) => !isEmpty(value))
   }, [keys, attrs, getRawValue, getFormatter])
 
   return content
@@ -252,7 +248,7 @@ export const FileCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
         <Content>
           {content.map(({ attr, name, value }) => (
             <Property key={attr.id} Icon={Icon.Property} name={name}>
-              {value}
+              {map(value, 'text').join(', ')}
             </Property>
           ))}
         </Content>
@@ -287,19 +283,32 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
       {!isEmpty(content) && (
         <Content>
           {content.map(({ attr, name, value, rawValue }) => {
-            const { Icon } = taskCardAssets[attr.id]
+            const assets = taskCardAssets[attr.id]
             const isPriority = attr.id === 'tasks:priority'
+            const isFiles = attr.id === 'tasks:files'
             return (
               <Property
                 key={attr.id}
-                Icon={Icon ?? Icon.Property}
+                Icon={assets.Icon ?? Icon.Property}
                 name={name}
                 css={{
                   ...mixin(isPriority && rawValue[0] === 'high', { c: '#cf9e69' }),
                   ...mixin(isPriority && rawValue[0] === 'highest', { c: '#ff9320' }),
                 }}
               >
-                {value}
+                {isFiles
+                  ? value.map(({ data, text }) => (
+                      <RouteLink
+                        key={data.id}
+                        href={`/files/${data.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        css={{ fw: '600', mr: '0.7ch', c: '#eaeaea' }}
+                      >
+                        {text}
+                        <Icon.Link css={{ s: 11, d: 'inline-block' }} />
+                      </RouteLink>
+                    ))
+                  : map(value, 'text').join(', ')}
               </Property>
             )
           })}
