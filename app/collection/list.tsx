@@ -1,5 +1,5 @@
 import { ComponentProps, useMemo, useState } from 'react'
-import lodash, { filter, isEmpty, noop, xor } from 'lodash'
+import lodash, { filter, isEmpty, noop, sortBy, xor } from 'lodash'
 import { SFC, styled } from '@common/styles'
 import * as T from '@common/types'
 import { useStorage } from '@common/storage'
@@ -87,10 +87,9 @@ export const List: SFC<{
 
   const predicate = useFilterPredicate(settings.filter, assets[category].attrs)
   const items = useMemo<any[]>(() => {
-    const withStatus = filter(storage.items, { status: settings.status })
-    return settings.filtering && !isEmpty(settings.filter)
-      ? filter(withStatus, predicate)
-      : withStatus
+    const r1 = filter(storage.items, { status: settings.status })
+    const r2 = settings.filtering && !isEmpty(settings.filter) ? filter(r1, predicate) : r1
+    return sortBy(r2, settings.sorting)
   }, [storage.items, settings, predicate])
 
   const grouped = useGrouping(items, settings.grouping)

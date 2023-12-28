@@ -289,6 +289,7 @@ export const tasks = {
       name,
       description,
       priority,
+      createdAt: new Date().toISOString(),
     }
     TASKS = Collection.add(TASKS, task)
     return Promise.resolve(task)

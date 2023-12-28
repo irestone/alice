@@ -184,6 +184,7 @@ export type Task = NamedEntry & {
   pinned: boolean
   description: string | null
   priority: ID // TaskPriority
+  createdAt: Date
 }
 
 export type NewTask = { name: string; description?: string; files: ID[]; priority: ID }

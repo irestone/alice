@@ -9,6 +9,7 @@ import { merge } from 'lodash'
 type Settings = {
   status: ID
   grouping: ID
+  sorting: string
   expandedGroups: ID[]
   variant: CardVariant
   content: ID[]
@@ -22,6 +23,7 @@ const init: StateCreator<State> = (set) => ({
   files: {
     status: 'current',
     grouping: 'courts',
+    sorting: 'name',
     expandedGroups: [],
     variant: 'normal',
     content: [],
@@ -32,6 +34,7 @@ const init: StateCreator<State> = (set) => ({
   tasks: {
     status: 'current',
     grouping: 'custom',
+    sorting: 'createdAt',
     expandedGroups: [],
     variant: 'normal',
     content: [],

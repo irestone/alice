@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SFC } from '@common/styles'
 import { useStorage } from '@common/storage'
-import lodash, { filter } from 'lodash'
+import lodash, { filter, sortBy } from 'lodash'
 import { File, ActivityType } from '@common/types'
 import { Button } from '@lib/buttons'
 import { Mobile } from '@lib/mobile'
 import { FileCard, TaskCard } from '@lib/cards'
 import { Section } from '@lib/sections'
+import { useSettings } from '@common/settings'
 
 export const Dashboard: SFC = () => {
   const router = useRouter()
@@ -19,6 +20,8 @@ export const Dashboard: SFC = () => {
     upd: s.upd,
     del: s.del,
   }))
+  const filesSettings = useSettings('files')
+  const tasksSettings = useSettings('tasks')
 
   const [moreRecentFiles, setMoreRecentFiles] = useState(false)
   const allRecentFiles = lodash
@@ -27,8 +30,8 @@ export const Dashboard: SFC = () => {
     .map((act) => storage.get<File>('files', act.payload))
     .value()
   const recentFiles = moreRecentFiles ? allRecentFiles : allRecentFiles.slice(0, 5)
-  const pinnedFiles = filter(storage.files, 'pinned')
-  const pinnedTasks = filter(storage.tasks, 'pinned')
+  const pinnedFiles = sortBy(filter(storage.files, 'pinned'), filesSettings.sorting)
+  const pinnedTasks = sortBy(filter(storage.tasks, 'pinned'), tasksSettings.sorting)
 
   return (
     <Mobile.Root>
