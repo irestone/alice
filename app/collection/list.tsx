@@ -69,14 +69,14 @@ const Root = styled(Mobile.Root, {
 export const List: SFC<{
   category: T.Category
   mobile?: boolean
-}> = ({ category: cat, mobile }) => {
-  const { Card, title } = assets[cat]
-  const settings = useSettings(cat)
+}> = ({ category, mobile }) => {
+  const { Card, title } = assets[category]
+  const settings = useSettings(category)
   const storage = useStorage((s: any) => ({
-    statuses: s.collections[assets[cat].statuses],
-    attrs: s.collections[assets[cat].attrs],
-    groupings: s.collections[assets[cat].groupings],
-    items: s.collections[cat],
+    statuses: s.collections[assets[category].statuses],
+    attrs: s.collections[assets[category].attrs],
+    groupings: s.collections[assets[category].groupings],
+    items: s.collections[category],
     groups: s.collections.groups,
     modules: s.collections.modules,
     get: s.get,
@@ -85,7 +85,7 @@ export const List: SFC<{
     del: s.del,
   }))
 
-  const predicate = useFilterPredicate(settings.filter, assets[cat].attrs)
+  const predicate = useFilterPredicate(settings.filter, assets[category].attrs)
   const items = useMemo<any[]>(() => {
     const withStatus = filter(storage.items, { status: settings.status })
     return settings.filtering && !isEmpty(settings.filter)
@@ -94,6 +94,7 @@ export const List: SFC<{
   }, [storage.items, settings, predicate])
 
   const grouped = useGrouping(items, settings.grouping)
+  const isCustomGrouping = settings.grouping === 'custom'
 
   const [selection, setSelection] = useState<string[]>([])
   const selected = useMemo(() => {
@@ -125,8 +126,8 @@ export const List: SFC<{
           <Selection
             status={settings.status}
             items={selected}
-            updateItems={(v) => storage.upd(cat, selection, v)}
-            deleteItems={() => storage.del(cat, selection)}
+            updateItems={(v) => storage.upd(category, selection, v)}
+            deleteItems={() => storage.del(category, selection)}
             clearSelection={() => setSelection([])}
           />
         )}
@@ -136,8 +137,9 @@ export const List: SFC<{
           <Group
             key={group.id}
             group={group}
-            updateGroup={(v) => storage.upd(cat, group.id, v)}
-            deleteGroup={() => storage.del(cat, group.id)}
+            editable={isCustomGrouping}
+            updateGroup={isCustomGrouping ? (v) => storage.upd('groups', group.id, v) : noop}
+            deleteGroup={isCustomGrouping ? () => storage.del('groups', group.id) : noop}
             expanded={settings.expandedGroups.includes(group.id)}
             toggleExpanded={() => {
               settings.set({ expandedGroups: xor(settings.expandedGroups, [group.id]) })
@@ -146,11 +148,11 @@ export const List: SFC<{
             {items.map((item) => (
               <Card
                 key={item.id}
-                href={`/${cat}/${item.id}`}
+                href={`/${category}/${item.id}`}
                 options={[]}
                 item={item}
-                updateItem={(v) => storage.upd(cat, item.id, v)}
-                deleteItem={() => storage.del(cat, item.id)}
+                updateItem={(v) => storage.upd(category, item.id, v)}
+                deleteItem={() => storage.del(category, item.id)}
                 selection={!isEmpty(selection)}
                 startSelection={() => setSelection([item.id])}
                 selected={selection.includes(item.id)}

@@ -324,53 +324,30 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
 
 export const Group: SFC<{
   group: TGroup
+  editable?: boolean
   updateGroup: (changes: Partial<TGroup>) => void
   deleteGroup: () => void
   expanded: boolean
   toggleExpanded: () => void
-}> = ({ group, children }) => {
-  const [editing, setEditing] = useState(false)
+}> = (props) => {
   return (
     <Section
-      title={group.name}
+      title={props.group.name}
       actions={
-        editing
-          ? [
-              <Button
-                key='delete'
-                icon='delete'
-                colors={{ color: 'indianred', preset: 'no_bg' }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              />,
-              <Button
-                key='save'
-                icon='checkmark'
-                colors={{ color: 'cyan', preset: 'no_bg' }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setEditing(false)
-                }}
-              />,
-            ]
-          : [
-              <Button
-                key='edit'
-                icon='edit'
-                colors={{ preset: 'no_bg', color: 'cyan' }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setEditing(true)
-                }}
-              />,
-            ]
+        props.editable && (
+          <Button
+            key='edit'
+            icon='edit'
+            colors={{ preset: 'no_bg', color: 'cyan' }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        )
       }
       stickHeadAt={101}
       collapsible
       counter
     >
-      {children}
+      {props.children}
     </Section>
   )
 }
