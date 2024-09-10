@@ -297,12 +297,12 @@ export const TaskCard: SFC<Omit<Card, 'href' | 'options' | 'gradient' | 'shadow'
                 }}
               >
                 {isFiles
-                  ? value.map(({ data, text }) => (
+                  ? map(value, ({ data, text }) => (
                       <RouteLink
                         key={data.id}
                         href={`/files/${data.id}`}
                         onClick={(e) => e.stopPropagation()}
-                        css={{ fw: '600', mr: '0.7ch', c: '#eaeaea' }}
+                        css={{ fw: '600', mr: '0.7ch', c: '#eaeaea', td: 'underline' }}
                       >
                         {text}
                         <Icon.Link css={{ s: 11, d: 'inline-block' }} />

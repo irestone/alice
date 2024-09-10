@@ -5,54 +5,46 @@ import { RouteLink } from 'lib/primitives'
 import { usePathname } from 'next/navigation'
 import { Button } from '@lib/buttons'
 
-const Search = styled('div', {
-  height: 32,
-  borderRadius: 999,
-  background: '#555',
-  [cq(1400)]: {},
+const Search = styled('input', {
+  flex: 1,
+  h: 40,
+  lh: 40,
+  bdrad: 999,
+  bd: '1px solid #444',
+  bg: 'rgb(255 255 255 / 0.03)',
+  c: 'white',
+  px: 16,
+  '&:focus': {
+    bg: 'rgb(255 255 255 / 0.05)',
+  },
   variants: {
-    position: {
-      static: {
-        flex: 1,
-      },
-      absolute: {
-        width: 640,
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        margin: 'auto',
-      },
+    centered: {
+      true: { w: 640, pos: 'absolute', l: 0, r: 0, m: 'auto' },
     },
   },
 })
 
-const Main = styled('div', { d: 'flex', g: 16 })
+const ButtonGroup = styled('div', { d: 'flex', g: 16 })
 
-const Extra = styled('div', { d: 'flex', g: 16, flex: 1, jc: 'flex-end' })
-
-const Root = styled('div', {
+const Root = styled('nav', {
   container: 'menu',
   gridArea: 'menu',
   display: 'flex',
   px: 16,
   py: 16,
   g: 16,
+  jc: 'space-between',
   bg: '#101010',
-  '& > *': { width: '40px !important' },
   variants: {
     handheld: {
       true: {
         borderTop: '1px solid #2a2a2a',
-        justifyContent: 'space-around',
-        g: 0,
-        px: 16,
         py: 6,
       },
     },
     mobile: {
       true: {
         borderTop: '1px solid #2a2a2a',
-        px: 16,
         py: 8,
       },
     },
@@ -72,56 +64,60 @@ export const Menu: SFC<{ display: TMenuDisplay }> = (props) => {
   if (d('handheld')) {
     return (
       <Root handheld>
-        <Button icon='home' size={1} colors='no_bg' href='/' active={pathname === '/'} caption>
-          Главная
-        </Button>
-        <Button
-          icon='catalog'
-          size={1}
-          colors='no_bg'
-          href='/files'
-          active={pathname?.startsWith('/files')}
-          caption
-        >
-          Каталог
-        </Button>
-        <Button
-          icon='task'
-          size={1}
-          colors='no_bg'
-          href='/tasks'
-          active={pathname?.startsWith('/tasks')}
-          caption
-        >
-          Задания
-        </Button>
-        <Button
-          icon='subscribe'
-          size={1}
-          colors='no_bg'
-          href='/subscriptions'
-          active={pathname?.startsWith('/subscriptions')}
-          caption
-        >
-          Подписки
-        </Button>
-        <Button
-          icon='profile'
-          size={1}
-          colors='no_bg'
-          href='/profile'
-          active={pathname?.startsWith('/profile')}
-          caption
-        >
-          Профиль
-        </Button>
+        <ButtonGroup css={{ flex: 1, g: 0, jc: 'space-around' }}>
+          <Button icon='home' size={1} colors='no_bg' href='/' active={pathname === '/'} caption>
+            Главная
+          </Button>
+          <Button
+            icon='catalog'
+            size={1}
+            colors='no_bg'
+            href='/files'
+            active={pathname?.startsWith('/files')}
+            caption
+          >
+            Каталог
+          </Button>
+          <Button
+            icon='task'
+            size={1}
+            colors='no_bg'
+            href='/tasks'
+            active={pathname?.startsWith('/tasks')}
+            caption
+          >
+            Задания
+          </Button>
+          <Button
+            icon='subscribe'
+            size={1}
+            colors='no_bg'
+            href='/subscriptions'
+            active={pathname?.startsWith('/subscriptions')}
+            caption
+          >
+            Подписки
+          </Button>
+          <Button
+            icon='profile'
+            size={1}
+            colors='no_bg'
+            href='/profile'
+            active={pathname?.startsWith('/profile')}
+            caption
+          >
+            Профиль
+          </Button>
+        </ButtonGroup>
       </Root>
     )
   }
 
+  //todo remove Root's mobile prop and just use css
+  // todo make 'if (mobile)' w 2 button groups and w/o search then default return for larger screens
   return (
     <Root mobile={d('mobile')}>
-      <Main>
+      <ButtonGroup>
         <Button icon='home' size={1} colors='no_bg' href='/' active={pathname === '/'} />
         <Button
           icon='catalog'
@@ -141,10 +137,10 @@ export const Menu: SFC<{ display: TMenuDisplay }> = (props) => {
         >
           Задания
         </Button>
-      </Main>
-      <Extra>
-        {d('small') && <Search position='static' />}
-        {d('normal') && <Search position='absolute' />}
+      </ButtonGroup>
+      {d('small') && <Search centered={d('normal')} />}
+      {d('normal') && <Search centered={d('normal')} />}
+      <ButtonGroup>
         <Button
           icon='subscribe'
           size={1}
@@ -159,7 +155,7 @@ export const Menu: SFC<{ display: TMenuDisplay }> = (props) => {
           href='/profile'
           active={pathname?.startsWith('/profile')}
         />
-      </Extra>
+      </ButtonGroup>
     </Root>
   )
 }

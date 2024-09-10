@@ -25,11 +25,9 @@ const MobileHead: SFC<{ title: string; actions?: ReactNode[]; search?: boolean }
     <Header
       css={{ pl: 16, pr: 12, bg: '$gray100', pos: 'sticky', t: 0, z: 1, pb: children ? 8 : 0 }}
     >
-      <Div
-        css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 53 }}
-      >
-        <H3 css={{ fontSize: 20, fontWeight: 500 }}>{title}</H3>
-        <Div css={{ display: 'flex', gap: 8 }}>
+      <Div css={{ d: 'flex', jc: 'space-between', ai: 'center', h: 53 }}>
+        <H3 css={{ fs: 20, fw: 500 }}>{title}</H3>
+        <Div css={{ d: 'flex', g: 8 }}>
           {actions}
           {search && (
             <Button icon='search' colors='no_bg' size={1} onClick={() => setMobileSearch(true)} />
@@ -41,8 +39,8 @@ const MobileHead: SFC<{ title: string; actions?: ReactNode[]; search?: boolean }
   )
 }
 
-const MobileRoot = styled('div', { height: '100%', overflow: 'auto' })
-const MobileBody = styled('div', { display: 'flex', flexDirection: 'column', pb: 8 })
+const MobileRoot = styled('div', { height: '100%', overflowY: 'auto', overflowX: 'hidden' })
+const MobileBody = styled('main', { display: 'flex', flexDirection: 'column', pb: 8 })
 
 // section #########################################################################################
 //  SEARCH

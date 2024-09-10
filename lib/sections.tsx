@@ -36,7 +36,7 @@ const Handle = styled('div', {
 
 const Actions = styled('div', { d: 'flex', g: 8 })
 
-const Head = styled('div', {
+const Head = styled('header', {
   d: 'flex',
   jc: 'space-between',
   ai: 'center',

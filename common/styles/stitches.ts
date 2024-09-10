@@ -136,6 +136,7 @@ const utils = {
   ti: (v: PV<'textIndent'>) => ({ textIndent: v }),
   ls: (v: PV<'letterSpacing'>) => ({ letterSpacing: v }),
   tsh: (v: PV<'textShadow'>) => ({ textShadow: v }),
+  td: (v: PV<'textShadow'>) => ({ textDecoration: v }),
 
   //todo position('absolute', 16, 16) === p=abs, t=16, y=16
   // toher

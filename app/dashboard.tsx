@@ -38,7 +38,7 @@ export const Dashboard: SFC = () => {
       <Mobile.Head title='Alice MS' />
       <Mobile.Body>
         <Section
-          title='Последние файлы'
+          title='Последнее'
           stickyHead={false}
           actions={[
             <Button key='history' icon='history' colors={{ preset: 'no_bg', color: 'cyan' }}>
